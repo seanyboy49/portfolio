@@ -1,43 +1,38 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import pelletTownSrc from "./images/pellet-town.png";
-import playerSrc from "./images/player-down.png";
-
-import "./App.css";
-import Sprite from "./classes/Sprite";
-import useCanvas from "./hooks/useCanvas";
+import { useCallback, useEffect, useRef } from "react";
+import Sprite from "../classes/Sprite";
+import useCanvas from "../hooks/useCanvas";
+import pelletTownSrc from "../images/pellet-town.png";
+import playerSrc from "../images/player-down.png";
 
 const OFFSET = {
   x: -735,
   y: -650,
 };
 
-enum Keys {
-  W = "w",
-  A = "a",
-  S = "s",
-  D = "d",
-}
+const VELOCITY = 3;
 
-function App() {
-  const backgroudSprite = useRef<Sprite | null>(null);
-  const playerSprite = useRef<Sprite | null>(null);
+interface Props {
+  backgroundSprite: React.MutableRefObject<Sprite>;
+  playerSprite: React.MutableRefObject<Sprite>;
+}
+const Game = ({ backgroundSprite, playerSprite }: Props) => {
   const keys = useRef({
-    [Keys.W]: {
+    w: {
       pressed: false,
     },
-    [Keys.A]: {
+    a: {
       pressed: false,
     },
-    [Keys.S]: {
+    s: {
       pressed: false,
     },
-    [Keys.D]: {
+    d: {
       pressed: false,
     },
   });
 
   const draw = useCallback((context: CanvasRenderingContext2D) => {
-    const background = backgroudSprite.current;
+    const background = backgroundSprite.current;
     const player = playerSprite.current;
 
     if (!background || !player) {
@@ -48,16 +43,14 @@ function App() {
     player.draw();
 
     // Move sprites
-    const key = keys.current;
-
-    if (key[Keys.W].pressed) {
-      background.position.y += Sprite.Velocity;
-    } else if (key[Keys.S].pressed) {
-      background.position.y -= Sprite.Velocity;
-    } else if (key[Keys.A].pressed) {
-      background.position.x += Sprite.Velocity;
-    } else if (key[Keys.D].pressed) {
-      background.position.x -= Sprite.Velocity;
+    if (keys.current.w.pressed) {
+      background.position.y += VELOCITY;
+    } else if (keys.current.s.pressed) {
+      background.position.y -= VELOCITY;
+    } else if (keys.current.a.pressed) {
+      background.position.x += VELOCITY;
+    } else if (keys.current.d.pressed) {
+      background.position.x -= VELOCITY;
     }
   }, []);
 
@@ -66,7 +59,7 @@ function App() {
    */
   const setUpSprites = useCallback(
     (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-      backgroudSprite.current = new Sprite(
+      backgroundSprite.current = new Sprite(
         context,
         { x: OFFSET.x, y: OFFSET.y },
         pelletTownSrc
@@ -85,38 +78,39 @@ function App() {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      const background = backgroudSprite.current;
+      const background = backgroundSprite.current;
       if (!background) return;
 
       switch (event.key) {
-        case Keys.W:
+        case "w":
           keys.current.w.pressed = true;
           break;
-        case Keys.S:
+        case "s":
           keys.current.s.pressed = true;
           break;
-        case Keys.A:
+        case "a":
           keys.current.a.pressed = true;
           break;
-        case Keys.D:
+        case "d":
           keys.current.d.pressed = true;
           break;
       }
     }
     function handleKeyUp(event: KeyboardEvent) {
-      const background = backgroudSprite.current;
+      const background = backgroundSprite.current;
       if (!background) return;
+
       switch (event.key) {
-        case Keys.W:
+        case "w":
           keys.current.w.pressed = false;
           break;
-        case Keys.S:
+        case "s":
           keys.current.s.pressed = false;
           break;
-        case Keys.A:
+        case "a":
           keys.current.a.pressed = false;
           break;
-        case Keys.D:
+        case "d":
           keys.current.d.pressed = false;
           break;
       }
@@ -131,11 +125,7 @@ function App() {
     };
   });
 
-  return (
-    <div className="App">
-      <canvas ref={canvas} />
-    </div>
-  );
-}
+  return <canvas ref={canvas} />;
+};
 
-export default App;
+export default Game;

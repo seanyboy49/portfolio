@@ -7,6 +7,8 @@ class Sprite {
   image: HTMLImageElement;
   ctx: CanvasRenderingContext2D;
 
+  static Velocity = 3;
+
   constructor(
     ctx: CanvasRenderingContext2D,
     position: Position,
