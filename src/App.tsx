@@ -75,7 +75,8 @@ function App() {
       playerSprite.current = new Sprite(
         context,
         { x: canvas.width / 2, y: canvas.height / 2 },
-        playerSrc
+        playerSrc,
+        { total: 4, rate: 10 }
       );
     },
     []
@@ -83,6 +84,7 @@ function App() {
 
   const canvas = useCanvas(draw, setUpSprites);
 
+  // Register event listeners
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       const background = backgroudSprite.current;
