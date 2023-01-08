@@ -9,27 +9,37 @@ type Frames = {
   current: number; // the current frame to render
   elapsed: number; // number of frames that have elapsed
 };
+
+interface ISprite {
+  ctx: CanvasRenderingContext2D;
+  position: Position;
+  imageSrc: string;
+  frames?: { total: number; rate: number };
+}
 class Sprite {
   position: Position;
   image: HTMLImageElement;
   ctx: CanvasRenderingContext2D;
   frames: Frames;
+  width?: number; // the actual width of the sprite after it's been cropped
+  height?: number; // the height of the sprite
 
   static Velocity = 3;
 
-  constructor(
-    ctx: CanvasRenderingContext2D,
-    position: Position,
-    imageSrc: string,
-    frames = { total: 1, rate: 10 }
-  ) {
+  constructor({
+    ctx,
+    position,
+    imageSrc,
+    frames = { total: 1, rate: 10 },
+  }: ISprite) {
     this.position = position;
     this.image = new Image();
     this.frames = { ...frames, current: 0, elapsed: 0 };
 
-    // this.image.onload = () => {
-    //     this.width =
-    // }
+    this.image.onload = () => {
+      this.width = this.image.width / this.frames.total;
+      this.height = this.image.height;
+    };
 
     this.image.src = imageSrc;
     this.ctx = ctx;
@@ -47,11 +57,10 @@ class Sprite {
     //  )
 
     this.frames.elapsed++;
-    console.log("image", this.image.width);
 
     this.ctx.drawImage(
       this.image, // image
-      this.frames.current * (this.image.width / this.frames.total), // x of source to begin cropping * image. width to shift crop over to next character in sprite sheet
+      this.frames.current * this.width!, // x of source to begin cropping * image. width to shift crop over to next character in sprite sheet
       0, // y of source to begin cropping
       this.image.width / this.frames.total, // source width
       this.image.height, // source height
@@ -62,14 +71,15 @@ class Sprite {
     );
 
     // Animate every 10 frames
-    if (this.frames.elapsed % this.frames.rate === 0) {
-      // Move the current frame up
-      if (this.frames.current < this.frames.total - 1) {
-        this.frames.current++;
-      } else {
-        // Reset current frame to zero
-        this.frames.current = 0;
-      }
+    if (this.frames.elapsed % this.frames.rate !== 0) return;
+
+    // Move the current frame up
+    // We don't want current to actually reach the total, otherwise we'll crop out of bounds
+    if (this.frames.current < this.frames.total - 1) {
+      this.frames.current++;
+    } else {
+      // Reset current frame to zero
+      this.frames.current = 0;
     }
   }
 }

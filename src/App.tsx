@@ -66,18 +66,18 @@ function App() {
    */
   const setUpSprites = useCallback(
     (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-      backgroudSprite.current = new Sprite(
-        context,
-        { x: OFFSET.x, y: OFFSET.y },
-        pelletTownSrc
-      );
+      backgroudSprite.current = new Sprite({
+        ctx: context,
+        position: { x: OFFSET.x, y: OFFSET.y },
+        imageSrc: pelletTownSrc,
+      });
 
-      playerSprite.current = new Sprite(
-        context,
-        { x: canvas.width / 2, y: canvas.height / 2 },
-        playerSrc,
-        { total: 4, rate: 10 }
-      );
+      playerSprite.current = new Sprite({
+        ctx: context,
+        position: { x: canvas.width / 2, y: canvas.height / 2 },
+        imageSrc: playerSrc,
+        frames: { total: 4, rate: 10 },
+      });
     },
     []
   );
