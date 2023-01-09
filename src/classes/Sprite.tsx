@@ -10,16 +10,20 @@ type Frames = {
   elapsed: number; // number of frames that have elapsed
 };
 
+type SpriteSheets = { [direction: string]: string };
+
 interface ISprite {
   ctx: CanvasRenderingContext2D;
   position: Position;
   imageSrc: string;
   frames?: { total: number; rate: number };
+  sprites?: SpriteSheets;
 }
 class Sprite {
+  ctx: CanvasRenderingContext2D;
   position: Position;
   image: HTMLImageElement;
-  ctx: CanvasRenderingContext2D;
+  sprites?: SpriteSheets;
   frames: Frames;
   width?: number; // the actual width of the sprite after it's been cropped
   height?: number; // the height of the sprite
@@ -31,18 +35,22 @@ class Sprite {
     position,
     imageSrc,
     frames = { total: 1, rate: 10 },
+    sprites,
   }: ISprite) {
+    this.ctx = ctx;
     this.position = position;
-    this.image = new Image();
-    this.frames = { ...frames, current: 0, elapsed: 0 };
 
+    this.image = new Image();
+    this.image.src = imageSrc;
+    // The image src doesn't load immediately, so we specify
+    // a function to execute logic when it's done loading
     this.image.onload = () => {
       this.width = this.image.width / this.frames.total;
       this.height = this.image.height;
     };
+    this.sprites = sprites;
 
-    this.image.src = imageSrc;
-    this.ctx = ctx;
+    this.frames = { ...frames, current: 0, elapsed: 0 };
   }
 
   draw() {
