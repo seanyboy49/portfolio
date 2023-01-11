@@ -1,3 +1,5 @@
+import { Keys, KeysPressed } from "../hooks/useKeyboardInput";
+
 type Position = {
   x: number;
   y: number;
@@ -18,6 +20,7 @@ interface ISprite {
   imageSrc: string;
   frames?: { total: number; rate: number };
   sprites?: SpriteSheets;
+  movable?: boolean;
 }
 class Sprite {
   ctx: CanvasRenderingContext2D;
@@ -27,6 +30,8 @@ class Sprite {
   frames: Frames;
   width?: number; // the actual width of the sprite after it's been cropped
   height?: number; // the height of the sprite
+  movable: boolean; // whether or not the sprite moves with character movement
+  animate: boolean;
 
   static Velocity = 3;
 
@@ -36,6 +41,7 @@ class Sprite {
     imageSrc,
     frames = { total: 1, rate: 10 },
     sprites,
+    movable = true,
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
@@ -51,6 +57,41 @@ class Sprite {
     this.sprites = sprites;
 
     this.frames = { ...frames, current: 0, elapsed: 0 };
+
+    this.movable = movable;
+    this.animate = false;
+  }
+
+  handleKeyboardInput(key: KeysPressed) {
+    // If the sprite is movable, then modify its position
+    // to move in response to the player
+    if (this.movable) {
+      if (key[Keys.W].pressed) {
+        this.position.y += Sprite.Velocity;
+      } else if (key[Keys.S].pressed) {
+        this.position.y -= Sprite.Velocity;
+      } else if (key[Keys.A].pressed) {
+        this.position.x += Sprite.Velocity;
+      } else if (key[Keys.D].pressed) {
+        this.position.x -= Sprite.Velocity;
+      }
+    }
+    // Otherwise, modify its image to simulate animation
+    else {
+      if (key[Keys.W].pressed) {
+        this.animate = true;
+        this.image.src = this.sprites!.up;
+      } else if (key[Keys.S].pressed) {
+        this.animate = true;
+        this.image.src = this.sprites!.down;
+      } else if (key[Keys.A].pressed) {
+        this.animate = true;
+        this.image.src = this.sprites!.left;
+      } else if (key[Keys.D].pressed) {
+        this.animate = true;
+        this.image.src = this.sprites!.right;
+      }
+    }
   }
 
   draw() {
@@ -64,8 +105,6 @@ class Sprite {
     //   -this.position.y - this.image.height / 2
     //  )
 
-    this.frames.elapsed++;
-
     this.ctx.drawImage(
       this.image, // image
       this.frames.current * this.width!, // x of source to begin cropping * image. width to shift crop over to next character in sprite sheet
@@ -78,6 +117,14 @@ class Sprite {
       this.image.height // heigth of image
     );
 
+    // Below, we increment frames in order to do math to animate frames
+    // of the sprite sheet.
+    // If animate=false, then we shouldn't increment frames
+    if (!this.animate) return;
+
+    // Increment frames for animation math below
+    this.frames.elapsed++;
+
     // Animate every 10 frames
     if (this.frames.elapsed % this.frames.rate !== 0) return;
 
@@ -89,6 +136,9 @@ class Sprite {
       // Reset current frame to zero
       this.frames.current = 0;
     }
+
+    // Once this frame of animation is done, animate should be false
+    this.animate = false;
   }
 }
 
