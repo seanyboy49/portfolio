@@ -1,4 +1,5 @@
-import { Position } from "./types";
+import { Keys, KeysPressed } from "../hooks/useKeyboardInput";
+import { Position, VELOCITY } from "./types";
 
 interface IBoundary {
   ctx: CanvasRenderingContext2D;
@@ -23,8 +24,20 @@ class Boundary {
 
   draw() {
     const { x, y } = this.position;
-    this.ctx.fillStyle = `rgba(255, 0, 0, 0)`;
+    this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
     this.ctx.fillRect(x, y, this.width, this.height);
+  }
+
+  handleKeyboardInput(key: KeysPressed) {
+    if (key[Keys.W].pressed) {
+      this.position.y += VELOCITY;
+    } else if (key[Keys.S].pressed) {
+      this.position.y -= VELOCITY;
+    } else if (key[Keys.A].pressed) {
+      this.position.x += VELOCITY;
+    } else if (key[Keys.D].pressed) {
+      this.position.x -= VELOCITY;
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import { Keys, KeysPressed } from "../hooks/useKeyboardInput";
-import { Position } from "./types";
+import { Position, VELOCITY } from "./types";
 
 type Frames = {
   total: number; // total number of frames in a sprite sheet
@@ -28,8 +28,6 @@ class Sprite {
   height?: number; // the height of the sprite
   movable: boolean; // whether or not the sprite moves with character movement
   animate: boolean;
-
-  static Velocity = 3;
 
   constructor({
     ctx,
@@ -63,13 +61,13 @@ class Sprite {
     // to move in response to the player
     if (this.movable) {
       if (key[Keys.W].pressed) {
-        this.position.y += Sprite.Velocity;
+        this.position.y += VELOCITY;
       } else if (key[Keys.S].pressed) {
-        this.position.y -= Sprite.Velocity;
+        this.position.y -= VELOCITY;
       } else if (key[Keys.A].pressed) {
-        this.position.x += Sprite.Velocity;
+        this.position.x += VELOCITY;
       } else if (key[Keys.D].pressed) {
-        this.position.x -= Sprite.Velocity;
+        this.position.x -= VELOCITY;
       }
     }
     // Otherwise, modify its image to simulate animation

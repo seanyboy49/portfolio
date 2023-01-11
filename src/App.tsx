@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import pelletTownSrc from "./images/pellet-town.png";
 import playerUpSrc from "./images/player-up.png";
 import playerDownSrc from "./images/player-down.png";
@@ -9,33 +9,57 @@ import "./App.css";
 import Sprite from "./classes/Sprite";
 import useCanvas from "./hooks/useCanvas";
 import useKeyboardInput from "./hooks/useKeyboardInput";
+import collisions from "./data/collisions";
+import Boundary from "./classes/Boundary";
 
 const OFFSET = {
   x: -735,
   y: -650,
-};
+} as const;
+
+const MAP_DIMENSIONS = {
+  width: 70,
+  height: 40,
+} as const;
+
+const collisionsMatrix = [];
+
+for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
+  collisionsMatrix.push(collisions.slice(i, i + MAP_DIMENSIONS.width));
+}
+
+// Set up collision boundaries
+const collisionsMap: Array<number[]> = [];
+// map is 70 tiles map and 40 tiles tall
+for (let i = 0; i < collisions.length; i += 70) {
+  collisionsMap.push(collisions.slice(i, i + 70));
+}
 
 function App() {
   const backgroudSprite = useRef<Sprite | null>(null);
   const playerSprite = useRef<Sprite | null>(null);
+  const boundarySprites = useRef<Boundary[] | null>(null);
   const keyEvent = useKeyboardInput();
 
   const draw = useCallback(
     (context: CanvasRenderingContext2D) => {
       const background = backgroudSprite.current;
       const player = playerSprite.current;
+      const boundaries = boundarySprites.current;
 
-      if (!background || !player) {
+      if (!background || !player || !boundaries) {
         return;
       }
 
       // Draw sprites
       background.draw();
       player.draw();
+      boundaries.forEach((boundary) => boundary.draw());
 
       // Handle keyboard events
       background.handleKeyboardInput(keyEvent);
       player.handleKeyboardInput(keyEvent);
+      boundaries.forEach((boundary) => boundary.handleKeyboardInput(keyEvent));
     },
     [keyEvent]
   );
@@ -64,6 +88,25 @@ function App() {
         },
         movable: false,
       });
+
+      const boundaries = collisionsMap
+        .flatMap((row, y) => {
+          return row.map((cell, x) => {
+            if (cell === 1025) {
+              return new Boundary({
+                ctx: context,
+                position: {
+                  x: x * Boundary.width + OFFSET.x,
+                  y: y * Boundary.height + OFFSET.y,
+                },
+              });
+            }
+            return null;
+          });
+        })
+        .filter((v): v is Boundary => v !== null);
+
+      boundarySprites.current = boundaries;
     },
     []
   );
