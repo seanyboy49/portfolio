@@ -1,9 +1,5 @@
 import { Keys, KeysPressed } from "../hooks/useKeyboardInput";
-
-type Position = {
-  x: number;
-  y: number;
-};
+import { Position } from "./types";
 
 type Frames = {
   total: number; // total number of frames in a sprite sheet
