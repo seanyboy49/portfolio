@@ -1,4 +1,6 @@
+import { OFFSET } from "../App";
 import { Keys, KeysPressed } from "../hooks/useKeyboardInput";
+import Boundary from "./Boundary";
 import { Position, VELOCITY } from "./types";
 
 type Frames = {
@@ -56,7 +58,7 @@ class Sprite {
     this.animate = false;
   }
 
-  handleKeyboardInput(key: KeysPressed) {
+  handleKeyboardInput(key: KeysPressed, boundaries?: Boundary[]) {
     // If the sprite is movable, then modify its position
     // to move in response to the player
     if (this.movable) {
@@ -72,6 +74,11 @@ class Sprite {
     }
     // Otherwise, modify its image to simulate animation
     else {
+      // this.x = 512
+      // this.y = 288
+      const x_ = Math.floor(this.position.x / 48 + Math.abs(OFFSET.x / 48)); // 25
+      const y_ = Math.floor(this.position.y / 48 + Math.abs(OFFSET.y / 48)); // 19
+
       if (key[Keys.W].pressed) {
         this.animate = true;
         this.image.src = this.sprites!.up;
@@ -89,15 +96,15 @@ class Sprite {
   }
 
   draw() {
-    // this.ctx.translate(
-    //   this.position.x + this.image.width / 2,
-    //   this.position.y + this.image.height / 2
-    // );
+    this.ctx.translate(
+      this.position.x + this.image.width / 2,
+      this.position.y + this.image.height / 2
+    );
 
-    // this.ctx.translate(
-    //   -this.position.x - this.image.width / 2,
-    //   -this.position.y - this.image.height / 2
-    //  )
+    this.ctx.translate(
+      -this.position.x - this.image.width / 2,
+      -this.position.y - this.image.height / 2
+    );
 
     this.ctx.drawImage(
       this.image, // image

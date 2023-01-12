@@ -12,11 +12,12 @@ import useKeyboardInput from "./hooks/useKeyboardInput";
 import collisions from "./data/collisions";
 import Boundary from "./classes/Boundary";
 
-const OFFSET = {
+export const OFFSET = {
   x: -735,
   y: -650,
 } as const;
 
+// Width/Height in tiles
 const MAP_DIMENSIONS = {
   width: 70,
   height: 40,
@@ -58,7 +59,7 @@ function App() {
 
       // Handle keyboard events
       background.handleKeyboardInput(keyEvent);
-      player.handleKeyboardInput(keyEvent);
+      player.handleKeyboardInput(keyEvent, boundaries);
       boundaries.forEach((boundary) => boundary.handleKeyboardInput(keyEvent));
     },
     [keyEvent]
@@ -72,6 +73,7 @@ function App() {
       backgroudSprite.current = new Sprite({
         ctx: context,
         position: { x: OFFSET.x, y: OFFSET.y },
+        // position: { x: 0, y: 0 },
         imageSrc: pelletTownSrc,
       });
 

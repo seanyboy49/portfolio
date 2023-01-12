@@ -6,6 +6,10 @@ export type SetUpSprites = (
   canvas: HTMLCanvasElement
 ) => void;
 
+// Map dimensions
+// width: 70
+// height: 40
+// tiles: 12x12
 const useCanvas = (draw: Draw, setUpSprites: SetUpSprites) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -20,6 +24,7 @@ const useCanvas = (draw: Draw, setUpSprites: SetUpSprites) => {
       let animationFrameId: number;
 
       // Set up width and height
+      // 16:9 aspect ratio that should fit any desktop size
       canvas.width = 1024;
       canvas.height = 576;
 

@@ -17,8 +17,8 @@ class Boundary {
 
   constructor({ position, ctx }: IBoundary) {
     this.position = position;
-    this.width = 48;
-    this.height = 48;
+    this.width = 12 * 4;
+    this.height = 12 * 4;
     this.ctx = ctx;
   }
 
