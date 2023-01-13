@@ -11,6 +11,8 @@ import useCanvas from "./hooks/useCanvas";
 import useKeyboardInput from "./hooks/useKeyboardInput";
 import collisions from "./data/collisions";
 import Boundary from "./classes/Boundary";
+import Game from "./classes/Game";
+import useBetterCanvas from "./hooks/useBetterCanvas";
 
 export const OFFSET = {
   x: -735,
@@ -41,6 +43,8 @@ function App() {
   const playerSprite = useRef<Sprite | null>(null);
   const boundarySprites = useRef<Boundary[] | null>(null);
   const keyEvent = useKeyboardInput();
+
+  console.log("render");
 
   const draw = useCallback(
     (context: CanvasRenderingContext2D) => {
@@ -113,7 +117,33 @@ function App() {
     []
   );
 
-  const canvas = useCanvas(draw, setUpSprites);
+  const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
+    const background = new Sprite({
+      ctx: ctx,
+      position: { x: OFFSET.x, y: OFFSET.y },
+      imageSrc: pelletTownSrc,
+    });
+
+    const player = new Sprite({
+      ctx: ctx,
+      position: { x: ctx.canvas.width / 2, y: ctx.canvas.height / 2 },
+      imageSrc: playerDownSrc,
+      frames: { total: 4, rate: 10 },
+      sprites: {
+        up: playerUpSrc,
+        down: playerDownSrc,
+        left: playerLeftSrc,
+        right: playerRightSrc,
+      },
+      movable: false,
+    });
+
+    const game = new Game({ ctx, background, player });
+
+    return game;
+  }, []);
+
+  const canvas = useBetterCanvas(setUpGame);
 
   return (
     <div className="App">
