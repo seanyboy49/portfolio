@@ -1,12 +1,11 @@
-import "./App.css";
 import GameBoard from "./components/GameBoard";
+import UnderConstruction from "./components/UnderConstruction";
 
+const underConstruction = true;
 function App() {
-  return (
-    <div className="App">
-      <GameBoard />
-    </div>
-  );
+  if (underConstruction) return <UnderConstruction />;
+
+  return <GameBoard />;
 }
 
 export default App;
