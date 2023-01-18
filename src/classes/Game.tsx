@@ -1,3 +1,5 @@
+import { OFFSET } from "../App";
+import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 
 export enum Keys {
@@ -20,10 +22,13 @@ export type KeysPressed = {
     pressed: boolean;
   };
 };
+
+type Collisions = number[][];
 interface IGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;
+  collisions: Collisions;
 }
 
 class Game {
@@ -31,11 +36,13 @@ class Game {
   background: Sprite;
   player: Sprite;
   keyEvents: KeysPressed;
+  boundaries: Boundary[];
 
-  constructor({ ctx, background, player }: IGame) {
+  constructor({ ctx, background, player, collisions }: IGame) {
     this.ctx = ctx;
     this.background = background;
     this.player = player;
+    this.boundaries = this.createBoundariesFromCollisions(collisions);
     this.keyEvents = {
       [Keys.W]: {
         pressed: false,
@@ -59,11 +66,15 @@ class Game {
   draw() {
     this.background.draw();
     this.player.draw();
+    this.boundaries.forEach((b) => b.draw());
 
     // Handle keyboard invput
     this.background.handleKeyboardInput(this.keyEvents);
     this.player.handleKeyboardInput(this.keyEvents);
+    this.boundaries.forEach((b) => b.handleKeyboardInput(this.keyEvents));
   }
+
+  handleCollisions() {}
 
   handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
@@ -97,6 +108,25 @@ class Game {
         this.keyEvents.d.pressed = false;
         break;
     }
+  }
+
+  private createBoundariesFromCollisions(collisions: Collisions) {
+    return collisions
+      .flatMap((row, y) => {
+        return row.map((cell, x) => {
+          if (cell === 1025) {
+            return new Boundary({
+              ctx: this.ctx,
+              position: {
+                x: x * Boundary.width + OFFSET.x,
+                y: y * Boundary.height + OFFSET.y,
+              },
+            });
+          }
+          return null;
+        });
+      })
+      .filter((v): v is Boundary => v !== null);
   }
 }
 

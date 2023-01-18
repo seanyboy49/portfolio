@@ -136,7 +136,12 @@ function App() {
       movable: false,
     });
 
-    const game = new Game({ ctx, background, player });
+    const game = new Game({
+      ctx,
+      background,
+      player,
+      collisions: collisionsMap,
+    });
 
     return game;
   }, []);
