@@ -8,7 +8,7 @@ export type SetUpGame = (context: CanvasRenderingContext2D) => Game;
 // width: 70
 // height: 40
 // tiles: 12x12
-const useBetterCanvas = (setUpGame: SetUpGame) => {
+const useCanvas = (setUpGame: SetUpGame) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -45,4 +45,4 @@ const useBetterCanvas = (setUpGame: SetUpGame) => {
   return canvasRef;
 };
 
-export default useBetterCanvas;
+export default useCanvas;
