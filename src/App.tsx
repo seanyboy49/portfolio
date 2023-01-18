@@ -28,8 +28,8 @@ export const MAP_DIMENSIONS = {
 // Set up collision boundaries
 const collisionsMap: Array<number[]> = [];
 // map is 70 tiles map and 40 tiles tall
-for (let i = 0; i < collisions.length; i += 70) {
-  collisionsMap.push(collisions.slice(i, i + 70));
+for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
+  collisionsMap.push(collisions.slice(i, i + MAP_DIMENSIONS.width));
 }
 
 function App() {

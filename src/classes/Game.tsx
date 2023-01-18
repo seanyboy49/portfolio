@@ -1,4 +1,5 @@
 import { MAP_DIMENSIONS, OFFSET } from "../App";
+import collisions from "../data/collisions";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 
@@ -36,12 +37,14 @@ class Game {
   background: Sprite;
   player: Sprite;
   keyEvents: KeysPressed;
-  boundaries: Array<Boundary | null>;
+  boundaries: Array<Boundary>;
+  collisionDirection?: Keys;
 
   constructor({ ctx, background, player, collisions }: IGame) {
     this.ctx = ctx;
     this.background = background;
     this.player = player;
+    // this.moving = true; // If the player is moving, then animate player/background/boundaries/etc
     this.boundaries = this.createBoundariesFromCollisions(collisions);
     this.keyEvents = {
       [Keys.W]: {
@@ -69,36 +72,102 @@ class Game {
     this.player.draw();
     this.boundaries.forEach((b) => b && b.draw());
 
-    // Handle keyboard invput
-    this.background.handleKeyboardInput(this.keyEvents);
-    this.player.handleKeyboardInput(this.keyEvents);
-    this.boundaries.forEach((b) => b && b.handleKeyboardInput(this.keyEvents));
+    this.collisionDirection = undefined;
 
-    // detect collisions
-    // this.handleCollisions();
+    // Handle keyboard invput
+    this.player.handleKeyboardInput(this.keyEvents);
+
+    this.handleCollisions(this.keyEvents);
+
+    console.log("collisionDirection", this.collisionDirection);
+    this.background.handleKeyboardInput(
+      this.keyEvents,
+      this.collisionDirection
+    );
+    this.boundaries.forEach(
+      (b) => b && b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    );
   }
 
-  handleCollisions() {
+  // problem
+  // after hitting top boundary, player cannot move in any direction
+  // because handleCollisions is still detecting a collision
+  // so even if you press down, you still have a collision
+  // and then in sprite.handleKeyboardInput
+
+  handleCollisions(keyEvents: KeysPressed) {
+    const isKeyPressed = Object.values(this.keyEvents).some(
+      (x) => x.pressed === true
+    );
+    if (!isKeyPressed) return;
+    console.log("this.handleCollisions");
+
+    for (let i = 0; i <= this.boundaries.length - 1; i++) {
+      const boundary = this.boundaries[i];
+
+      const boundary_ = {
+        ...boundary,
+      };
+
+      if (keyEvents[Keys.W].pressed) {
+        boundary_.position = {
+          x: boundary.position.x,
+          y: boundary.position.y + 3,
+        };
+      } else if (keyEvents[Keys.S].pressed) {
+        boundary_.position = {
+          x: boundary.position.x,
+          y: boundary.position.y - 3,
+        };
+      } else if (keyEvents[Keys.A].pressed) {
+        boundary_.position = {
+          x: boundary.position.x + 3,
+          y: boundary.position.y,
+        };
+      } else if (keyEvents[Keys.D].pressed) {
+        boundary_.position = {
+          x: boundary.position.x - 3,
+          y: boundary.position.y,
+        };
+      }
+
+      if (rectangularCollision(this.player as Rectangle, boundary_)) {
+        if (keyEvents[Keys.W].pressed) {
+          this.collisionDirection = Keys.W;
+        } else if (keyEvents[Keys.S].pressed) {
+          this.collisionDirection = Keys.S;
+        } else if (keyEvents[Keys.A].pressed) {
+          this.collisionDirection = Keys.A;
+        } else if (keyEvents[Keys.D].pressed) {
+          this.collisionDirection = Keys.D;
+        }
+      }
+    }
     // Broad phase
     // Find approximately where on the boundaries map the player's position is
-    const x_ =
-      Math.ceil(
-        (this.player.position.x + this.player.width! / 2) / Boundary.width +
-          Math.abs(this.background.position.x / Boundary.width)
-      ) + 1;
-    const y_ =
-      Math.ceil(
-        (this.player.position.y + this.player.height! / 2) / Boundary.width +
-          Math.abs(this.background.position.y / Boundary.width)
-      ) + 1;
+    // const x_ = Math.ceil(
+    //   (this.player.position.x + this.player.width!) / Boundary.width +
+    //     Math.abs(this.background.position.x / Boundary.width)
+    // );
+    // const y_ = Math.ceil(
+    //   (this.player.position.y + this.player.height!) / Boundary.width +
+    //     Math.abs(this.background.position.y / Boundary.width)
+    // );
+    // console.log("x_", x_); // 27
+    // console.log("y_", y_); // 21
 
     // console.log("x_", x_);
     // console.log("y_", y_);
 
-    const boundariesIndex = x_ * MAP_DIMENSIONS.width + (y_ + 1);
+    // const boundariesIndex = x_ * MAP_DIMENSIONS.width + (y_ + 1);
+    // const boundary = this.boundaries[boundariesIndex];
+    // if (boundary) {
+    //   // console.log("boundary", boundary);
+    //   boundary.color = `rgba(50, 0, 0, 1)`;
+    // }
 
-    const broadPhaseBoundaries = [];
-    const OFFSET = 5;
+    // const broadPhaseBoundaries = [];
+    // const OFFSET = 5;
     // for (
     //   let x = boundariesIndex - MAP_DIMENSIONS.width * OFFSET;
     //   x <= boundariesIndex + MAP_DIMENSIONS.width * OFFSET;
@@ -181,21 +250,22 @@ class Game {
   }
 
   private createBoundariesFromCollisions(collisions: Collisions) {
-    return collisions.flatMap((row, y) => {
-      return row.map((cell, x) => {
-        if (cell === 1025) {
-          return new Boundary({
-            ctx: this.ctx,
-            position: {
-              x: x * Boundary.width + OFFSET.x,
-              y: y * Boundary.height + OFFSET.y,
-            },
-          });
-        }
-        return null;
-      });
-    });
-    // .filter((v): v is Boundary => v !== null);
+    return collisions
+      .flatMap((row, y) => {
+        return row.map((cell, x) => {
+          if (cell === 1025) {
+            return new Boundary({
+              ctx: this.ctx,
+              position: {
+                x: x * Boundary.width + OFFSET.x,
+                y: y * Boundary.height + OFFSET.y,
+              },
+            });
+          }
+          return null;
+        });
+      })
+      .filter((v): v is Boundary => v !== null);
   }
 }
 

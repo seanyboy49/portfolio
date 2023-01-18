@@ -30,14 +30,19 @@ class Boundary {
     this.ctx.fillRect(x, y, this.width, this.height);
   }
 
-  handleKeyboardInput(key: KeysPressed) {
+  handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
     if (key[Keys.W].pressed) {
+      if (collisionDirection && collisionDirection === Keys.W) return;
+
       this.position.y += VELOCITY;
     } else if (key[Keys.S].pressed) {
+      if (collisionDirection && collisionDirection === Keys.S) return;
       this.position.y -= VELOCITY;
     } else if (key[Keys.A].pressed) {
+      if (collisionDirection && collisionDirection === Keys.A) return;
       this.position.x += VELOCITY;
     } else if (key[Keys.D].pressed) {
+      if (collisionDirection && collisionDirection === Keys.D) return;
       this.position.x -= VELOCITY;
     }
   }

@@ -30,6 +30,7 @@ class Sprite {
   height?: number; // the height of the sprite
   movable: boolean; // whether or not the sprite moves with character movement
   animate: boolean;
+  velocity: number;
 
   constructor({
     ctx,
@@ -41,6 +42,7 @@ class Sprite {
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
+    this.velocity = VELOCITY;
 
     this.image = new Image();
     this.image.src = imageSrc;
@@ -58,27 +60,27 @@ class Sprite {
     this.animate = false;
   }
 
-  handleKeyboardInput(key: KeysPressed, boundaries?: Boundary[]) {
+  handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
     // If the sprite is movable, then modify its position
     // to move in response to the player
     if (this.movable) {
       if (key[Keys.W].pressed) {
-        this.position.y += VELOCITY;
+        if (collisionDirection && collisionDirection === Keys.W) return;
+        this.position.y += this.velocity;
       } else if (key[Keys.S].pressed) {
-        this.position.y -= VELOCITY;
+        if (collisionDirection && collisionDirection === Keys.S) return;
+
+        this.position.y -= this.velocity;
       } else if (key[Keys.A].pressed) {
-        this.position.x += VELOCITY;
+        if (collisionDirection && collisionDirection === Keys.A) return;
+        this.position.x += this.velocity;
       } else if (key[Keys.D].pressed) {
-        this.position.x -= VELOCITY;
+        if (collisionDirection && collisionDirection === Keys.D) return;
+        this.position.x -= this.velocity;
       }
     }
     // Otherwise, modify its image to simulate animation
     else {
-      // this.x = 512
-      // this.y = 288
-      const x_ = Math.floor(this.position.x / 48 + Math.abs(OFFSET.x / 48)); // 25
-      const y_ = Math.floor(this.position.y / 48 + Math.abs(OFFSET.y / 48)); // 19
-
       if (key[Keys.W].pressed) {
         this.animate = true;
         this.image.src = this.sprites!.up;
