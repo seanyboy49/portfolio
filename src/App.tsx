@@ -42,80 +42,78 @@ function App() {
   const backgroudSprite = useRef<Sprite | null>(null);
   const playerSprite = useRef<Sprite | null>(null);
   const boundarySprites = useRef<Boundary[] | null>(null);
-  const keyEvent = useKeyboardInput();
+  // const keyEvent = useKeyboardInput();
 
-  console.log("render");
+  // const draw = useCallback(
+  //   (context: CanvasRenderingContext2D) => {
+  //     const background = backgroudSprite.current;
+  //     const player = playerSprite.current;
+  //     const boundaries = boundarySprites.current;
 
-  const draw = useCallback(
-    (context: CanvasRenderingContext2D) => {
-      const background = backgroudSprite.current;
-      const player = playerSprite.current;
-      const boundaries = boundarySprites.current;
+  //     if (!background || !player || !boundaries) {
+  //       return;
+  //     }
 
-      if (!background || !player || !boundaries) {
-        return;
-      }
+  //     // Draw sprites
+  //     background.draw();
+  //     player.draw();
+  //     boundaries.forEach((boundary) => boundary.draw());
 
-      // Draw sprites
-      background.draw();
-      player.draw();
-      boundaries.forEach((boundary) => boundary.draw());
-
-      // Handle keyboard events
-      background.handleKeyboardInput(keyEvent);
-      player.handleKeyboardInput(keyEvent, boundaries);
-      boundaries.forEach((boundary) => boundary.handleKeyboardInput(keyEvent));
-    },
-    [keyEvent]
-  );
+  //     // Handle keyboard events
+  //     background.handleKeyboardInput(keyEvent);
+  //     player.handleKeyboardInput(keyEvent, boundaries);
+  //     boundaries.forEach((boundary) => boundary.handleKeyboardInput(keyEvent));
+  //   },
+  //   [keyEvent]
+  // );
 
   /**
    * Set up sprites
    */
-  const setUpSprites = useCallback(
-    (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-      backgroudSprite.current = new Sprite({
-        ctx: context,
-        position: { x: OFFSET.x, y: OFFSET.y },
-        // position: { x: 0, y: 0 },
-        imageSrc: pelletTownSrc,
-      });
+  // const setUpSprites = useCallback(
+  //   (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
+  //     backgroudSprite.current = new Sprite({
+  //       ctx: context,
+  //       position: { x: OFFSET.x, y: OFFSET.y },
+  //       // position: { x: 0, y: 0 },
+  //       imageSrc: pelletTownSrc,
+  //     });
 
-      playerSprite.current = new Sprite({
-        ctx: context,
-        position: { x: canvas.width / 2, y: canvas.height / 2 },
-        imageSrc: playerDownSrc,
-        frames: { total: 4, rate: 10 },
-        sprites: {
-          up: playerUpSrc,
-          down: playerDownSrc,
-          left: playerLeftSrc,
-          right: playerRightSrc,
-        },
-        movable: false,
-      });
+  //     playerSprite.current = new Sprite({
+  //       ctx: context,
+  //       position: { x: canvas.width / 2, y: canvas.height / 2 },
+  //       imageSrc: playerDownSrc,
+  //       frames: { total: 4, rate: 10 },
+  //       sprites: {
+  //         up: playerUpSrc,
+  //         down: playerDownSrc,
+  //         left: playerLeftSrc,
+  //         right: playerRightSrc,
+  //       },
+  //       movable: false,
+  //     });
 
-      const boundaries = collisionsMap
-        .flatMap((row, y) => {
-          return row.map((cell, x) => {
-            if (cell === 1025) {
-              return new Boundary({
-                ctx: context,
-                position: {
-                  x: x * Boundary.width + OFFSET.x,
-                  y: y * Boundary.height + OFFSET.y,
-                },
-              });
-            }
-            return null;
-          });
-        })
-        .filter((v): v is Boundary => v !== null);
+  //     const boundaries = collisionsMap
+  //       .flatMap((row, y) => {
+  //         return row.map((cell, x) => {
+  //           if (cell === 1025) {
+  //             return new Boundary({
+  //               ctx: context,
+  //               position: {
+  //                 x: x * Boundary.width + OFFSET.x,
+  //                 y: y * Boundary.height + OFFSET.y,
+  //               },
+  //             });
+  //           }
+  //           return null;
+  //         });
+  //       })
+  //       .filter((v): v is Boundary => v !== null);
 
-      boundarySprites.current = boundaries;
-    },
-    []
-  );
+  //     boundarySprites.current = boundaries;
+  //   },
+  //   []
+  // );
 
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
     const background = new Sprite({
