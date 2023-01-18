@@ -1,6 +1,4 @@
-import { OFFSET } from "../App";
-import { Keys, KeysPressed } from "../hooks/useKeyboardInput";
-import Boundary from "./Boundary";
+import { Keys, KeysPressed } from "../classes/types";
 import { Position, VELOCITY } from "./types";
 
 type Frames = {

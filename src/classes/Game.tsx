@@ -63,10 +63,10 @@ class Game {
     this.collisionDirection = undefined;
     this.handleCollisions(this.keyEvents);
 
-    // Handle keyboard invput for Player
+    // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
 
-    // Handle keyboard invput for movables
+    // Handle keyboard input for movables
     this.background.handleKeyboardInput(
       this.keyEvents,
       this.collisionDirection
@@ -85,6 +85,7 @@ class Game {
     for (let i = 0; i <= this.boundaries.length - 1; i++) {
       const boundary = padRectangle(this.boundaries[i], keyEvents);
 
+      // If there is a collision, set the collision direction
       if (rectangularCollision(this.player as Rectangle, boundary)) {
         if (keyEvents[Keys.W].pressed) {
           this.collisionDirection = Keys.W;

@@ -1,4 +1,4 @@
-import { Keys, KeysPressed } from "../hooks/useKeyboardInput";
+import { Keys, KeysPressed } from "../classes/types";
 import { Position, VELOCITY } from "./types";
 
 interface IBoundary {

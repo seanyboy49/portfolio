@@ -7,8 +7,6 @@ import playerLeftSrc from "./images/player-left.png";
 
 import "./App.css";
 import Sprite from "./classes/Sprite";
-import useCanvas from "./hooks/useCanvas";
-import useKeyboardInput from "./hooks/useKeyboardInput";
 import collisions from "./data/collisions";
 import Boundary from "./classes/Boundary";
 import Game from "./classes/Game";
