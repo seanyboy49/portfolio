@@ -11,6 +11,7 @@ class Boundary {
   position: Position;
   width: number;
   height: number;
+  color: string;
 
   static width = 48;
   static height = 48;
@@ -20,11 +21,12 @@ class Boundary {
     this.width = 12 * 4;
     this.height = 12 * 4;
     this.ctx = ctx;
+    this.color = `rgba(255, 0, 0, 0.5)`;
   }
 
   draw() {
     const { x, y } = this.position;
-    this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
+    this.ctx.fillStyle = this.color;
     this.ctx.fillRect(x, y, this.width, this.height);
   }
 

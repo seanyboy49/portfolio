@@ -20,16 +20,10 @@ export const OFFSET = {
 } as const;
 
 // Width/Height in tiles
-const MAP_DIMENSIONS = {
+export const MAP_DIMENSIONS = {
   width: 70,
   height: 40,
 } as const;
-
-const collisionsMatrix = [];
-
-for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
-  collisionsMatrix.push(collisions.slice(i, i + MAP_DIMENSIONS.width));
-}
 
 // Set up collision boundaries
 const collisionsMap: Array<number[]> = [];

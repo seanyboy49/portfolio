@@ -9,7 +9,7 @@ export type SetUpSprites = (
 // Map dimensions
 // width: 70
 // height: 40
-// tiles: 12x12
+// tiles: 48x48
 const useCanvas = (draw: Draw, setUpSprites: SetUpSprites) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
