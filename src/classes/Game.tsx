@@ -44,7 +44,7 @@ class Game {
     this.ctx = ctx;
     this.background = background;
     this.player = player;
-    // this.moving = true; // If the player is moving, then animate player/background/boundaries/etc
+
     this.boundaries = this.createBoundariesFromCollisions(collisions);
     this.keyEvents = {
       [Keys.W]: {
@@ -61,7 +61,6 @@ class Game {
       },
     };
 
-    // console.log("this.boundaries", this.boundaries);
     // Register event listeners
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
     window.addEventListener("keyup", this.handleKeyUp.bind(this));
@@ -70,7 +69,7 @@ class Game {
   draw() {
     this.background.draw();
     this.player.draw();
-    this.boundaries.forEach((b) => b && b.draw());
+    this.boundaries.forEach((b) => b.draw());
 
     this.collisionDirection = undefined;
 
@@ -84,23 +83,16 @@ class Game {
       this.keyEvents,
       this.collisionDirection
     );
-    this.boundaries.forEach(
-      (b) => b && b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    this.boundaries.forEach((b) =>
+      b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
   }
-
-  // problem
-  // after hitting top boundary, player cannot move in any direction
-  // because handleCollisions is still detecting a collision
-  // so even if you press down, you still have a collision
-  // and then in sprite.handleKeyboardInput
 
   handleCollisions(keyEvents: KeysPressed) {
     const isKeyPressed = Object.values(this.keyEvents).some(
       (x) => x.pressed === true
     );
     if (!isKeyPressed) return;
-    console.log("this.handleCollisions");
 
     for (let i = 0; i <= this.boundaries.length - 1; i++) {
       const boundary = this.boundaries[i];

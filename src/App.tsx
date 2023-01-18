@@ -110,6 +110,7 @@ function App() {
   // );
 
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
+    console.log("setup");
     const background = new Sprite({
       ctx: ctx,
       position: { x: OFFSET.x, y: OFFSET.y },
