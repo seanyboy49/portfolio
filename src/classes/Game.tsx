@@ -1,5 +1,6 @@
 import { MAP_DIMENSIONS, OFFSET } from "../App";
 import collisions from "../data/collisions";
+import { Rectangle, rectangularCollision } from "../utilities";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 
@@ -36,9 +37,9 @@ class Game {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;
-  keyEvents: KeysPressed;
-  boundaries: Array<Boundary>;
-  collisionDirection?: Keys;
+  keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
+  boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
+  collisionDirection?: Keys; // The direction the player was moving when colliding
 
   constructor({ ctx, background, player, collisions }: IGame) {
     this.ctx = ctx;
@@ -66,19 +67,26 @@ class Game {
     window.addEventListener("keyup", this.handleKeyUp.bind(this));
   }
 
-  draw() {
+  /**
+   * The main animation loop to be handled in useCanvas
+   * Draw each game element
+   * Detect for collisions
+   * Handle keyboard input for each game element
+   */
+  public draw() {
     this.background.draw();
     this.player.draw();
     this.boundaries.forEach((b) => b.draw());
 
+    // Handle collision detection
+    // Initialize to undefined because it should only be defined when a collision is detected
     this.collisionDirection = undefined;
-
-    // Handle keyboard invput
-    this.player.handleKeyboardInput(this.keyEvents);
-
     this.handleCollisions(this.keyEvents);
 
-    console.log("collisionDirection", this.collisionDirection);
+    // Handle keyboard invput for Player
+    this.player.handleKeyboardInput(this.keyEvents);
+
+    // Handle keyboard invput for movables
     this.background.handleKeyboardInput(
       this.keyEvents,
       this.collisionDirection
@@ -88,7 +96,7 @@ class Game {
     );
   }
 
-  handleCollisions(keyEvents: KeysPressed) {
+  private handleCollisions(keyEvents: KeysPressed) {
     const isKeyPressed = Object.values(this.keyEvents).some(
       (x) => x.pressed === true
     );
@@ -207,7 +215,7 @@ class Game {
     // console.log("y", y_);
   }
 
-  handleKeyDown(event: KeyboardEvent) {
+  private handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       case Keys.W:
         this.keyEvents.w.pressed = true;
@@ -224,7 +232,7 @@ class Game {
     }
   }
 
-  handleKeyUp(event: KeyboardEvent) {
+  private handleKeyUp(event: KeyboardEvent) {
     switch (event.key) {
       case Keys.W:
         this.keyEvents.w.pressed = false;
@@ -268,24 +276,5 @@ class Game {
 // player
 // sprites
 // animation loop
-
-type Rectangle = {
-  position: {
-    x: number;
-    y: number;
-  };
-  width: number;
-  height: number;
-};
-function rectangularCollision(rectangle1: Rectangle, rectangle2: Rectangle) {
-  // console.log("rectangle1", rectangle1.position);
-  // console.log("rectangle2", rectangle2);
-  return (
-    rectangle1.position.x + rectangle1.width >= rectangle2.position.x && // rect1 right hits rect2 left
-    rectangle1.position.x <= rectangle2.position.x + rectangle2.width && // rect1 left hits rect2 right
-    rectangle1.position.y <= rectangle2.position.y + rectangle2.height && // rect1 top hits rect2 bottom
-    rectangle1.position.y + rectangle1.height >= rectangle2.position.y // rect2 bottom hits rect2 top
-  );
-}
 
 export default Game;
