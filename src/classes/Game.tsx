@@ -1,4 +1,4 @@
-import { MAP_DIMENSIONS, OFFSET } from "../App";
+import { OFFSET } from "../components/GameBoard";
 import collisions from "../data/collisions";
 import { padRectangle, Rectangle, rectangularCollision } from "../utilities";
 import Boundary from "./Boundary";
