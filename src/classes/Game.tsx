@@ -1,29 +1,9 @@
 import { MAP_DIMENSIONS, OFFSET } from "../App";
 import collisions from "../data/collisions";
-import { Rectangle, rectangularCollision } from "../utilities";
+import { padRectangle, Rectangle, rectangularCollision } from "../utilities";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
-
-export enum Keys {
-  W = "w",
-  A = "a",
-  S = "s",
-  D = "d",
-}
-export type KeysPressed = {
-  [Keys.W]: {
-    pressed: boolean;
-  };
-  [Keys.A]: {
-    pressed: boolean;
-  };
-  [Keys.S]: {
-    pressed: boolean;
-  };
-  [Keys.D]: {
-    pressed: boolean;
-  };
-};
+import { Keys, KeysPressed } from "./types";
 
 type Collisions = number[][];
 interface IGame {
@@ -97,41 +77,15 @@ class Game {
   }
 
   private handleCollisions(keyEvents: KeysPressed) {
-    const isKeyPressed = Object.values(this.keyEvents).some(
+    const isKeyPressed = Object.values(keyEvents).some(
       (x) => x.pressed === true
     );
     if (!isKeyPressed) return;
 
     for (let i = 0; i <= this.boundaries.length - 1; i++) {
-      const boundary = this.boundaries[i];
+      const boundary = padRectangle(this.boundaries[i], keyEvents);
 
-      const boundary_ = {
-        ...boundary,
-      };
-
-      if (keyEvents[Keys.W].pressed) {
-        boundary_.position = {
-          x: boundary.position.x,
-          y: boundary.position.y + 3,
-        };
-      } else if (keyEvents[Keys.S].pressed) {
-        boundary_.position = {
-          x: boundary.position.x,
-          y: boundary.position.y - 3,
-        };
-      } else if (keyEvents[Keys.A].pressed) {
-        boundary_.position = {
-          x: boundary.position.x + 3,
-          y: boundary.position.y,
-        };
-      } else if (keyEvents[Keys.D].pressed) {
-        boundary_.position = {
-          x: boundary.position.x - 3,
-          y: boundary.position.y,
-        };
-      }
-
-      if (rectangularCollision(this.player as Rectangle, boundary_)) {
+      if (rectangularCollision(this.player as Rectangle, boundary)) {
         if (keyEvents[Keys.W].pressed) {
           this.collisionDirection = Keys.W;
         } else if (keyEvents[Keys.S].pressed) {
