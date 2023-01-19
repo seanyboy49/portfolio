@@ -1,3 +1,4 @@
+import { CanvasGame } from "../types";
 import Enemy from "./Enemy";
 import Player from "./Player";
 import Projectile from "./Projectile";
@@ -6,7 +7,7 @@ interface ISpaceShooterGame {
   ctx: CanvasRenderingContext2D;
   player: Player;
 }
-class SpaceShooterGame {
+class SpaceShooterGame implements CanvasGame {
   readonly ctx: CanvasRenderingContext2D;
   player: Player;
   enemies: Enemy[];
@@ -49,7 +50,7 @@ class SpaceShooterGame {
       event.clientY - this.CANVAS_CENTER.y,
       event.clientX - this.CANVAS_CENTER.x
     );
-    const SPEED = 6;
+    const SPEED = 3;
     const velocity = {
       x: Math.cos(angle) * SPEED,
       y: Math.sin(angle) * SPEED,
