@@ -28,7 +28,7 @@ for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
   collisionsMap.push(collisions.slice(i, i + MAP_DIMENSIONS.width));
 }
 
-const GameBoard = () => {
+const TopDownGameBoard = () => {
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
     const background = new Sprite({
       ctx: ctx,
@@ -65,4 +65,4 @@ const GameBoard = () => {
   return <canvas ref={canvas} />;
 };
 
-export default GameBoard;
+export default TopDownGameBoard;

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import githubSrc from "../images/social/github.png";
 import linkedInSrc from "../images/social/linkedIn.png";
@@ -30,6 +31,10 @@ const socialLinks = [
 ];
 
 const UnderConstruction = () => {
+  const [playGame, setPlayGame] = useState(false);
+  if (playGame) {
+    return <SpaceShooter />;
+  }
   return (
     <FlexContainer style={{ height: "100vh" }}>
       <Hero>
@@ -40,10 +45,15 @@ const UnderConstruction = () => {
           {socialLinks.map((link) => {
             return <Icon {...link} />;
           })}
+          <button onClick={() => setPlayGame(true)}>Shoot</button>
         </FlexContainer>
       </Hero>
     </FlexContainer>
   );
+};
+
+const SpaceShooter = () => {
+  return <canvas />;
 };
 
 export default UnderConstruction;

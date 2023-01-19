@@ -1,4 +1,4 @@
-import { OFFSET } from "../components/GameBoard";
+import { OFFSET } from "../components/TopDownGameBoard";
 import collisions from "../data/collisions";
 import { padRectangle, Rectangle, rectangularCollision } from "../utilities";
 import Boundary from "./Boundary";
