@@ -1,11 +1,11 @@
-import TopDownGameBoard from "./components/TopDownGameBoard";
+import RPGGameBoard from "./components/RPGGameBoard";
 import UnderConstruction from "./components/UnderConstruction";
 
 const underConstruction = true;
 function App() {
   if (underConstruction) return <UnderConstruction />;
 
-  return <TopDownGameBoard />;
+  return <RPGGameBoard />;
 }
 
 export default App;

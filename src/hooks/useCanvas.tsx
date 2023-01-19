@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import Game from "../classes/Game";
+// import Game from "../games/Game";
 
 export type Draw = (context: CanvasRenderingContext2D) => void;
-export type SetUpGame = (context: CanvasRenderingContext2D) => Game;
+export type SetUpGame = (context: CanvasRenderingContext2D) => any;
 
 // Map dimensions
 // width: 70

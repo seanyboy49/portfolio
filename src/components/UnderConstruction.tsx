@@ -3,6 +3,7 @@ import styled from "styled-components";
 import githubSrc from "../images/social/github.png";
 import linkedInSrc from "../images/social/linkedIn.png";
 import Icon from "./Icon";
+import SpaceShooterGameBoard from "./SpaceShooterGame";
 
 const FlexContainer = styled.div`
   display: flex;
@@ -31,9 +32,9 @@ const socialLinks = [
 ];
 
 const UnderConstruction = () => {
-  const [playGame, setPlayGame] = useState(false);
+  const [playGame, setPlayGame] = useState(true);
   if (playGame) {
-    return <SpaceShooter />;
+    return <SpaceShooterGameBoard />;
   }
   return (
     <FlexContainer style={{ height: "100vh" }}>
@@ -50,10 +51,6 @@ const UnderConstruction = () => {
       </Hero>
     </FlexContainer>
   );
-};
-
-const SpaceShooter = () => {
-  return <canvas />;
 };
 
 export default UnderConstruction;

@@ -1,19 +1,18 @@
-import { OFFSET } from "../components/TopDownGameBoard";
-import collisions from "../data/collisions";
-import { padRectangle, Rectangle, rectangularCollision } from "../utilities";
+import { OFFSET } from "../../components/RPGGameBoard";
+import { padRectangle, Rectangle, rectangularCollision } from "../../utilities";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
 
 type Collisions = number[][];
-interface IGame {
+interface IRPGGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;
   collisions: Collisions;
 }
 
-class Game {
+class RPGGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;
@@ -21,7 +20,7 @@ class Game {
   boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
   collisionDirection?: Keys; // The direction the player was moving when colliding
 
-  constructor({ ctx, background, player, collisions }: IGame) {
+  constructor({ ctx, background, player, collisions }: IRPGGame) {
     this.ctx = ctx;
     this.background = background;
     this.player = player;
@@ -232,4 +231,4 @@ class Game {
 // sprites
 // animation loop
 
-export default Game;
+export default RPGGame;

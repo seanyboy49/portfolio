@@ -1,5 +1,4 @@
-import { Keys, KeysPressed } from "../classes/types";
-import { Position, VELOCITY } from "./types";
+import { Position, VELOCITY, Keys, KeysPressed } from "./types";
 
 type Frames = {
   total: number; // total number of frames in a sprite sheet
