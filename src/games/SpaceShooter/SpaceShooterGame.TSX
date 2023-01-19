@@ -1,5 +1,6 @@
 import Enemy from "./Enemy";
 import Player from "./Player";
+import Projectile from "./Projectile";
 
 interface ISpaceShooterGame {
   ctx: CanvasRenderingContext2D;
@@ -9,6 +10,7 @@ class SpaceShooterGame {
   readonly ctx: CanvasRenderingContext2D;
   player: Player;
   enemies: Enemy[];
+  projectiles: Projectile[];
   readonly CANVAS_CENTER: {
     x: number;
     y: number;
@@ -18,10 +20,14 @@ class SpaceShooterGame {
     this.ctx = ctx;
     this.player = player;
     this.enemies = [];
+    this.projectiles = [];
     this.CANVAS_CENTER = {
       x: ctx.canvas.width / 2,
       y: ctx.canvas.height / 2,
     };
+
+    // Register event listeners
+    window.addEventListener("click", this.handleShoot.bind(this));
   }
 
   public draw() {
@@ -33,6 +39,32 @@ class SpaceShooterGame {
 
     // animate enemies
     this.enemies.forEach((enemy) => enemy.update());
+
+    // animate projectiles
+    this.projectiles.forEach((projectile) => projectile.update());
+  }
+
+  private handleShoot(event: MouseEvent) {
+    const angle = Math.atan2(
+      event.clientY - this.CANVAS_CENTER.y,
+      event.clientX - this.CANVAS_CENTER.x
+    );
+    const SPEED = 6;
+    const velocity = {
+      x: Math.cos(angle) * SPEED,
+      y: Math.sin(angle) * SPEED,
+    };
+
+    const projectile = new Projectile({
+      ctx: this.ctx,
+      x: this.CANVAS_CENTER.x,
+      y: this.CANVAS_CENTER.y,
+      radius: 5,
+      color: "white",
+      velocity,
+    });
+
+    this.projectiles.push(projectile);
   }
 
   private spawnEnemies() {
