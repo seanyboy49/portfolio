@@ -6,7 +6,7 @@ import playerRightSrc from "../images/player-right.png";
 import playerLeftSrc from "../images/player-left.png";
 
 import Sprite from "../games/RPG/Sprite";
-import Game from "../games/RPG/Game";
+import RPGGame from "../games/RPG/RPGGame";
 import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
 
@@ -50,7 +50,7 @@ const RPGGameBoard = () => {
       movable: false,
     });
 
-    const game = new Game({
+    const game = new RPGGame({
       ctx,
       background,
       player,
