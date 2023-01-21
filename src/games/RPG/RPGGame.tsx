@@ -1,5 +1,6 @@
 import { OFFSET } from "../../components/RPGGameBoard";
 import { padRectangle, Rectangle, rectangularCollision } from "../../utilities";
+import { CanvasGame } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
@@ -12,7 +13,7 @@ interface IRPGGame {
   collisions: Collisions;
 }
 
-class RPGGame {
+class RPGGame implements CanvasGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;

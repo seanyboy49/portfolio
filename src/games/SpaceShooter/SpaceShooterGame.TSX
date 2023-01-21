@@ -28,6 +28,7 @@ class SpaceShooterGame implements CanvasGame {
     };
 
     // Register event listeners
+    // TODO: move this to hook
     window.addEventListener("click", this.handleShoot.bind(this));
   }
 
@@ -42,7 +43,11 @@ class SpaceShooterGame implements CanvasGame {
     this.enemies.forEach((enemy) => enemy.update());
 
     // animate projectiles
-    this.projectiles.forEach((projectile) => projectile.update());
+    this.projectiles.forEach((projectile, projectileIndex) => {
+      projectile.update();
+
+      this.handleProjectileOutOfBounds(projectile, projectileIndex);
+    });
   }
 
   private handleShoot(event: MouseEvent) {
@@ -66,6 +71,24 @@ class SpaceShooterGame implements CanvasGame {
     });
 
     this.projectiles.push(projectile);
+  }
+
+  /**
+   * Detect if the projectile has moved past the edge of the screen in each of the 4 directions
+   * and removes it from the projectiles array
+   */
+  private handleProjectileOutOfBounds(
+    projectile: Projectile,
+    projectileIndex: number
+  ) {
+    if (
+      projectile.x + projectile.radius < 0 || // OOB left
+      projectile.x - projectile.radius > this.ctx.canvas.width || // OOB right
+      projectile.y + projectile.radius < 0 || // OOB top
+      projectile.y - projectile.radius > this.ctx.canvas.height // OOB top
+    ) {
+      this.projectiles.splice(projectileIndex, 1);
+    }
   }
 
   private spawnEnemies() {
