@@ -31,7 +31,7 @@ class SpaceShooterGame implements CanvasGame {
     // TODO: move this to hook
     window.addEventListener("click", this.handleShoot.bind(this));
 
-    this.spawnEnemies();
+    // this.spawnEnemies();
   }
 
   public draw() {

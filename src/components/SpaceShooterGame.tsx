@@ -14,7 +14,7 @@ const SpaceShooterGameBoard = () => {
     return game;
   }, []);
 
-  const canvas = useCanvas(setUpGame);
+  const canvas = useCanvas({ setUpGame });
 
   return <canvas ref={canvas} />;
 };

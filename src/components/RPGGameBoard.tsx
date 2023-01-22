@@ -60,7 +60,14 @@ const RPGGameBoard = () => {
     return game;
   }, []);
 
-  const canvas = useCanvas(setUpGame);
+  // 16:9 aspect ratio that should fit any desktop size
+  const canvas = useCanvas({
+    setUpGame,
+    dimensions: {
+      width: 1024,
+      height: 576,
+    },
+  });
 
   return <canvas ref={canvas} />;
 };

@@ -4,12 +4,19 @@ import { CanvasGame } from "../games/types";
 
 export type Draw = (context: CanvasRenderingContext2D) => void;
 export type SetUpGame = (context: CanvasRenderingContext2D) => CanvasGame;
+interface IUseCanvas {
+  setUpGame: SetUpGame;
+  dimensions?: {
+    width: number;
+    height: number;
+  };
+}
 
 // Map dimensions
 // width: 70
 // height: 40
 // tiles: 12x12
-const useCanvas = (setUpGame: SetUpGame) => {
+const useCanvas = ({ setUpGame, dimensions }: IUseCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -23,9 +30,8 @@ const useCanvas = (setUpGame: SetUpGame) => {
       let animationFrameId: number;
 
       // Set up width and height
-      // 16:9 aspect ratio that should fit any desktop size
-      canvas.width = 1024;
-      canvas.height = 576;
+      canvas.width = dimensions?.width || window.innerWidth;
+      canvas.height = dimensions?.height || window.innerHeight;
 
       const game = setUpGame(context);
 
