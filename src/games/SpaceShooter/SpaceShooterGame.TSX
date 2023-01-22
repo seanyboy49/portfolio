@@ -35,6 +35,10 @@ class SpaceShooterGame implements CanvasGame {
     this.spawnEnemies();
   }
 
+  /**
+   * The main animation loop. It should be called the first time in useCanvas
+   * and will call itself from then on out
+   */
   public draw() {
     this.animationId = requestAnimationFrame(() => this.draw());
 
@@ -110,7 +114,7 @@ class SpaceShooterGame implements CanvasGame {
     const actualDistance = distance - enemy.radius - this.player.radius;
     if (actualDistance >= 1) return;
 
-    cancelAnimationFrame(this.animationId!);
+    this.animationId && cancelAnimationFrame(this.animationId);
   }
 
   private handleEnemyProjectileCollision(enemy: Enemy, enemyIndex: number) {

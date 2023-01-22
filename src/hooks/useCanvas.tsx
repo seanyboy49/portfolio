@@ -23,26 +23,17 @@ const useCanvas = ({ setUpGame, dimensions }: IUseCanvas) => {
       // Exit early if there is no context
       if (!context) return;
 
-      let animationFrameId: number;
-
       // Set up width and height
       canvas.width = dimensions?.width || window.innerWidth;
       canvas.height = dimensions?.height || window.innerHeight;
 
       const game = setUpGame(context);
 
-      // Animation loop
-      // const tick = () => {
-      //   game.draw();
-      //   animationFrameId = requestAnimationFrame(tick);
-      // };
-
-      // tick();
-
+      // Inititate the animation loop
       game.draw();
 
       return () => {
-        cancelAnimationFrame(animationFrameId);
+        game.animationId && cancelAnimationFrame(game.animationId);
       };
     }
   }, [setUpGame, dimensions]);
