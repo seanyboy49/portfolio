@@ -30,6 +30,8 @@ class SpaceShooterGame implements CanvasGame {
     // Register event listeners
     // TODO: move this to hook
     window.addEventListener("click", this.handleShoot.bind(this));
+
+    this.spawnEnemies();
   }
 
   public draw() {
@@ -39,14 +41,18 @@ class SpaceShooterGame implements CanvasGame {
 
     this.player.draw();
 
-    // animate enemies
-    this.enemies.forEach((enemy) => enemy.update());
-
     // animate projectiles
     this.projectiles.forEach((projectile, projectileIndex) => {
       projectile.update();
 
       this.handleProjectileOutOfBounds(projectile, projectileIndex);
+    });
+
+    // animate enemies
+    this.enemies.forEach((enemy, enemyIndex) => {
+      enemy.update();
+
+      this.handleEnemyProjectileCollision(enemy, enemyIndex);
     });
   }
 
@@ -89,6 +95,30 @@ class SpaceShooterGame implements CanvasGame {
     ) {
       this.projectiles.splice(projectileIndex, 1);
     }
+  }
+
+  private handleEnemyProjectileCollision(enemy: Enemy, enemyIndex: number) {
+    this.projectiles.forEach((projectile, projectileIndex) => {
+      const distance = Math.hypot(
+        projectile.x - enemy.x,
+        projectile.y - enemy.y
+      );
+
+      // Account for both enemy and projectile radius when calculating distance
+      const actualDistance = distance - enemy.radius - projectile.radius;
+      if (actualDistance >= 1) return;
+
+      // Shrink enemies on hit
+      if (enemy.radius - 10 > 5) {
+        enemy.radius -= 10;
+      } else {
+        // remove enemies
+        this.enemies.splice(enemyIndex, 1);
+      }
+
+      // Remove projectile
+      this.projectiles.splice(projectileIndex, 1);
+    });
   }
 
   private spawnEnemies() {
