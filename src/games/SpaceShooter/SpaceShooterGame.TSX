@@ -106,6 +106,9 @@ class SpaceShooterGame implements CanvasGame {
     }
   }
 
+  /**
+   * Detect if an enemy hits the player and stops the game
+   */
   private handleEnemyPlayerCollision(enemy: Enemy) {
     const distance = Math.hypot(
       this.player.x - enemy.x,
@@ -117,6 +120,10 @@ class SpaceShooterGame implements CanvasGame {
     this.animationId && cancelAnimationFrame(this.animationId);
   }
 
+  /**
+   * Detect if a projectile hits an enemy. Creates particle explosions on hit.
+   * @todo - Improve this to avoid O(n^2)
+   */
   private handleEnemyProjectileCollision(enemy: Enemy, enemyIndex: number) {
     this.projectiles.forEach((projectile, projectileIndex) => {
       const distance = Math.hypot(

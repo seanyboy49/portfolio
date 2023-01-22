@@ -1,4 +1,4 @@
-interface IEnemy {
+export interface IEnemy {
   ctx: CanvasRenderingContext2D;
   x: number;
   y: number;
