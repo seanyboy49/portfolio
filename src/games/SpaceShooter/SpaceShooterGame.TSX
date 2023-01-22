@@ -1,5 +1,6 @@
 import { CanvasGame } from "../types";
 import Enemy from "./Enemy";
+import Particle from "./Particle";
 import Player from "./Player";
 import Projectile from "./Projectile";
 
@@ -12,6 +13,7 @@ class SpaceShooterGame implements CanvasGame {
   player: Player;
   enemies: Enemy[];
   projectiles: Projectile[];
+  particles: Particle[];
   readonly CANVAS_CENTER: {
     x: number;
     y: number;
@@ -23,6 +25,7 @@ class SpaceShooterGame implements CanvasGame {
     this.player = player;
     this.enemies = [];
     this.projectiles = [];
+    this.particles = [];
     this.CANVAS_CENTER = {
       x: ctx.canvas.width / 2,
       y: ctx.canvas.height / 2,
@@ -55,12 +58,21 @@ class SpaceShooterGame implements CanvasGame {
       this.handleProjectileOutOfBounds(projectile, projectileIndex);
     });
 
+    // animate particles
+    this.particles.forEach((particle, particleIndex) => {
+      // Remove particles as their alpha gets smaller
+      if (particle.alpha <= 0) {
+        this.particles.splice(particleIndex, 0);
+      } else {
+        particle.update();
+      }
+    });
+
     // animate enemies
     this.enemies.forEach((enemy, enemyIndex) => {
       enemy.update();
 
       this.handleEnemyPlayerCollision(enemy);
-
       this.handleEnemyProjectileCollision(enemy, enemyIndex);
     });
   }
@@ -134,6 +146,23 @@ class SpaceShooterGame implements CanvasGame {
       // Account for both enemy and projectile radius when calculating distance
       const actualDistance = distance - enemy.radius - projectile.radius;
       if (actualDistance >= 1) return;
+
+      // Create particles on collision
+      for (let i = 0; i <= enemy.radius * 2; i++) {
+        const particle = new Particle({
+          ctx: this.ctx,
+          x: enemy.x,
+          y: enemy.y,
+          radius: Math.random() * 2,
+          color: enemy.color,
+          velocity: {
+            x: (Math.random() - 0.5) * (Math.random() * 8),
+            y: (Math.random() - 0.5) * (Math.random() * 8),
+          },
+        });
+
+        this.particles.push(particle);
+      }
 
       // Shrink enemies on hit
       if (enemy.radius - 10 > 5) {
