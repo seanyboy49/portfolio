@@ -16,6 +16,7 @@ class SpaceShooterGame implements CanvasGame {
     x: number;
     y: number;
   };
+  public animationId?: number;
 
   constructor({ ctx, player }: ISpaceShooterGame) {
     this.ctx = ctx;
@@ -31,10 +32,12 @@ class SpaceShooterGame implements CanvasGame {
     // TODO: move this to hook
     window.addEventListener("click", this.handleShoot.bind(this));
 
-    // this.spawnEnemies();
+    this.spawnEnemies();
   }
 
   public draw() {
+    this.animationId = requestAnimationFrame(() => this.draw());
+
     // Add a slight blur to projectiles with opacity trick
     this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -51,6 +54,8 @@ class SpaceShooterGame implements CanvasGame {
     // animate enemies
     this.enemies.forEach((enemy, enemyIndex) => {
       enemy.update();
+
+      this.handleEnemyPlayerCollision(enemy);
 
       this.handleEnemyProjectileCollision(enemy, enemyIndex);
     });
@@ -95,6 +100,17 @@ class SpaceShooterGame implements CanvasGame {
     ) {
       this.projectiles.splice(projectileIndex, 1);
     }
+  }
+
+  private handleEnemyPlayerCollision(enemy: Enemy) {
+    const distance = Math.hypot(
+      this.player.x - enemy.x,
+      this.player.y - enemy.y
+    );
+    const actualDistance = distance - enemy.radius - this.player.radius;
+    if (actualDistance >= 1) return;
+
+    cancelAnimationFrame(this.animationId!);
   }
 
   private handleEnemyProjectileCollision(enemy: Enemy, enemyIndex: number) {

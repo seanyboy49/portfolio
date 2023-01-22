@@ -12,10 +12,6 @@ interface IUseCanvas {
   };
 }
 
-// Map dimensions
-// width: 70
-// height: 40
-// tiles: 12x12
 const useCanvas = ({ setUpGame, dimensions }: IUseCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -36,18 +32,20 @@ const useCanvas = ({ setUpGame, dimensions }: IUseCanvas) => {
       const game = setUpGame(context);
 
       // Animation loop
-      const tick = () => {
-        game.draw();
-        animationFrameId = requestAnimationFrame(tick);
-      };
+      // const tick = () => {
+      //   game.draw();
+      //   animationFrameId = requestAnimationFrame(tick);
+      // };
 
-      tick();
+      // tick();
+
+      game.draw();
 
       return () => {
         cancelAnimationFrame(animationFrameId);
       };
     }
-  }, [setUpGame]);
+  }, [setUpGame, dimensions]);
 
   return canvasRef;
 };

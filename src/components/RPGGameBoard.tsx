@@ -60,6 +60,11 @@ const RPGGameBoard = () => {
     return game;
   }, []);
 
+  // Map dimensions
+  // width: 70
+  // height: 40
+  // tiles: 12x12
+
   // 16:9 aspect ratio that should fit any desktop size
   const canvas = useCanvas({
     setUpGame,
