@@ -32,9 +32,9 @@ const socialLinks = [
 ];
 
 const UnderConstruction = () => {
-  const [playGame, setPlayGame] = useState(true);
+  const [playGame, setPlayGame] = useState(false);
   if (playGame) {
-    return <SpaceShooterGameBoard />;
+    return <SpaceShooterGameBoard handleBack={() => setPlayGame(false)} />;
   }
   return (
     <FlexContainer style={{ height: "100vh" }}>

@@ -32,9 +32,13 @@ interface IUseCanvas {
 /**
  * A React interface for connecting your Game Class to your canvas.
  * Initializes canvas size
- * Sets up a mutable canvas ref
- * Controls when the game starts and stops
+ *
+ *  Sets up a mutable canvas ref
+
+ * Controls when the game starts and stops.
+ *
  * Registers and removes event listeners without causing memory leaks
+ *
  */
 const useCanvas = ({ setUpGame, dimensions, initialState }: IUseCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

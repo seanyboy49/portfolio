@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import styled from "styled-components";
 import Player from "../games/SpaceShooter/Player";
 import SpaceShooterGame, {
@@ -31,7 +31,11 @@ const StartButton = styled.button`
   padding: 5px 45px;
 `;
 
-const SpaceShooterGameBoard = () => {
+interface ISpaceShooterGameBoard {
+  handleBack: () => void;
+}
+
+const SpaceShooterGameBoard = ({ handleBack }: ISpaceShooterGameBoard) => {
   const setUpGame = useCallback(
     (ctx: CanvasRenderingContext2D, setGameState: UpdateGameState) => {
       const x = ctx.canvas.width / 2;
@@ -68,6 +72,7 @@ const SpaceShooterGameBoard = () => {
         {!gameState.isPlaying && (
           <GameModal>
             <StartButton onClick={startGame}>Start Game</StartButton>
+            <button onClick={handleBack}>Go back</button>
           </GameModal>
         )}
       </GameUI>
