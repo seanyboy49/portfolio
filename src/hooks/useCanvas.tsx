@@ -8,8 +8,8 @@ export type SetUpGame = (
 ) => CanvasGame;
 interface IUseCanvas {
   /**
-   * Connects a canvas game to the React API. Passes canvas context and gameState setter
-   * to a canvas game
+   * Used to initialize a Canvas Game and connect it to React. Passes canvas
+   * context and gameState setter to a Canvas Game
    */
   setUpGame: SetUpGame;
   /**
@@ -61,13 +61,14 @@ const useCanvas = ({ setUpGame, dimensions, initialState }: IUseCanvas) => {
     }
   }, [setUpGame, dimensions, gameState.isPlaying]);
 
-  const startGame = () =>
+  const updateGameState = (state: typeof initialState) => {
     setGameState((prev) => ({
       ...prev,
-      isPlaying: !prev.isPlaying,
+      ...state,
     }));
+  };
 
-  return { canvasRef, gameState, startGame };
+  return { canvasRef, gameState, updateGameState };
 };
 
 export default useCanvas;

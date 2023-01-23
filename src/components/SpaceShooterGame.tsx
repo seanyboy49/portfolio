@@ -50,7 +50,7 @@ const SpaceShooterGameBoard = () => {
     []
   );
 
-  const { canvasRef, gameState, startGame } = useCanvas({
+  const { canvasRef, gameState, updateGameState } = useCanvas({
     setUpGame,
     initialState: {
       score: 0,
@@ -58,7 +58,9 @@ const SpaceShooterGameBoard = () => {
     },
   });
 
-  console.log(gameState);
+  const startGame = () => {
+    updateGameState({ isPlaying: true, score: 0 });
+  };
 
   return (
     <>
