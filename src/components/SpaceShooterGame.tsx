@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import styled from "styled-components";
 import Player from "../games/SpaceShooter/Player";
 import SpaceShooterGame, {
-  SpaceShooterGameReactState,
   UpdateGameState,
 } from "../games/SpaceShooter/SpaceShooterGame";
 import useCanvas from "../hooks/useCanvas";
