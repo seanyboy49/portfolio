@@ -1,6 +1,4 @@
-import { IEnemy } from "./Enemy";
-
-type IParticle = IEnemy;
+import { IEnemy as IParticle } from "./Enemy";
 
 class Particle {
   ctx: CanvasRenderingContext2D;

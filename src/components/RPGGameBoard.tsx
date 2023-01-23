@@ -66,7 +66,7 @@ const RPGGameBoard = () => {
   // tiles: 12x12
 
   // 16:9 aspect ratio that should fit any desktop size
-  const canvas = useCanvas({
+  const { canvasRef } = useCanvas({
     setUpGame,
     dimensions: {
       width: 1024,
@@ -74,7 +74,7 @@ const RPGGameBoard = () => {
     },
   });
 
-  return <canvas ref={canvas} />;
+  return <canvas ref={canvasRef} />;
 };
 
 export default RPGGameBoard;

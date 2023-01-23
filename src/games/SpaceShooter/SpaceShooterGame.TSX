@@ -1,26 +1,41 @@
+import { Dispatch, SetStateAction } from "react";
 import { CanvasGame } from "../types";
 import Enemy from "./Enemy";
 import Particle from "./Particle";
 import Player from "./Player";
 import Projectile from "./Projectile";
 
+export type SpaceShooterGameReactState = {
+  isPlaying: boolean;
+  score: number;
+};
+export type UpdateGameProps = Dispatch<
+  SetStateAction<SpaceShooterGameReactState>
+>;
+
 interface ISpaceShooterGame {
   ctx: CanvasRenderingContext2D;
   player: Player;
+  updateGameProps: UpdateGameProps;
 }
 class SpaceShooterGame implements CanvasGame {
   readonly ctx: CanvasRenderingContext2D;
-  player: Player;
-  enemies: Enemy[];
-  projectiles: Projectile[];
-  particles: Particle[];
   readonly CANVAS_CENTER: {
     x: number;
     y: number;
   };
   public animationId?: number;
+  public score: number = 0;
+  public isPlaying: boolean = false;
 
-  constructor({ ctx, player }: ISpaceShooterGame) {
+  player: Player;
+  enemies: Enemy[];
+  projectiles: Projectile[];
+  particles: Particle[];
+
+  updateGameProps: UpdateGameProps; // Callback that exposes game state to React state in useCanvas
+
+  constructor({ ctx, player, updateGameProps }: ISpaceShooterGame) {
     this.ctx = ctx;
     this.player = player;
     this.enemies = [];
@@ -30,6 +45,7 @@ class SpaceShooterGame implements CanvasGame {
       x: ctx.canvas.width / 2,
       y: ctx.canvas.height / 2,
     };
+    this.updateGameProps = updateGameProps;
 
     // Register event listeners
     // TODO: move this to hook
@@ -43,6 +59,7 @@ class SpaceShooterGame implements CanvasGame {
    * and will call itself from then on out
    */
   public draw() {
+    // You must pass an arrow function to keep the reference to this
     this.animationId = requestAnimationFrame(() => this.draw());
 
     // Add a slight blur to projectiles with opacity trick
@@ -146,6 +163,13 @@ class SpaceShooterGame implements CanvasGame {
       // Account for both enemy and projectile radius when calculating distance
       const actualDistance = distance - enemy.radius - projectile.radius;
       if (actualDistance >= 1) return;
+
+      // Increment score
+      this.score += 100;
+      this.updateGameProps((prev) => ({
+        ...prev,
+        score: this.score,
+      }));
 
       // Create particles on collision
       for (let i = 0; i <= enemy.radius * 2; i++) {

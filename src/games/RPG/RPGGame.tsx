@@ -20,6 +20,7 @@ class RPGGame implements CanvasGame {
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
   collisionDirection?: Keys; // The direction the player was moving when colliding
+  isPlaying = true;
 
   constructor({ ctx, background, player, collisions }: IRPGGame) {
     this.ctx = ctx;
