@@ -1,24 +1,28 @@
-import {
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { CanvasGame } from "../games/types";
-// import Game from "../games/Game";
 
 export type Draw = (context: CanvasRenderingContext2D) => void;
 export type SetUpGame = (
   context: CanvasRenderingContext2D,
-  setGameProps: SetStateAction<any>
+  setGameState: Dispatch<SetStateAction<any>>
 ) => CanvasGame;
 interface IUseCanvas {
+  /**
+   * Connects a canvas game to the React API. Passes canvas context and gameState setter
+   * to a canvas game
+   */
   setUpGame: SetUpGame;
+  /**
+   * initialState.isPlaying is required.
+   * All other state props are arbitrary
+   */
   initialState: {
     isPlaying: boolean;
     [key: string]: any;
   };
+  /**
+   * If dimensions aren't specified, the canvas will take up full width/height
+   */
   dimensions?: {
     width: number;
     height: number;
@@ -34,7 +38,6 @@ const useCanvas = ({ setUpGame, dimensions, initialState }: IUseCanvas) => {
 
   useEffect(() => {
     if (!gameState.isPlaying) return;
-    console.log("render");
 
     if (canvasRef.current) {
       const canvas = canvasRef.current;
