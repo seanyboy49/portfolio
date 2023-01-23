@@ -52,11 +52,23 @@ const useCanvas = ({ setUpGame, dimensions, initialState }: IUseCanvas) => {
 
       const game = setUpGame(context, setGameState);
 
+      // Register event listeners
+      game.eventListeners.forEach((listener) => {
+        const { event, handler } = listener;
+        window.addEventListener(event, handler as any);
+      });
+
       // Initiate the animation loop
       game.draw();
 
       return () => {
         game.animationId && cancelAnimationFrame(game.animationId);
+
+        // Remove event listeners
+        game.eventListeners.forEach((listener) => {
+          const { event, handler } = listener;
+          window.removeEventListener(event, handler as any);
+        });
       };
     }
   }, [setUpGame, dimensions, gameState.isPlaying]);

@@ -1,6 +1,6 @@
 import { OFFSET } from "../../components/RPGGameBoard";
 import { padRectangle, Rectangle, rectangularCollision } from "../../utilities";
-import { CanvasGame } from "../types";
+import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
@@ -21,6 +21,7 @@ class RPGGame implements CanvasGame {
   boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
   collisionDirection?: Keys; // The direction the player was moving when colliding
   isPlaying = true;
+  eventListeners: EventHandler[];
 
   constructor({ ctx, background, player, collisions }: IRPGGame) {
     this.ctx = ctx;
@@ -43,6 +44,7 @@ class RPGGame implements CanvasGame {
       },
     };
 
+    this.eventListeners = [];
     // Register event listeners
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
     window.addEventListener("keyup", this.handleKeyUp.bind(this));

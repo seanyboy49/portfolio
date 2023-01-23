@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { CanvasGame } from "../types";
+import { CanvasGame, EventHandler, Events } from "../types";
 import Enemy from "./Enemy";
 import Particle from "./Particle";
 import Player from "./Player";
@@ -32,6 +32,7 @@ class SpaceShooterGame implements CanvasGame {
   enemies: Enemy[];
   projectiles: Projectile[];
   particles: Particle[];
+  eventListeners: EventHandler[];
 
   updateGameState: UpdateGameState; // Callback that exposes game state to React state in useCanvas
 
@@ -48,8 +49,9 @@ class SpaceShooterGame implements CanvasGame {
     this.updateGameState = updateGameState;
 
     // Register event listeners
-    // TODO: move this to hook
-    window.addEventListener("click", this.handleShoot.bind(this));
+    this.eventListeners = [
+      { event: Events.CLICK, handler: this.handleShoot.bind(this) },
+    ];
 
     this.spawnEnemies();
   }
@@ -94,7 +96,7 @@ class SpaceShooterGame implements CanvasGame {
     });
   }
 
-  private handleShoot(event: MouseEvent) {
+  handleShoot(event: MouseEvent) {
     const angle = Math.atan2(
       event.clientY - this.CANVAS_CENTER.y,
       event.clientX - this.CANVAS_CENTER.x
