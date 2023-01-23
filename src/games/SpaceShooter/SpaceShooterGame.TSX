@@ -9,14 +9,14 @@ export type SpaceShooterGameReactState = {
   isPlaying: boolean;
   score: number;
 };
-export type UpdateGameProps = Dispatch<
+export type UpdateGameState = Dispatch<
   SetStateAction<SpaceShooterGameReactState>
 >;
 
 interface ISpaceShooterGame {
   ctx: CanvasRenderingContext2D;
   player: Player;
-  updateGameProps: UpdateGameProps;
+  updateGameState: UpdateGameState;
 }
 class SpaceShooterGame implements CanvasGame {
   readonly ctx: CanvasRenderingContext2D;
@@ -33,9 +33,9 @@ class SpaceShooterGame implements CanvasGame {
   projectiles: Projectile[];
   particles: Particle[];
 
-  updateGameProps: UpdateGameProps; // Callback that exposes game state to React state in useCanvas
+  updateGameState: UpdateGameState; // Callback that exposes game state to React state in useCanvas
 
-  constructor({ ctx, player, updateGameProps }: ISpaceShooterGame) {
+  constructor({ ctx, player, updateGameState }: ISpaceShooterGame) {
     this.ctx = ctx;
     this.player = player;
     this.enemies = [];
@@ -45,7 +45,7 @@ class SpaceShooterGame implements CanvasGame {
       x: ctx.canvas.width / 2,
       y: ctx.canvas.height / 2,
     };
-    this.updateGameProps = updateGameProps;
+    this.updateGameState = updateGameState;
 
     // Register event listeners
     // TODO: move this to hook
@@ -146,6 +146,13 @@ class SpaceShooterGame implements CanvasGame {
     const actualDistance = distance - enemy.radius - this.player.radius;
     if (actualDistance >= 1) return;
 
+    // Update State
+    this.isPlaying = false;
+    this.updateGameState((prev) => ({
+      ...prev,
+      isPlaying: this.isPlaying,
+    }));
+    // And cancel the animation
     this.animationId && cancelAnimationFrame(this.animationId);
   }
 
@@ -166,7 +173,7 @@ class SpaceShooterGame implements CanvasGame {
 
       // Increment score
       this.score += 100;
-      this.updateGameProps((prev) => ({
+      this.updateGameState((prev) => ({
         ...prev,
         score: this.score,
       }));

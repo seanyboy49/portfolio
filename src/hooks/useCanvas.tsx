@@ -15,7 +15,10 @@ export type SetUpGame = (
 ) => CanvasGame;
 interface IUseCanvas {
   setUpGame: SetUpGame;
-  initialState?: any;
+  initialState: {
+    isPlaying: boolean;
+    [key: string]: any;
+  };
   dimensions?: {
     width: number;
     height: number;
@@ -25,13 +28,13 @@ interface IUseCanvas {
 /**
  * A React interface for connecting your Game Class to your canvas.
  */
-const useCanvas = <T,>({ setUpGame, dimensions, initialState }: IUseCanvas) => {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+const useCanvas = ({ setUpGame, dimensions, initialState }: IUseCanvas) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [gameState, setGameState] = useState<T>(initialState);
+  const [gameState, setGameState] = useState<typeof initialState>(initialState);
 
   useEffect(() => {
-    if (!isPlaying) return;
+    if (!gameState.isPlaying) return;
+    console.log("render");
 
     if (canvasRef.current) {
       const canvas = canvasRef.current;
@@ -46,18 +49,22 @@ const useCanvas = <T,>({ setUpGame, dimensions, initialState }: IUseCanvas) => {
 
       const game = setUpGame(context, setGameState);
 
-      // Inititate the animation loop
+      // Initiate the animation loop
       game.draw();
 
       return () => {
         game.animationId && cancelAnimationFrame(game.animationId);
       };
     }
-  }, [setUpGame, dimensions, isPlaying]);
+  }, [setUpGame, dimensions, gameState.isPlaying]);
 
-  const startGame = useCallback(() => setIsPlaying(!isPlaying), [isPlaying]);
+  const startGame = () =>
+    setGameState((prev) => ({
+      ...prev,
+      isPlaying: !prev.isPlaying,
+    }));
 
-  return { canvasRef, gameState, startGame, isPlaying };
+  return { canvasRef, gameState, startGame };
 };
 
 export default useCanvas;

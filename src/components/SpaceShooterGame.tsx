@@ -1,9 +1,9 @@
-import { SetStateAction, useCallback, useState } from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
 import Player from "../games/SpaceShooter/Player";
 import SpaceShooterGame, {
   SpaceShooterGameReactState,
-  UpdateGameProps,
+  UpdateGameState,
 } from "../games/SpaceShooter/SpaceShooterGame";
 import useCanvas from "../hooks/useCanvas";
 
@@ -29,13 +29,12 @@ const GameModal = styled.div`
 const StartButton = styled.button`
   background-color: lightblue;
   border-radius: 5%;
-  /* border: none; */
   padding: 5px 45px;
 `;
 
 const SpaceShooterGameBoard = () => {
   const setUpGame = useCallback(
-    (ctx: CanvasRenderingContext2D, setGameProps: UpdateGameProps) => {
+    (ctx: CanvasRenderingContext2D, setGameState: UpdateGameState) => {
       const x = ctx.canvas.width / 2;
       const y = ctx.canvas.height / 2;
 
@@ -43,7 +42,7 @@ const SpaceShooterGameBoard = () => {
       const game = new SpaceShooterGame({
         ctx,
         player,
-        updateGameProps: setGameProps,
+        updateGameState: setGameState,
       });
 
       return game;
@@ -51,28 +50,27 @@ const SpaceShooterGameBoard = () => {
     []
   );
 
-  const { canvasRef, gameState, isPlaying, startGame } =
-    useCanvas<SpaceShooterGameReactState>({
-      setUpGame,
-      initialState: {
-        score: 0,
-        isPlaying: false,
-      },
-    });
+  const { canvasRef, gameState, startGame } = useCanvas({
+    setUpGame,
+    initialState: {
+      score: 0,
+      isPlaying: false,
+    },
+  });
 
   console.log(gameState);
 
   return (
     <>
       <GameUI>
-        <Score>Score: {gameState?.score}</Score>
-        {!isPlaying && (
+        <Score>Score: {gameState.score}</Score>
+        {!gameState.isPlaying && (
           <GameModal>
             <StartButton onClick={startGame}>Start Game</StartButton>
           </GameModal>
         )}
       </GameUI>
-      <canvas ref={canvasRef} />;
+      <canvas ref={canvasRef} />
     </>
   );
 };

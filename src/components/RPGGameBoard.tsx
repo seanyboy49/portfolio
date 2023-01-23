@@ -72,6 +72,9 @@ const RPGGameBoard = () => {
       width: 1024,
       height: 576,
     },
+    initialState: {
+      isPlaying: true,
+    },
   });
 
   return <canvas ref={canvasRef} />;
