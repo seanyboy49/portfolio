@@ -1,4 +1,4 @@
-import { KeysPressed, Keys } from "../classes/types";
+import { KeysPressed, Keys } from "../games/RPG/types";
 
 export type Rectangle = {
   position: {

@@ -5,9 +5,9 @@ import playerDownSrc from "../images/player-down.png";
 import playerRightSrc from "../images/player-right.png";
 import playerLeftSrc from "../images/player-left.png";
 
-import Sprite from "../classes/Sprite";
-import collisions from "../data/collisions";
-import Game from "../classes/Game";
+import Sprite from "../games/RPG/Sprite";
+import RPGGame from "../games/RPG/RPGGame";
+import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
 
 export const OFFSET = {
@@ -28,7 +28,7 @@ for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
   collisionsMap.push(collisions.slice(i, i + MAP_DIMENSIONS.width));
 }
 
-const GameBoard = () => {
+const RPGGameBoard = () => {
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
     const background = new Sprite({
       ctx: ctx,
@@ -50,7 +50,7 @@ const GameBoard = () => {
       movable: false,
     });
 
-    const game = new Game({
+    const game = new RPGGame({
       ctx,
       background,
       player,
@@ -60,9 +60,24 @@ const GameBoard = () => {
     return game;
   }, []);
 
-  const canvas = useCanvas(setUpGame);
+  // Map dimensions
+  // width: 70
+  // height: 40
+  // tiles: 12x12
 
-  return <canvas ref={canvas} />;
+  // 16:9 aspect ratio that should fit any desktop size
+  const { canvasRef } = useCanvas({
+    setUpGame,
+    dimensions: {
+      width: 1024,
+      height: 576,
+    },
+    initialState: {
+      isPlaying: true,
+    },
+  });
+
+  return <canvas ref={canvasRef} />;
 };
 
-export default GameBoard;
+export default RPGGameBoard;

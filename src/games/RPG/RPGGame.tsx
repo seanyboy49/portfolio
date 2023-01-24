@@ -1,27 +1,29 @@
-import { OFFSET } from "../components/GameBoard";
-import collisions from "../data/collisions";
-import { padRectangle, Rectangle, rectangularCollision } from "../utilities";
+import { OFFSET } from "../../components/RPGGameBoard";
+import { padRectangle, Rectangle, rectangularCollision } from "../../utilities";
+import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
 
 type Collisions = number[][];
-interface IGame {
+interface IRPGGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;
   collisions: Collisions;
 }
 
-class Game {
+class RPGGame implements CanvasGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
   collisionDirection?: Keys; // The direction the player was moving when colliding
+  isPlaying = true;
+  eventListeners: EventHandler[];
 
-  constructor({ ctx, background, player, collisions }: IGame) {
+  constructor({ ctx, background, player, collisions }: IRPGGame) {
     this.ctx = ctx;
     this.background = background;
     this.player = player;
@@ -42,6 +44,7 @@ class Game {
       },
     };
 
+    this.eventListeners = [];
     // Register event listeners
     window.addEventListener("keydown", this.handleKeyDown.bind(this));
     window.addEventListener("keyup", this.handleKeyUp.bind(this));
@@ -232,4 +235,4 @@ class Game {
 // sprites
 // animation loop
 
-export default Game;
+export default RPGGame;
