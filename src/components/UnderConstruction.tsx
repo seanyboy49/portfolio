@@ -39,7 +39,7 @@ const socialLinks = [
 ];
 
 const UnderConstruction = () => {
-  const [playGame, setPlayGame] = useState(true);
+  const [playGame, setPlayGame] = useState(false);
   if (playGame) {
     return <SpaceShooterGameBoard handleBack={() => setPlayGame(false)} />;
   }
