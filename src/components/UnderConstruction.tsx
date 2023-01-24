@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import githubSrc from "../images/social/github.png";
 import linkedInSrc from "../images/social/linkedIn.png";
+import meteorSrc from "../images/meteor.png";
 import Icon from "./Icon";
 import SpaceShooterGameBoard from "./SpaceShooterGame";
 
@@ -26,6 +27,12 @@ const Hero = styled.div`
   text-align: center;
 `;
 
+const GameButton = styled.button`
+  border: none;
+  cursor: pointer;
+  background: none;
+`;
+
 const socialLinks = [
   { iconSrc: githubSrc, href: "https://github.com/seanyboy49" },
   { iconSrc: linkedInSrc, href: "https://www.linkedin.com/in/seanboramlee/" },
@@ -41,12 +48,15 @@ const UnderConstruction = () => {
       <Hero>
         <HeroText>COMING SOON</HeroText>
         <Text>My portfolio website is still under construction.</Text>
-        <Text>In the mean time, here are some fun links to click.</Text>
+        <Text>In the mean time, here are some fun things to click.</Text>
         <FlexContainer style={{ justifyContent: "center", marginTop: "1rem" }}>
           {socialLinks.map((link) => {
             return <Icon {...link} />;
           })}
-          <button onClick={() => setPlayGame(true)}>Shoot</button>
+
+          <GameButton onClick={() => setPlayGame(true)}>
+            <img src={meteorSrc} alt="icon of meteor" height={50} />
+          </GameButton>
         </FlexContainer>
       </Hero>
     </FlexContainer>
