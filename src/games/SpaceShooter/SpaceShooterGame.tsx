@@ -149,10 +149,9 @@ class SpaceShooterGame implements CanvasGame {
     if (actualDistance >= 1) return;
 
     // Update State
-    this.isPlaying = false;
     this.updateGameState((prev) => ({
       ...prev,
-      isPlaying: this.isPlaying,
+      isPlaying: false,
     }));
     // And cancel the animation
     this.animationId && cancelAnimationFrame(this.animationId);

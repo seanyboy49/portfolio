@@ -23,6 +23,8 @@ class RPGGame implements CanvasGame {
   isPlaying = true;
   eventListeners: EventHandler[];
 
+  public animationId?: number;
+
   constructor({ ctx, background, player, collisions }: IRPGGame) {
     this.ctx = ctx;
     this.background = background;
@@ -57,6 +59,9 @@ class RPGGame implements CanvasGame {
    * Handle keyboard input for each game element
    */
   public draw() {
+    // You must pass an arrow function to keep the reference to this
+    this.animationId = requestAnimationFrame(() => this.draw());
+
     this.background.draw();
     this.player.draw();
     this.boundaries.forEach((b) => b.draw());
