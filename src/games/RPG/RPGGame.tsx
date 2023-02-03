@@ -4,6 +4,7 @@ import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
+import { Events } from "../types";
 
 type Collisions = number[][];
 interface IRPGGame {
@@ -46,10 +47,17 @@ class RPGGame implements CanvasGame {
       },
     };
 
-    this.eventListeners = [];
     // Register event listeners
-    window.addEventListener("keydown", this.handleKeyDown.bind(this));
-    window.addEventListener("keyup", this.handleKeyUp.bind(this));
+    this.eventListeners = [
+      {
+        event: Events.KEYDOWN,
+        handler: this.handleKeyDown.bind(this),
+      },
+      {
+        event: Events.KEYUP,
+        handler: this.handleKeyUp.bind(this),
+      },
+    ];
   }
 
   /**
