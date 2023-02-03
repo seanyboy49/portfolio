@@ -68,10 +68,6 @@ const RPGGameBoard = () => {
   // 16:9 aspect ratio that should fit any desktop size
   const { canvasRef } = useCanvas({
     setUpGame,
-    dimensions: {
-      width: 1024,
-      height: 576,
-    },
     initialState: {
       isPlaying: true,
     },
