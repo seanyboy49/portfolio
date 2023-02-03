@@ -4,6 +4,7 @@ import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
+import { Events } from "../types";
 
 type Collisions = number[][];
 interface IRPGGame {
@@ -22,6 +23,8 @@ class RPGGame implements CanvasGame {
   collisionDirection?: Keys; // The direction the player was moving when colliding
   isPlaying = true;
   eventListeners: EventHandler[];
+
+  public animationId?: number;
 
   constructor({ ctx, background, player, collisions }: IRPGGame) {
     this.ctx = ctx;
@@ -44,10 +47,17 @@ class RPGGame implements CanvasGame {
       },
     };
 
-    this.eventListeners = [];
     // Register event listeners
-    window.addEventListener("keydown", this.handleKeyDown.bind(this));
-    window.addEventListener("keyup", this.handleKeyUp.bind(this));
+    this.eventListeners = [
+      {
+        event: Events.KEYDOWN,
+        handler: this.handleKeyDown.bind(this),
+      },
+      {
+        event: Events.KEYUP,
+        handler: this.handleKeyUp.bind(this),
+      },
+    ];
   }
 
   /**
@@ -57,6 +67,9 @@ class RPGGame implements CanvasGame {
    * Handle keyboard input for each game element
    */
   public draw() {
+    // You must pass an arrow function to keep the reference to this
+    this.animationId = requestAnimationFrame(() => this.draw());
+
     this.background.draw();
     this.player.draw();
     this.boundaries.forEach((b) => b.draw());

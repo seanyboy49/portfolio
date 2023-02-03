@@ -13,6 +13,5 @@ export type EventHandler = {
 export interface CanvasGame {
   draw(): void;
   animationId?: number;
-  isPlaying: boolean;
   eventListeners: EventHandler[];
 }
