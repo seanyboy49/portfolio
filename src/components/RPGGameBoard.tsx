@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import pelletTownSrc from "../images/pellet-town.png";
+// import pelletTownSrc from "../images/pellet-town.png";
+import islandV1Src from "../images/island_v1.png";
 import playerUpSrc from "../images/player-up.png";
 import playerDownSrc from "../images/player-down.png";
 import playerRightSrc from "../images/player-right.png";
@@ -33,7 +34,7 @@ const RPGGameBoard = () => {
     const background = new Sprite({
       ctx: ctx,
       position: { x: OFFSET.x, y: OFFSET.y },
-      imageSrc: pelletTownSrc,
+      imageSrc: islandV1Src,
     });
 
     const player = new Sprite({
