@@ -11,6 +11,8 @@ import RPGGame from "../games/RPG/RPGGame";
 import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
 
+export const TILE_WIDTH = 16;
+
 export const OFFSET = {
   x: -735,
   y: -650,

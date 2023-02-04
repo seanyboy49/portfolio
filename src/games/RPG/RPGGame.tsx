@@ -224,7 +224,7 @@ class RPGGame implements CanvasGame {
     return collisions
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if (cell === 1025) {
+          if (cell === 1610) {
             return new Boundary({
               ctx: this.ctx,
               position: {
