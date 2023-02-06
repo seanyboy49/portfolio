@@ -101,13 +101,13 @@ class RPGGame implements CanvasGame {
 
     for (let i = 0; i <= this.boundaries.length - 1; i++) {
       const boundary = padRectangle(this.boundaries[i], keyEvents);
-      const playerRectangle = {
-        ...this.player.collisionBox,
-        position: { ...this.player.position },
-      };
+      // const playerRectangle = {
+      //   ...this.player.collisionBox,
+      //   position: { ...this.player.position },
+      // };
 
       // If there is a collision, set the collision direction
-      if (rectangularCollision(playerRectangle, boundary, 20)) {
+      if (rectangularCollision(this.player.collisionBox, boundary)) {
         if (keyEvents[Keys.W].pressed) {
           this.collisionDirection = Keys.W;
         } else if (keyEvents[Keys.S].pressed) {

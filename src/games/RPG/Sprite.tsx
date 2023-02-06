@@ -33,6 +33,7 @@ class Sprite {
   collisionBox?: {
     width: number; // Same as sprite width
     height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
+    position: Position;
   };
 
   constructor({
@@ -55,8 +56,12 @@ class Sprite {
       this.width = this.image.width / this.frames.total;
       this.height = this.image.height;
       this.collisionBox = {
-        width: this.width,
+        width: this.width - COLLISION_PADDING,
         height: this.height - COLLISION_PADDING,
+        position: {
+          x: this.position.x + COLLISION_PADDING / 2,
+          y: this.position.y + COLLISION_PADDING / 2,
+        },
       };
     };
 
@@ -106,10 +111,19 @@ class Sprite {
   }
 
   draw() {
+    // Update collision box
+    if (!this.collisionBox) return;
+    this.collisionBox = {
+      ...this.collisionBox,
+      position: {
+        x: this.position.x + COLLISION_PADDING / 2,
+        y: this.position.y + COLLISION_PADDING / 2,
+      },
+    };
     this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
     this.ctx.fillRect(
-      this.position.x,
-      this.position.y + 20,
+      this.collisionBox.position.x,
+      this.collisionBox.position.y,
       this.collisionBox?.width!,
       this.collisionBox?.height!
     );
