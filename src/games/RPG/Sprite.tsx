@@ -1,5 +1,7 @@
 import { Position, VELOCITY, Keys, KeysPressed } from "./types";
 
+export const COLLISION_PADDING = 20 as const;
+
 type Frames = {
   total: number; // total number of frames in a sprite sheet
   rate: number; // rate at which to switch frames
@@ -29,8 +31,8 @@ class Sprite {
   animate: boolean;
   velocity: number;
   collisionBox?: {
-    width: number; // the actual width of the sprite after it's been cropped
-    height: number; // the height of the sprite
+    width: number; // Same as sprite width
+    height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
   };
 
   constructor({
@@ -54,7 +56,7 @@ class Sprite {
       this.height = this.image.height;
       this.collisionBox = {
         width: this.width,
-        height: this.height - 20,
+        height: this.height - COLLISION_PADDING,
       };
     };
 
