@@ -4,7 +4,6 @@ export const GameUI = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  display: flex;
 `;
 
 export const MenuContainer = styled.div`
@@ -31,5 +30,9 @@ export const MenuItemsContainer = styled.div`
   display: flex;
 `;
 export const MenuItem = styled.div`
+  background: white;
+  border: 1px lightgray solid;
+  border-radius: 5px;
   margin: 1rem;
+  padding: 1rem;
 `;

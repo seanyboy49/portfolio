@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import islandV1Src from "../images/island_v1.png";
 import playerUpSrc from "../images/player-up.png";
 import playerDownSrc from "../images/player-down.png";
@@ -10,13 +10,7 @@ import RPGGame from "../games/RPG/RPGGame";
 import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
 import { MAP_DIMENSIONS, OFFSET } from "../games/RPG/types";
-import {
-  MenuContainer,
-  GameUI,
-  MenuItem,
-  MenuItemsContainer,
-  Modal,
-} from "./styled";
+import PortfolioMenuUI from "./PortfolioMenuUI";
 
 // Set up collision boundaries
 const collisionsMap: Array<number[]> = [];
@@ -26,6 +20,7 @@ for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
 }
 
 const RPGGameBoard = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
     const background = new Sprite({
       ctx: ctx,
@@ -64,21 +59,13 @@ const RPGGameBoard = () => {
     },
   });
 
+  const toggleMenuOpen = useCallback(() => {
+    setIsMenuOpen((isMenuOpen) => !isMenuOpen);
+  }, []);
+
   return (
     <>
-      <GameUI>
-        <MenuContainer>
-          <Modal>
-            <h1>Sean Island</h1>
-          </Modal>
-          <MenuItemsContainer>
-            <MenuItem>Resume</MenuItem>
-            <MenuItem>Github</MenuItem>
-            <MenuItem>LinkedIn</MenuItem>
-          </MenuItemsContainer>
-        </MenuContainer>
-      </GameUI>
-
+      <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
       <canvas ref={canvasRef} />
     </>
   );
