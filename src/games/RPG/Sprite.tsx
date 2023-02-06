@@ -55,6 +55,7 @@ class Sprite {
     this.image.onload = () => {
       this.width = this.image.width / this.frames.total;
       this.height = this.image.height;
+
       this.collisionBox = {
         width: this.width - COLLISION_PADDING,
         height: this.height - COLLISION_PADDING,
@@ -71,6 +72,28 @@ class Sprite {
 
     this.movable = movable;
     this.animate = false;
+  }
+
+  /**
+   * Defines a collisionbox that's smaller than the dimensions of the Sprite. This allows slight overlaps
+   * with boundaries
+   */
+  private updateCollisionBox() {
+    if (!this.collisionBox) return;
+    this.collisionBox = {
+      ...this.collisionBox,
+      position: {
+        x: this.position.x + COLLISION_PADDING / 2,
+        y: this.position.y + COLLISION_PADDING / 2,
+      },
+    };
+    this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
+    this.ctx.fillRect(
+      this.collisionBox.position.x,
+      this.collisionBox.position.y,
+      this.collisionBox?.width!,
+      this.collisionBox?.height!
+    );
   }
 
   handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
@@ -111,22 +134,7 @@ class Sprite {
   }
 
   draw() {
-    // Update collision box
-    if (!this.collisionBox) return;
-    this.collisionBox = {
-      ...this.collisionBox,
-      position: {
-        x: this.position.x + COLLISION_PADDING / 2,
-        y: this.position.y + COLLISION_PADDING / 2,
-      },
-    };
-    this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
-    this.ctx.fillRect(
-      this.collisionBox.position.x,
-      this.collisionBox.position.y,
-      this.collisionBox?.width!,
-      this.collisionBox?.height!
-    );
+    this.updateCollisionBox();
 
     this.ctx.translate(
       this.position.x + this.image.width / 2,

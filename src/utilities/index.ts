@@ -12,13 +12,10 @@ export type Rectangle = {
 /**
  * Standard rectungular collision detection algorithm
  * @see https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
- * Factors in vertical offset so that the the top of rectangle1 can overlap slightly with bottom of rectangle 2
- * Basically so that the Sprite's head can move past objects in the background
  */
 export function rectangularCollision(
   rectangle1: Rectangle,
   rectangle2: Rectangle
-  // offset: number
 ) {
   return (
     rectangle1.position.x + rectangle1.width >= rectangle2.position.x && // rect1 right hits rect2 left
