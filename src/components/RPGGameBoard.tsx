@@ -10,19 +10,7 @@ import Sprite from "../games/RPG/Sprite";
 import RPGGame from "../games/RPG/RPGGame";
 import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
-
-export const TILE_WIDTH = 16;
-
-export const OFFSET = {
-  x: -735,
-  y: -650,
-} as const;
-
-// Width/Height in tiles
-export const MAP_DIMENSIONS = {
-  width: 70,
-  height: 40,
-} as const;
+import { MAP_DIMENSIONS, OFFSET } from "../games/RPG/types";
 
 // Set up collision boundaries
 const collisionsMap: Array<number[]> = [];
@@ -63,12 +51,6 @@ const RPGGameBoard = () => {
     return game;
   }, []);
 
-  // Map dimensions
-  // width: 70
-  // height: 40
-  // tiles: 12x12
-
-  // 16:9 aspect ratio that should fit any desktop size
   const { canvasRef } = useCanvas({
     setUpGame,
     initialState: {

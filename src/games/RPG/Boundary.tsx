@@ -1,6 +1,5 @@
-import { TILE_WIDTH } from "../../components/RPGGameBoard";
 import { Keys, KeysPressed } from "../RPG/types";
-import { Position, VELOCITY } from "./types";
+import { Position, VELOCITY, TILE_WIDTH } from "./types";
 
 interface IBoundary {
   ctx: CanvasRenderingContext2D;
