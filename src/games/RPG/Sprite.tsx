@@ -28,6 +28,10 @@ class Sprite {
   movable: boolean; // whether or not the sprite moves with character movement
   animate: boolean;
   velocity: number;
+  collisionBox?: {
+    width: number; // the actual width of the sprite after it's been cropped
+    height: number; // the height of the sprite
+  };
 
   constructor({
     ctx,
@@ -48,7 +52,12 @@ class Sprite {
     this.image.onload = () => {
       this.width = this.image.width / this.frames.total;
       this.height = this.image.height;
+      this.collisionBox = {
+        width: this.width,
+        height: this.height - 20,
+      };
     };
+
     this.sprites = sprites;
 
     this.frames = { ...frames, current: 0, elapsed: 0 };
@@ -95,6 +104,14 @@ class Sprite {
   }
 
   draw() {
+    this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
+    this.ctx.fillRect(
+      this.position.x,
+      this.position.y + 20,
+      this.collisionBox?.width!,
+      this.collisionBox?.height!
+    );
+
     this.ctx.translate(
       this.position.x + this.image.width / 2,
       this.position.y + this.image.height / 2
