@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-// import pelletTownSrc from "../images/pellet-town.png";
 import islandV1Src from "../images/island_v1.png";
 import playerUpSrc from "../images/player-up.png";
 import playerDownSrc from "../images/player-down.png";
@@ -11,6 +10,13 @@ import RPGGame from "../games/RPG/RPGGame";
 import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
 import { MAP_DIMENSIONS, OFFSET } from "../games/RPG/types";
+import {
+  MenuContainer,
+  GameUI,
+  MenuItem,
+  MenuItemsContainer,
+  Modal,
+} from "./styled";
 
 // Set up collision boundaries
 const collisionsMap: Array<number[]> = [];
@@ -58,7 +64,24 @@ const RPGGameBoard = () => {
     },
   });
 
-  return <canvas ref={canvasRef} />;
+  return (
+    <>
+      <GameUI>
+        <MenuContainer>
+          <Modal>
+            <h1>Sean Island</h1>
+          </Modal>
+          <MenuItemsContainer>
+            <MenuItem>Resume</MenuItem>
+            <MenuItem>Github</MenuItem>
+            <MenuItem>LinkedIn</MenuItem>
+          </MenuItemsContainer>
+        </MenuContainer>
+      </GameUI>
+
+      <canvas ref={canvasRef} />
+    </>
+  );
 };
 
 export default RPGGameBoard;

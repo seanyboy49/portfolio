@@ -5,18 +5,13 @@ import SpaceShooterGame, {
   UpdateGameState,
 } from "../games/SpaceShooter/SpaceShooterGame";
 import useCanvas from "../hooks/useCanvas";
+import { GameUI } from "./styled";
 
 const FlexContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const GameUI = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-`;
 const Score = styled.div`
   color: white;
 `;
