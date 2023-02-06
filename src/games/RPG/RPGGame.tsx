@@ -1,5 +1,5 @@
-import { OFFSET } from "../../components/RPGGameBoard";
-import { padRectangle, Rectangle, rectangularCollision } from "../../utilities";
+import { OFFSET } from "./types";
+import { padRectangle, rectangularCollision } from "../../utilities";
 import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
