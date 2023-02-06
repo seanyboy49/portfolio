@@ -10,8 +10,8 @@ export const TILE_WIDTH = 16;
 
 /** Amount of offset rendering of the map from top left hand corner*/
 export const OFFSET = {
-  x: -735,
-  y: -650,
+  x: -1555,
+  y: -700,
 } as const;
 
 /** Width/Height of map in tiles.

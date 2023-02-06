@@ -20,7 +20,7 @@ for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
 }
 
 const RPGGameBoard = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
     const background = new Sprite({
       ctx: ctx,

@@ -13,7 +13,7 @@ export const MenuContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(120, 83, 212, 0.772);
+  /* background: rgba(120, 83, 212, 0.772); */
 `;
 
 export const Modal = styled.div`
