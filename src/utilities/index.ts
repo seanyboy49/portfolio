@@ -9,6 +9,10 @@ export type Rectangle = {
   height: number;
 };
 
+/**
+ * Standard rectungular collision detection algorithm
+ * @see https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+ */
 export function rectangularCollision(
   rectangle1: Rectangle,
   rectangle2: Rectangle

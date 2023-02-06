@@ -1,3 +1,4 @@
+import { TILE_WIDTH } from "../../components/RPGGameBoard";
 import { Keys, KeysPressed } from "../RPG/types";
 import { Position, VELOCITY } from "./types";
 
@@ -13,13 +14,13 @@ class Boundary {
   height: number;
   color: string;
 
-  static width = 48;
-  static height = 48;
+  static width = 64; // tile width * 4
+  static height = 64;
 
   constructor({ position, ctx }: IBoundary) {
     this.position = position;
-    this.width = 12 * 4;
-    this.height = 12 * 4;
+    this.width = TILE_WIDTH * 4;
+    this.height = TILE_WIDTH * 4;
     this.ctx = ctx;
     this.color = `rgba(255, 0, 0, 0.5)`;
   }

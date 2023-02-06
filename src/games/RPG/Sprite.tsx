@@ -1,5 +1,7 @@
 import { Position, VELOCITY, Keys, KeysPressed } from "./types";
 
+export const COLLISION_PADDING = 20 as const;
+
 type Frames = {
   total: number; // total number of frames in a sprite sheet
   rate: number; // rate at which to switch frames
@@ -28,6 +30,11 @@ class Sprite {
   movable: boolean; // whether or not the sprite moves with character movement
   animate: boolean;
   velocity: number;
+  collisionBox?: {
+    width: number; // Same as sprite width
+    height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
+    position: Position;
+  };
 
   constructor({
     ctx,
@@ -48,13 +55,45 @@ class Sprite {
     this.image.onload = () => {
       this.width = this.image.width / this.frames.total;
       this.height = this.image.height;
+
+      this.collisionBox = {
+        width: this.width - COLLISION_PADDING,
+        height: this.height - COLLISION_PADDING,
+        position: {
+          x: this.position.x + COLLISION_PADDING / 2,
+          y: this.position.y + COLLISION_PADDING / 2,
+        },
+      };
     };
+
     this.sprites = sprites;
 
     this.frames = { ...frames, current: 0, elapsed: 0 };
 
     this.movable = movable;
     this.animate = false;
+  }
+
+  /**
+   * Defines a collisionbox that's smaller than the dimensions of the Sprite. This allows slight overlaps
+   * with boundaries
+   */
+  private updateCollisionBox() {
+    if (!this.collisionBox) return;
+    this.collisionBox = {
+      ...this.collisionBox,
+      position: {
+        x: this.position.x + COLLISION_PADDING / 2,
+        y: this.position.y + COLLISION_PADDING / 2,
+      },
+    };
+    this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
+    this.ctx.fillRect(
+      this.collisionBox.position.x,
+      this.collisionBox.position.y,
+      this.collisionBox?.width!,
+      this.collisionBox?.height!
+    );
   }
 
   handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
@@ -95,6 +134,8 @@ class Sprite {
   }
 
   draw() {
+    this.updateCollisionBox();
+
     this.ctx.translate(
       this.position.x + this.image.width / 2,
       this.position.y + this.image.height / 2

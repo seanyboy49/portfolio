@@ -97,12 +97,13 @@ class RPGGame implements CanvasGame {
       (x) => x.pressed === true
     );
     if (!isKeyPressed) return;
+    if (!this.player.collisionBox) return;
 
     for (let i = 0; i <= this.boundaries.length - 1; i++) {
       const boundary = padRectangle(this.boundaries[i], keyEvents);
 
       // If there is a collision, set the collision direction
-      if (rectangularCollision(this.player as Rectangle, boundary)) {
+      if (rectangularCollision(this.player.collisionBox, boundary)) {
         if (keyEvents[Keys.W].pressed) {
           this.collisionDirection = Keys.W;
         } else if (keyEvents[Keys.S].pressed) {
@@ -224,7 +225,7 @@ class RPGGame implements CanvasGame {
     return collisions
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if (cell === 1025) {
+          if (cell === 1610) {
             return new Boundary({
               ctx: this.ctx,
               position: {
