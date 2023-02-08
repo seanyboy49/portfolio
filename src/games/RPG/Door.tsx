@@ -7,6 +7,7 @@ interface IDoor extends IBoundary {
 
 class Door extends Boundary {
   map: Maps;
+
   constructor(props: IDoor) {
     super(props);
 

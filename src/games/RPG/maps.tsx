@@ -59,7 +59,7 @@ export const MAPS_CONFIG: MapsConfig = {
   [Maps.MUSEUM]: {
     imageSrc: museumImgSrc,
     offset: {
-      x: -1555,
+      x: -500,
       y: -700,
     },
     dimensions: {
