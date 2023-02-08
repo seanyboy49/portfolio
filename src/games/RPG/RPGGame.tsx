@@ -5,13 +5,18 @@ import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
 import { Events } from "../types";
+import { COLLISION, DOOR } from "./collisions";
+import Door from "./Door";
+import { DoorConfig } from "./maps";
 
 type Collisions = number[][];
+
 interface IRPGGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
   player: Sprite;
   collisions: Collisions;
+  doors: DoorConfig[];
 }
 
 class RPGGame implements CanvasGame {
@@ -20,18 +25,21 @@ class RPGGame implements CanvasGame {
   player: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
+  doors: Array<Door>; // An array of Doors that lead to other maps
   collisionDirection?: Keys; // The direction the player was moving when colliding
   isPlaying = true;
   eventListeners: EventHandler[];
 
   public animationId?: number;
 
-  constructor({ ctx, background, player, collisions }: IRPGGame) {
+  constructor({ ctx, background, player, collisions, doors }: IRPGGame) {
     this.ctx = ctx;
     this.background = background;
     this.player = player;
 
     this.boundaries = this.createBoundariesFromCollisions(collisions);
+    this.doors = this.createDoors(doors);
+
     this.keyEvents = {
       [Keys.W]: {
         pressed: false,
@@ -73,6 +81,7 @@ class RPGGame implements CanvasGame {
     this.background.draw();
     this.player.draw();
     this.boundaries.forEach((b) => b.draw());
+    this.doors.forEach((d) => d.draw());
 
     // Handle collision detection
     // Initialize to undefined because it should only be defined when a collision is detected
@@ -88,6 +97,9 @@ class RPGGame implements CanvasGame {
       this.collisionDirection
     );
     this.boundaries.forEach((b) =>
+      b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    );
+    this.doors.forEach((b) =>
       b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
   }
@@ -225,7 +237,7 @@ class RPGGame implements CanvasGame {
     return collisions
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if (cell === 1610) {
+          if (cell === COLLISION) {
             return new Boundary({
               ctx: this.ctx,
               position: {
@@ -237,7 +249,19 @@ class RPGGame implements CanvasGame {
           return null;
         });
       })
-      .filter((v): v is Boundary => v !== null);
+      .filter((x): x is Boundary => x !== null);
+  }
+
+  private createDoors(doors: DoorConfig[]) {
+    return doors.map((door) => {
+      return new Door({
+        ctx: this.ctx,
+        position: {
+          x: door.position.x,
+          y: door.position.y,
+        },
+      });
+    });
   }
 }
 
