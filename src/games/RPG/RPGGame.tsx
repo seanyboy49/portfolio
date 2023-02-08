@@ -260,6 +260,7 @@ class RPGGame implements CanvasGame {
           x: door.position.x,
           y: door.position.y,
         },
+        map: door.map,
       });
     });
   }

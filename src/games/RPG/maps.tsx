@@ -1,13 +1,13 @@
 import museumImgSrc from "../../images/museum_v1.png";
 import islandImgSrc from "../../images/island_v1.png";
 
-export enum Names {
+export enum Maps {
   ISLAND = "island",
   MUSEUM = "museum",
   HOME = "home",
 }
 export type MapsConfig = {
-  [key in Names]: {
+  [key in Maps]: {
     imageSrc: string;
     offset: {
       x: number;
@@ -22,14 +22,14 @@ export type MapsConfig = {
 };
 
 export type DoorConfig = {
-  map: Names;
+  map: Maps;
   position: {
     x: number;
     y: number;
   };
 };
-export const MAPS: MapsConfig = {
-  [Names.ISLAND]: {
+export const MAPS_CONFIG: MapsConfig = {
+  [Maps.ISLAND]: {
     imageSrc: islandImgSrc,
     offset: {
       x: -1555,
@@ -41,14 +41,14 @@ export const MAPS: MapsConfig = {
     },
     doors: [
       {
-        map: Names.MUSEUM,
+        map: Maps.MUSEUM,
         position: {
           x: 1197,
           y: -124,
         },
       },
       {
-        map: Names.HOME,
+        map: Maps.HOME,
         position: {
           x: 749,
           y: 324,
@@ -56,7 +56,7 @@ export const MAPS: MapsConfig = {
       },
     ],
   },
-  [Names.MUSEUM]: {
+  [Maps.MUSEUM]: {
     imageSrc: museumImgSrc,
     offset: {
       x: -1555,
@@ -68,7 +68,7 @@ export const MAPS: MapsConfig = {
     },
     doors: [
       {
-        map: Names.MUSEUM,
+        map: Maps.MUSEUM,
         position: {
           x: 1197,
           y: -124,
@@ -76,7 +76,7 @@ export const MAPS: MapsConfig = {
       },
     ],
   },
-  [Names.HOME]: {
+  [Maps.HOME]: {
     imageSrc: museumImgSrc,
     offset: {
       x: -1555,
@@ -88,7 +88,7 @@ export const MAPS: MapsConfig = {
     },
     doors: [
       {
-        map: Names.MUSEUM,
+        map: Maps.MUSEUM,
         position: {
           x: 1197,
           y: -124,

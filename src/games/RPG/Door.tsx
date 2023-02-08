@@ -1,8 +1,16 @@
-import Boundary from "./Boundary";
+import Boundary, { IBoundary } from "./Boundary";
+import { Maps } from "./maps";
+
+interface IDoor extends IBoundary {
+  map: Maps;
+}
 
 class Door extends Boundary {
-  constructor(props: any) {
+  map: Maps;
+  constructor(props: IDoor) {
     super(props);
+
+    this.map = props.map;
     this.color = `rgba(0, 26, 255, 0.5)`;
   }
 }

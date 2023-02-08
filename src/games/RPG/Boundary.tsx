@@ -1,7 +1,7 @@
 import { Keys, KeysPressed } from "../RPG/types";
 import { Position, VELOCITY, TILE_WIDTH } from "./types";
 
-interface IBoundary {
+export interface IBoundary {
   ctx: CanvasRenderingContext2D;
   position: Position;
 }

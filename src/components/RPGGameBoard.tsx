@@ -11,7 +11,7 @@ import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
 import { MAP_DIMENSIONS, OFFSET } from "../games/RPG/types";
 import PortfolioMenuUI from "./PortfolioMenuUI";
-import { MAPS, Names } from "../games/RPG/maps";
+import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
 
 // Set up collision boundaries
 const collisionsMap: Array<number[]> = [];
@@ -46,7 +46,7 @@ const RPGGameBoard = () => {
     const game = new RPGGame({
       ctx,
       background,
-      doors: MAPS[Names.ISLAND].doors,
+      doors: MAPS_CONFIG[Maps.ISLAND].doors,
       player,
       collisions: collisionsMap,
     });
