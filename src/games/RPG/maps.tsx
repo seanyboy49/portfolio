@@ -1,4 +1,4 @@
-import museumImgSrc from "../../images/museum_v1.png";
+import museumImgSrc from "../../images/museum_v2.png";
 import islandImgSrc from "../../images/island_v1.png";
 
 export enum Maps {
@@ -18,6 +18,7 @@ export type MapsConfig = {
       height: number;
     };
     doors: DoorConfig[];
+    zoomScale: number;
   };
 };
 
@@ -55,12 +56,13 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
     ],
+    zoomScale: 4,
   },
   [Maps.MUSEUM]: {
     imageSrc: museumImgSrc,
     offset: {
-      x: -500,
-      y: -700,
+      x: -2025,
+      y: -1200,
     },
     dimensions: {
       width: 70,
@@ -75,6 +77,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
     ],
+    zoomScale: 3.5,
   },
   [Maps.HOME]: {
     imageSrc: museumImgSrc,
@@ -95,5 +98,6 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
     ],
+    zoomScale: 3.5,
   },
 };

@@ -181,7 +181,7 @@ class RPGGame implements CanvasGame {
       this.boundaries = [];
       this.doors = [];
       this.draw();
-    }, 500);
+    }, 100);
   }
 
   private handleKeyDown(event: KeyboardEvent) {
