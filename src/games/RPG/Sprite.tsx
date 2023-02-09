@@ -87,7 +87,7 @@ class Sprite {
         y: this.position.y + COLLISION_PADDING / 2,
       },
     };
-    this.ctx.fillStyle = `rgba(255, 0, 0, 0.5)`;
+
     this.ctx.fillRect(
       this.collisionBox.position.x,
       this.collisionBox.position.y,

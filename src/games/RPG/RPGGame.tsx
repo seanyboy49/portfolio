@@ -203,6 +203,7 @@ class RPGGame implements CanvasGame {
       this.foreground = foreground;
       this.boundaries = [];
       this.doors = [];
+
       this.draw();
     }, 100);
   }
