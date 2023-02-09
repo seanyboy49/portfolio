@@ -1,4 +1,5 @@
-import museumImgSrc from "../../images/museum_v2.png";
+import museumBackgroundImgSrc from "../../images/museum_v2.png";
+import museumForegroundImgSrc from "../../images/museum_foreground_v2.png";
 import islandImgSrc from "../../images/island_v1.png";
 
 export enum Maps {
@@ -8,7 +9,8 @@ export enum Maps {
 }
 export type MapsConfig = {
   [key in Maps]: {
-    imageSrc: string;
+    imageBackgroundSrc: string;
+    imageForegroundSrc: string;
     offset: {
       x: number;
       y: number;
@@ -31,7 +33,8 @@ export type DoorConfig = {
 };
 export const MAPS_CONFIG: MapsConfig = {
   [Maps.ISLAND]: {
-    imageSrc: islandImgSrc,
+    imageBackgroundSrc: islandImgSrc,
+    imageForegroundSrc: islandImgSrc,
     offset: {
       x: -1555,
       y: -700,
@@ -59,7 +62,8 @@ export const MAPS_CONFIG: MapsConfig = {
     zoomScale: 4,
   },
   [Maps.MUSEUM]: {
-    imageSrc: museumImgSrc,
+    imageBackgroundSrc: museumBackgroundImgSrc,
+    imageForegroundSrc: museumForegroundImgSrc,
     offset: {
       x: -2025,
       y: -1200,
@@ -80,7 +84,8 @@ export const MAPS_CONFIG: MapsConfig = {
     zoomScale: 3.5,
   },
   [Maps.HOME]: {
-    imageSrc: museumImgSrc,
+    imageBackgroundSrc: museumBackgroundImgSrc,
+    imageForegroundSrc: museumForegroundImgSrc,
     offset: {
       x: -1555,
       y: -700,

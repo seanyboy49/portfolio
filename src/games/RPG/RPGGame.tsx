@@ -9,7 +9,7 @@ import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
 import { Events } from "../types";
-import { COLLISION, DOOR } from "./collisions";
+import { COLLISION } from "./collisions";
 import Door from "./Door";
 import { DoorConfig, Maps, MAPS_CONFIG } from "./maps";
 
@@ -18,6 +18,7 @@ type Collisions = number[][];
 interface IRPGGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
+  foreground?: Sprite;
   player: Sprite;
   collisions: Collisions;
   doors: DoorConfig[];
@@ -26,6 +27,7 @@ interface IRPGGame {
 class RPGGame implements CanvasGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
+  foreground?: Sprite;
   player: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
@@ -36,9 +38,18 @@ class RPGGame implements CanvasGame {
 
   public animationId?: number;
 
-  constructor({ ctx, background, player, collisions, doors }: IRPGGame) {
+  constructor({
+    ctx,
+    background,
+    foreground,
+    player,
+    collisions,
+    doors,
+  }: IRPGGame) {
     this.ctx = ctx;
     this.background = background;
+    if (foreground) this.foreground = foreground;
+    // this.foreground = foreground;
     this.player = player;
 
     this.boundaries = this.createBoundariesFromCollisions(collisions);
@@ -84,6 +95,7 @@ class RPGGame implements CanvasGame {
 
     this.background.draw();
     this.player.draw();
+    this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
     this.doors.forEach((d) => d.draw());
 
@@ -98,6 +110,10 @@ class RPGGame implements CanvasGame {
 
     // Handle keyboard input for movables
     this.background.handleKeyboardInput(
+      this.keyEvents,
+      this.collisionDirection
+    );
+    this.foreground?.handleKeyboardInput(
       this.keyEvents,
       this.collisionDirection
     );
@@ -166,7 +182,13 @@ class RPGGame implements CanvasGame {
     const background = new Sprite({
       ctx: this.ctx,
       position: { x: newMap.offset.x, y: newMap.offset.y },
-      imageSrc: newMap.imageSrc,
+      imageSrc: newMap.imageBackgroundSrc,
+    });
+
+    const foreground = new Sprite({
+      ctx: this.ctx,
+      position: { x: newMap.offset.x, y: newMap.offset.y },
+      imageSrc: newMap.imageForegroundSrc,
     });
 
     // Wipe ctx
@@ -178,6 +200,7 @@ class RPGGame implements CanvasGame {
 
     setTimeout(() => {
       this.background = background;
+      this.foreground = foreground;
       this.boundaries = [];
       this.doors = [];
       this.draw();

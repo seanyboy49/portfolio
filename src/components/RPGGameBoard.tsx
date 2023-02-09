@@ -42,10 +42,16 @@ const RPGGameBoard = () => {
       position: { x: OFFSET.x, y: OFFSET.y },
       imageSrc: islandV1Src,
     });
+    // const foreground = new Sprite({
+    //   ctx: ctx,
+    //   position: { x: OFFSET.x, y: OFFSET.y },
+    //   imageSrc: islandV1Src,
+    // });
 
     const game = new RPGGame({
       ctx,
       background,
+      // foreground,
       doors: MAPS_CONFIG[Maps.ISLAND].doors,
       player,
       collisions: collisionsMap,
