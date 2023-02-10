@@ -1,4 +1,4 @@
-import { Keys, KeysPressed } from "../RPG/types";
+import { Keys, KeysPressed } from "./types";
 import { Position, VELOCITY, TILE_WIDTH } from "./types";
 
 export interface IBoundary {
@@ -13,7 +13,7 @@ class Boundary {
   height: number;
   color: string;
 
-  static width = 64; // tile_width * scale up factor 16 * 4
+  static width = 64; // tile_width * scale up factor = 16 * 4
   static height = 64;
 
   constructor({ position, ctx }: IBoundary) {

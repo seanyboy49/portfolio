@@ -1,27 +1,33 @@
-import museumBackgroundImgSrc from "../../images/museum_v2.png";
-import museumForegroundImgSrc from "../../images/museum_foreground_v2.png";
-import islandImgSrc from "../../images/island_v1.png";
+import islandImgSrc from "../../images/RPG/island_v1.png";
+import { COLLISIONS } from "./collisions";
+
+import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
+import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 
 export enum Maps {
   ISLAND = "island",
   MUSEUM = "museum",
-  HOME = "home",
+  //   HOME = "home",
 }
-export type MapsConfig = {
-  [key in Maps]: {
-    imageBackgroundSrc: string;
-    imageForegroundSrc: string;
-    offset: {
-      x: number;
-      y: number;
-    };
-    dimensions: {
-      width: number;
-      height: number;
-    };
-    doors: DoorConfig[];
-    zoomScale: number;
+
+export type MapConfig = {
+  imageBackgroundSrc: string;
+  imageForegroundSrc?: string;
+  offset: {
+    x: number;
+    y: number;
   };
+  dimensions: {
+    width: number;
+    height: number;
+  };
+  doors: DoorConfig[];
+  zoomScale: number;
+  collisions: number[];
+};
+
+export type MapsConfig = {
+  [key in Maps]: MapConfig;
 };
 
 export type DoorConfig = {
@@ -34,7 +40,7 @@ export type DoorConfig = {
 export const MAPS_CONFIG: MapsConfig = {
   [Maps.ISLAND]: {
     imageBackgroundSrc: islandImgSrc,
-    imageForegroundSrc: islandImgSrc,
+    // imageForegroundSrc: islandImgSrc,
     offset: {
       x: -1555,
       y: -700,
@@ -51,15 +57,16 @@ export const MAPS_CONFIG: MapsConfig = {
           y: -124,
         },
       },
-      {
-        map: Maps.HOME,
-        position: {
-          x: 749,
-          y: 324,
-        },
-      },
+      //   {
+      //     map: Maps.HOME,
+      //     position: {
+      //       x: 749,
+      //       y: 324,
+      //     },
+      //   },
     ],
     zoomScale: 4,
+    collisions: COLLISIONS[Maps.ISLAND],
   },
   [Maps.MUSEUM]: {
     imageBackgroundSrc: museumBackgroundImgSrc,
@@ -82,27 +89,28 @@ export const MAPS_CONFIG: MapsConfig = {
       },
     ],
     zoomScale: 3.5,
+    collisions: COLLISIONS[Maps.ISLAND],
   },
-  [Maps.HOME]: {
-    imageBackgroundSrc: museumBackgroundImgSrc,
-    imageForegroundSrc: museumForegroundImgSrc,
-    offset: {
-      x: -1555,
-      y: -700,
-    },
-    dimensions: {
-      width: 70,
-      height: 40,
-    },
-    doors: [
-      {
-        map: Maps.MUSEUM,
-        position: {
-          x: 1197,
-          y: -124,
-        },
-      },
-    ],
-    zoomScale: 3.5,
-  },
+  //   [Maps.HOME]: {
+  //     imageBackgroundSrc: museumBackgroundImgSrc,
+  //     imageForegroundSrc: museumForegroundImgSrc,
+  //     offset: {
+  //       x: -1555,
+  //       y: -700,
+  //     },
+  //     dimensions: {
+  //       width: 70,
+  //       height: 40,
+  //     },
+  //     doors: [
+  //       {
+  //         map: Maps.MUSEUM,
+  //         position: {
+  //           x: 1197,
+  //           y: -124,
+  //         },
+  //       },
+  //     ],
+  //     zoomScale: 3.5,
+  //   },
 };

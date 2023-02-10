@@ -1,4 +1,3 @@
-import { OFFSET } from "./types";
 import {
   padRectangle,
   rectangularCollision,
@@ -11,49 +10,55 @@ import { Keys, KeysPressed } from "./types";
 import { Events } from "../types";
 import { COLLISION } from "./collisions";
 import Door from "./Door";
-import { DoorConfig, Maps, MAPS_CONFIG } from "./maps";
+import { DoorConfig, Maps, MapConfig, MAPS_CONFIG } from "./maps";
 
-type Collisions = number[][];
+type Collisions = number[];
 
 interface IRPGGame {
   ctx: CanvasRenderingContext2D;
-  background: Sprite;
-  foreground?: Sprite;
+  mapConfig: MapConfig;
   player: Sprite;
-  collisions: Collisions;
-  doors: DoorConfig[];
 }
 
 class RPGGame implements CanvasGame {
   ctx: CanvasRenderingContext2D;
+  mapConfig: MapConfig;
   background: Sprite;
   foreground?: Sprite;
   player: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
-  boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
-  doors: Array<Door>; // An array of Doors that lead to other maps
+  boundaries: Boundary[]; // An array of Boundaries that cause collisions
+  doors: Door[]; // An array of Doors that lead to other maps
   collisionDirection?: Keys; // The direction the player was moving when colliding
   isPlaying = true;
   eventListeners: EventHandler[];
 
   public animationId?: number;
 
-  constructor({
-    ctx,
-    background,
-    foreground,
-    player,
-    collisions,
-    doors,
-  }: IRPGGame) {
+  constructor({ ctx, mapConfig, player }: IRPGGame) {
+    this.mapConfig = mapConfig;
     this.ctx = ctx;
-    this.background = background;
-    if (foreground) this.foreground = foreground;
-    // this.foreground = foreground;
-    this.player = player;
 
-    this.boundaries = this.createBoundariesFromCollisions(collisions);
-    this.doors = this.createDoors(doors);
+    const background = new Sprite({
+      ctx: ctx,
+      position: { x: mapConfig.offset.x, y: mapConfig.offset.y },
+      imageSrc: mapConfig.imageBackgroundSrc,
+    });
+
+    this.background = background;
+
+    if (mapConfig.imageForegroundSrc) {
+      const foreground = new Sprite({
+        ctx: ctx,
+        position: { x: mapConfig.offset.x, y: mapConfig.offset.y },
+        imageSrc: mapConfig.imageForegroundSrc,
+      });
+      this.foreground = foreground;
+    }
+
+    this.player = player;
+    this.boundaries = this.createBoundariesFromCollisions(mapConfig.collisions);
+    this.doors = this.createDoors(mapConfig.doors);
 
     this.keyEvents = {
       [Keys.W]: {
@@ -185,12 +190,6 @@ class RPGGame implements CanvasGame {
       imageSrc: newMap.imageBackgroundSrc,
     });
 
-    const foreground = new Sprite({
-      ctx: this.ctx,
-      position: { x: newMap.offset.x, y: newMap.offset.y },
-      imageSrc: newMap.imageForegroundSrc,
-    });
-
     // Wipe ctx
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
@@ -200,7 +199,15 @@ class RPGGame implements CanvasGame {
 
     setTimeout(() => {
       this.background = background;
-      this.foreground = foreground;
+      if (newMap.imageForegroundSrc) {
+        const foreground = new Sprite({
+          ctx: this.ctx,
+          position: { x: newMap.offset.x, y: newMap.offset.y },
+          imageSrc: newMap.imageForegroundSrc,
+        });
+
+        this.foreground = foreground;
+      }
       this.boundaries = [];
       this.doors = [];
 
@@ -243,15 +250,23 @@ class RPGGame implements CanvasGame {
   }
 
   private createBoundariesFromCollisions(collisions: Collisions) {
-    return collisions
+    const { dimensions, offset } = this.mapConfig;
+
+    // Set up a 2d Array of collisions
+    const collisionsMap: number[][] = [];
+    for (let i = 0; i < collisions.length; i += dimensions.width) {
+      collisionsMap.push(collisions.slice(i, i + dimensions.width));
+    }
+
+    return collisionsMap
       .flatMap((row, y) => {
         return row.map((cell, x) => {
           if (cell === COLLISION) {
             return new Boundary({
               ctx: this.ctx,
               position: {
-                x: x * Boundary.width + OFFSET.x,
-                y: y * Boundary.height + OFFSET.y,
+                x: x * Boundary.width + offset.x,
+                y: y * Boundary.height + offset.y,
               },
             });
           }
