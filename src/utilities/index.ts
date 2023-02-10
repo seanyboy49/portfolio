@@ -27,15 +27,30 @@ export function rectangularCollision(
 
 export function rectangularDoorCollision(
   rectangle1: Rectangle,
-  rectangle2: Rectangle
+  rectangle2: Rectangle,
+  collisionDirection?: Keys
 ) {
-  return (
-    rectangle1.position.x + rectangle1.width <=
-      rectangle2.position.x + rectangle2.width && // rect1 right is inside rect2 riht
-    rectangle1.position.x >= rectangle2.position.x && // rect1 left is inside rect2 left
-    rectangle1.position.y <= rectangle2.position.y // rect1 top hits rect2 top
-    // rectangle1.position.y + rectangle1.height >= rectangle2.position.y // rect2 bottom hits rect2 top
-  );
+  if (!collisionDirection) return false;
+
+  if (collisionDirection === Keys.W) {
+    return (
+      rectangle1.position.x + rectangle1.width <=
+        rectangle2.position.x + rectangle2.width && // rect1 right is inside rect2 riht
+      rectangle1.position.x >= rectangle2.position.x && // rect1 left is inside rect2 left
+      rectangle1.position.y <= rectangle2.position.y // rect1 top hits rect2 top
+      // rectangle1.position.y + rectangle1.height >= rectangle2.position.y // rect2 bottom hits rect2 top
+    );
+  }
+  if (collisionDirection === Keys.S) {
+    return (
+      rectangle1.position.x + rectangle1.width <=
+        rectangle2.position.x + rectangle2.width && // rect1 right is inside rect2 riht
+      rectangle1.position.x >= rectangle2.position.x && // rect1 left is inside rect2 left
+      rectangle1.position.y + rectangle1.height >=
+        rectangle2.position.y + rectangle2.height // rect1 bottom hits rect2 bottom
+      // rectangle1.position.y + rectangle1.height >= rectangle2.position.y // rect2 bottom hits rect2 top
+    );
+  }
 }
 
 const COLLISION_PADDING = 3 as const;

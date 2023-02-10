@@ -36,6 +36,10 @@ export type DoorConfig = {
     x: number;
     y: number;
   };
+  span?: {
+    width: number;
+    height: number;
+  };
 };
 export const MAPS_CONFIG: MapsConfig = {
   [Maps.ISLAND]: {
@@ -81,10 +85,14 @@ export const MAPS_CONFIG: MapsConfig = {
     },
     doors: [
       {
-        map: Maps.MUSEUM,
+        map: Maps.ISLAND,
         position: {
-          x: 1197,
-          y: -124,
+          x: 508,
+          y: 424,
+        },
+        span: {
+          width: 5,
+          height: 1,
         },
       },
     ],

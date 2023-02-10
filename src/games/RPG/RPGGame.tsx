@@ -8,7 +8,7 @@ import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { Events } from "../types";
-import { COLLISION } from "./collisions";
+import { COLLISION, DOOR } from "./collisions";
 import Door from "./Door";
 import { DoorConfig, Maps, MapConfig, MAPS_CONFIG } from "./maps";
 
@@ -125,7 +125,9 @@ class RPGGame implements CanvasGame {
     this.boundaries.forEach((b) =>
       b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
-    this.doors.forEach((b) => b.handleKeyboardInput(this.keyEvents));
+    this.doors.forEach((b) =>
+      b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    );
   }
 
   private handleCollisions(keyEvents: KeysPressed) {
@@ -168,7 +170,13 @@ class RPGGame implements CanvasGame {
       const paddedDoor = padRectangle(this.doors[i], keyEvents);
 
       // If there is a door collision, load the new map
-      if (rectangularDoorCollision(this.player.collisionBox, paddedDoor)) {
+      if (
+        rectangularDoorCollision(
+          this.player.collisionBox,
+          paddedDoor,
+          this.collisionDirection
+        )
+      ) {
         this.loadMap(door.map);
       }
     }
@@ -211,7 +219,7 @@ class RPGGame implements CanvasGame {
 
       this.boundaries = this.createBoundariesFromCollisions(newMap.collisions);
 
-      this.doors = [];
+      this.doors = this.createDoors(newMap.doors);
 
       this.draw();
     }, 100);
@@ -273,6 +281,14 @@ class RPGGame implements CanvasGame {
               },
             });
           }
+          // Get Door positions
+          // if (cell === DOOR) {
+          //   const xPos = x * TILE_WIDTH * zoomScale + offset.x;
+          //   const yPos = y * TILE_WIDTH * zoomScale + offset.y;
+
+          //   console.log("xPos", xPos);
+          //   console.log("yPos", yPos);
+          // }
           return null;
         });
       })
@@ -281,6 +297,7 @@ class RPGGame implements CanvasGame {
 
   private createDoors(doors: DoorConfig[]) {
     const { zoomScale } = this.mapConfig;
+
     return doors.map((door) => {
       return new Door({
         ctx: this.ctx,
@@ -289,6 +306,7 @@ class RPGGame implements CanvasGame {
           x: door.position.x,
           y: door.position.y,
         },
+        span: door.span,
         map: door.map,
       });
     });
