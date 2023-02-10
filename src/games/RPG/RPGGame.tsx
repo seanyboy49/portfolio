@@ -1,37 +1,60 @@
 import { OFFSET } from "./types";
-import { padRectangle, rectangularCollision } from "../../utilities";
+import {
+  padRectangle,
+  rectangularCollision,
+  rectangularDoorCollision,
+} from "../../utilities";
 import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed } from "./types";
 import { Events } from "../types";
+import { COLLISION } from "./collisions";
+import Door from "./Door";
+import { DoorConfig, Maps, MAPS_CONFIG } from "./maps";
 
 type Collisions = number[][];
+
 interface IRPGGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
+  foreground?: Sprite;
   player: Sprite;
   collisions: Collisions;
+  doors: DoorConfig[];
 }
 
 class RPGGame implements CanvasGame {
   ctx: CanvasRenderingContext2D;
   background: Sprite;
+  foreground?: Sprite;
   player: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
+  doors: Array<Door>; // An array of Doors that lead to other maps
   collisionDirection?: Keys; // The direction the player was moving when colliding
   isPlaying = true;
   eventListeners: EventHandler[];
 
   public animationId?: number;
 
-  constructor({ ctx, background, player, collisions }: IRPGGame) {
+  constructor({
+    ctx,
+    background,
+    foreground,
+    player,
+    collisions,
+    doors,
+  }: IRPGGame) {
     this.ctx = ctx;
     this.background = background;
+    if (foreground) this.foreground = foreground;
+    // this.foreground = foreground;
     this.player = player;
 
     this.boundaries = this.createBoundariesFromCollisions(collisions);
+    this.doors = this.createDoors(doors);
+
     this.keyEvents = {
       [Keys.W]: {
         pressed: false,
@@ -72,12 +95,15 @@ class RPGGame implements CanvasGame {
 
     this.background.draw();
     this.player.draw();
+    this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
+    this.doors.forEach((d) => d.draw());
 
     // Handle collision detection
     // Initialize to undefined because it should only be defined when a collision is detected
     this.collisionDirection = undefined;
     this.handleCollisions(this.keyEvents);
+    this.handleDoorEntry(this.keyEvents);
 
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
@@ -87,7 +113,14 @@ class RPGGame implements CanvasGame {
       this.keyEvents,
       this.collisionDirection
     );
+    this.foreground?.handleKeyboardInput(
+      this.keyEvents,
+      this.collisionDirection
+    );
     this.boundaries.forEach((b) =>
+      b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    );
+    this.doors.forEach((b) =>
       b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
   }
@@ -115,76 +148,64 @@ class RPGGame implements CanvasGame {
         }
       }
     }
-    // Broad phase
-    // Find approximately where on the boundaries map the player's position is
-    // const x_ = Math.ceil(
-    //   (this.player.position.x + this.player.width!) / Boundary.width +
-    //     Math.abs(this.background.position.x / Boundary.width)
-    // );
-    // const y_ = Math.ceil(
-    //   (this.player.position.y + this.player.height!) / Boundary.width +
-    //     Math.abs(this.background.position.y / Boundary.width)
-    // );
-    // console.log("x_", x_); // 27
-    // console.log("y_", y_); // 21
+  }
 
-    // console.log("x_", x_);
-    // console.log("y_", y_);
+  private handleDoorEntry(keyEvents: KeysPressed) {
+    const isKeyPressed = Object.values(keyEvents).some(
+      (x) => x.pressed === true
+    );
+    if (!isKeyPressed) return;
+    if (!this.player.collisionBox) return;
 
-    // const boundariesIndex = x_ * MAP_DIMENSIONS.width + (y_ + 1);
-    // const boundary = this.boundaries[boundariesIndex];
-    // if (boundary) {
-    //   // console.log("boundary", boundary);
-    //   boundary.color = `rgba(50, 0, 0, 1)`;
-    // }
+    for (let i = 0; i <= this.doors.length - 1; i++) {
+      const door = this.doors[i];
+      const paddedDoor = padRectangle(this.doors[i], keyEvents);
 
-    // const broadPhaseBoundaries = [];
-    // const OFFSET = 5;
-    // for (
-    //   let x = boundariesIndex - MAP_DIMENSIONS.width * OFFSET;
-    //   x <= boundariesIndex + MAP_DIMENSIONS.width * OFFSET;
-    //   x += MAP_DIMENSIONS.width
-    // ) {
-    //   for (let y = x + y_ - OFFSET; y <= x + y_ + OFFSET; y++) {
-    //     // console.log("y", y);
-    //     // broadPhaseBoundaries.push(this.boundaries[y]);
-    //   }
-    // }
+      // If there is a collision, set the collision direction
+      if (rectangularDoorCollision(this.player.collisionBox, paddedDoor)) {
+        this.loadMap(door.map);
+        // if (keyEvents[Keys.W].pressed) {
+        //   this.collisionDirection = Keys.W;
+        // } else if (keyEvents[Keys.S].pressed) {
+        //   this.collisionDirection = Keys.S;
+        // } else if (keyEvents[Keys.A].pressed) {
+        //   this.collisionDirection = Keys.A;
+        // } else if (keyEvents[Keys.D].pressed) {
+        //   this.collisionDirection = Keys.D;
+        // }
+      }
+    }
+  }
 
-    // console.log("broadPhaseBoundaries", broadPhaseBoundaries);
+  private loadMap(map: Maps) {
+    const newMap = MAPS_CONFIG[map];
+    const background = new Sprite({
+      ctx: this.ctx,
+      position: { x: newMap.offset.x, y: newMap.offset.y },
+      imageSrc: newMap.imageBackgroundSrc,
+    });
 
-    // Narrow phase detection
+    const foreground = new Sprite({
+      ctx: this.ctx,
+      position: { x: newMap.offset.x, y: newMap.offset.y },
+      imageSrc: newMap.imageForegroundSrc,
+    });
 
-    // console.log("boundariesIndex", boundariesIndex);
-    // Detect for boundaries
-    // for (let i = 0; i <= broadPhaseBoundaries.length - 1; i++) {
-    //   const boundary = broadPhaseBoundaries[i];
-    //   // console.log("boundary", boundary);
+    // Wipe ctx
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
 
-    //   if (boundary) {
-    //     boundary.color = `rgba(20, 0, 0, 0.9)`;
-    //     // console.log(boundary);
-    //     // @ts-ignore
-    //     const collision = rectangularCollision(this.player, boundary);
-    //     // console.log("collision", collision);
-    //     if (collision) {
-    //       console.log("collision");
-    //     }
-    //   }
-    // }
+    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    cancelAnimationFrame(this.animationId!);
 
-    // if (
-    //   rectangularCollision(
-    //     this.player,
-    //      {
-    //       ...boundary,
-    //       position: { x: boundary.position.x, y: boundary.position.y + 3 },
-    //     },
-    //   }
+    setTimeout(() => {
+      this.background = background;
+      this.foreground = foreground;
+      this.boundaries = [];
+      this.doors = [];
 
-    // x=26 y = 20
-    // console.log("x", x_);
-    // console.log("y", y_);
+      this.draw();
+    }, 100);
   }
 
   private handleKeyDown(event: KeyboardEvent) {
@@ -225,7 +246,7 @@ class RPGGame implements CanvasGame {
     return collisions
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if (cell === 1610) {
+          if (cell === COLLISION) {
             return new Boundary({
               ctx: this.ctx,
               position: {
@@ -237,7 +258,20 @@ class RPGGame implements CanvasGame {
           return null;
         });
       })
-      .filter((v): v is Boundary => v !== null);
+      .filter((x): x is Boundary => x !== null);
+  }
+
+  private createDoors(doors: DoorConfig[]) {
+    return doors.map((door) => {
+      return new Door({
+        ctx: this.ctx,
+        position: {
+          x: door.position.x,
+          y: door.position.y,
+        },
+        map: door.map,
+      });
+    });
   }
 }
 

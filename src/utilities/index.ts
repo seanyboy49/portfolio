@@ -25,6 +25,19 @@ export function rectangularCollision(
   );
 }
 
+export function rectangularDoorCollision(
+  rectangle1: Rectangle,
+  rectangle2: Rectangle
+) {
+  return (
+    rectangle1.position.x + rectangle1.width <=
+      rectangle2.position.x + rectangle2.width && // rect1 right is inside rect2 riht
+    rectangle1.position.x >= rectangle2.position.x && // rect1 left is inside rect2 left
+    rectangle1.position.y <= rectangle2.position.y // rect1 top hits rect2 top
+    // rectangle1.position.y + rectangle1.height >= rectangle2.position.y // rect2 bottom hits rect2 top
+  );
+}
+
 const COLLISION_PADDING = 3 as const;
 /**
  * Pad the rectangle so that a player doesn't get stuck against a collision block after a collision is detected

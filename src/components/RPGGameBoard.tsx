@@ -11,6 +11,7 @@ import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
 import { MAP_DIMENSIONS, OFFSET } from "../games/RPG/types";
 import PortfolioMenuUI from "./PortfolioMenuUI";
+import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
 
 // Set up collision boundaries
 const collisionsMap: Array<number[]> = [];
@@ -22,12 +23,6 @@ for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
 const RPGGameBoard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
-    const background = new Sprite({
-      ctx: ctx,
-      position: { x: OFFSET.x, y: OFFSET.y },
-      imageSrc: islandV1Src,
-    });
-
     const player = new Sprite({
       ctx: ctx,
       position: { x: ctx.canvas.width / 2, y: ctx.canvas.height / 2 },
@@ -42,9 +37,22 @@ const RPGGameBoard = () => {
       movable: false,
     });
 
+    const background = new Sprite({
+      ctx: ctx,
+      position: { x: OFFSET.x, y: OFFSET.y },
+      imageSrc: islandV1Src,
+    });
+    // const foreground = new Sprite({
+    //   ctx: ctx,
+    //   position: { x: OFFSET.x, y: OFFSET.y },
+    //   imageSrc: islandV1Src,
+    // });
+
     const game = new RPGGame({
       ctx,
       background,
+      // foreground,
+      doors: MAPS_CONFIG[Maps.ISLAND].doors,
       player,
       collisions: collisionsMap,
     });

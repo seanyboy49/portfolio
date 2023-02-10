@@ -1,7 +1,7 @@
 import { Keys, KeysPressed } from "../RPG/types";
 import { Position, VELOCITY, TILE_WIDTH } from "./types";
 
-interface IBoundary {
+export interface IBoundary {
   ctx: CanvasRenderingContext2D;
   position: Position;
 }
@@ -13,7 +13,7 @@ class Boundary {
   height: number;
   color: string;
 
-  static width = 64; // tile width * 4
+  static width = 64; // tile_width * scale up factor 16 * 4
   static height = 64;
 
   constructor({ position, ctx }: IBoundary) {
@@ -31,6 +31,7 @@ class Boundary {
   }
 
   handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
+    if (collisionDirection) return;
     if (key[Keys.W].pressed) {
       if (collisionDirection && collisionDirection === Keys.W) return;
 
