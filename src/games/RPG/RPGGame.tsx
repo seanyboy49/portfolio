@@ -125,9 +125,7 @@ class RPGGame implements CanvasGame {
     this.boundaries.forEach((b) =>
       b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
-    this.doors.forEach((b) =>
-      b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
-    );
+    this.doors.forEach((b) => b.handleKeyboardInput(this.keyEvents));
   }
 
   private handleCollisions(keyEvents: KeysPressed) {
@@ -181,7 +179,7 @@ class RPGGame implements CanvasGame {
    */
   private loadMap(map: Maps) {
     const newMap = MAPS_CONFIG[map];
-    this.mapConfig = newMap
+    this.mapConfig = newMap;
 
     const background = new Sprite({
       ctx: this.ctx,
@@ -190,16 +188,16 @@ class RPGGame implements CanvasGame {
     });
 
     // Wipe ctx and briefly white it out
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    // this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
 
-    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     cancelAnimationFrame(this.animationId!);
 
     // Add a slight delay to give the illusion of loading
     setTimeout(() => {
       this.background = background;
-      
+
       // Not all maps have a foreground
       if (newMap.imageForegroundSrc) {
         const foreground = new Sprite({
@@ -211,8 +209,8 @@ class RPGGame implements CanvasGame {
         this.foreground = foreground;
       }
 
-      this.boundaries = this.createBoundariesFromCollisions(newMap.collisions)
-      
+      this.boundaries = this.createBoundariesFromCollisions(newMap.collisions);
+
       this.doors = [];
 
       this.draw();
@@ -282,7 +280,7 @@ class RPGGame implements CanvasGame {
   }
 
   private createDoors(doors: DoorConfig[]) {
-    const {  zoomScale } = this.mapConfig;
+    const { zoomScale } = this.mapConfig;
     return doors.map((door) => {
       return new Door({
         ctx: this.ctx,

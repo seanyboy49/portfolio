@@ -16,7 +16,7 @@ class Boundary {
 
   constructor({ position, ctx, zoomScale }: IBoundary) {
     this.position = position;
-    this.width = TILE_WIDTH * zoomScale; // 
+    this.width = TILE_WIDTH * zoomScale; // Each map has a different zoom scale, so it must be applied to the width/height
     this.height = TILE_WIDTH * zoomScale;
     this.ctx = ctx;
     this.color = `rgba(255, 0, 0, 0.5)`;
@@ -24,8 +24,8 @@ class Boundary {
 
   draw() {
     const { x, y } = this.position;
-    // this.ctx.fillStyle = this.color;d
-    // this.ctx.fillRect(x, y, this.width, this.height);
+    this.ctx.fillStyle = this.color;
+    this.ctx.fillRect(x, y, this.width, this.height);
   }
 
   handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
