@@ -11,6 +11,12 @@ interface IDoor extends IBoundary {
   };
 }
 
+/**
+ * A special object that represents a door to another level.
+ * It holds the config for the map it leads to.
+ * Doors can be entered from multiple directions, so entryDirection is specified.
+ * They can also span multiple blocks, so span is an optional attribute
+ */
 class Door {
   ctx: CanvasRenderingContext2D;
   position: Position;
@@ -67,8 +73,3 @@ class Door {
 }
 
 export default Door;
-
-// Doors
-
-// {x: 749, y: 324}
-// {x: 1197, y: -124

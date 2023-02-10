@@ -6,7 +6,7 @@ import {
 import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
-import { Keys, KeysPressed, TILE_WIDTH } from "./types";
+import { Keys, KeysPressed, Position, TILE_WIDTH } from "./types";
 import { Events } from "../types";
 import { COLLISION, DOOR } from "./collisions";
 import Door from "./Door";
@@ -187,6 +187,7 @@ class RPGGame implements CanvasGame {
    */
   private loadMap(map: Maps) {
     const newMap = MAPS_CONFIG[map];
+
     this.mapConfig = newMap;
 
     const background = new Sprite({
@@ -204,6 +205,7 @@ class RPGGame implements CanvasGame {
 
     // Add a slight delay to give the illusion of loading
     setTimeout(() => {
+      this.foreground = undefined;
       this.background = background;
 
       // Not all maps have a foreground

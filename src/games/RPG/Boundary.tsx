@@ -4,7 +4,7 @@ import { Position, VELOCITY, TILE_WIDTH } from "./types";
 export interface IBoundary {
   ctx: CanvasRenderingContext2D;
   position: Position;
-  zoomScale: number
+  zoomScale: number;
 }
 
 class Boundary {
@@ -25,7 +25,7 @@ class Boundary {
   draw() {
     const { x, y } = this.position;
     this.ctx.fillStyle = this.color;
-    this.ctx.fillRect(x, y, this.width, this.height);
+    // this.ctx.fillRect(x, y, this.width, this.height);
   }
 
   handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
