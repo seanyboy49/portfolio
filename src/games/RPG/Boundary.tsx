@@ -24,7 +24,7 @@ class Boundary {
 
   draw() {
     const { x, y } = this.position;
-    // this.ctx.fillStyle = this.color;
+    // this.ctx.fillStyle = this.color;d
     // this.ctx.fillRect(x, y, this.width, this.height);
   }
 

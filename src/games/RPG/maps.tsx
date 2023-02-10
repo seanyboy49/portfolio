@@ -72,7 +72,7 @@ export const MAPS_CONFIG: MapsConfig = {
     imageBackgroundSrc: museumBackgroundImgSrc,
     imageForegroundSrc: museumForegroundImgSrc,
     offset: {
-      x: -2025,
+      x: -2180,
       y: -1200,
     },
     dimensions: {
