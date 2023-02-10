@@ -25,6 +25,12 @@ export function rectangularCollision(
   );
 }
 
+/**
+ * Similar to rectangularCollision except it also accounts for collisionDirection.
+ * Whereas rectangularCollision detects if outer edges touch, this function detects if
+ * rect1's outer edge touches rect2's inner edge.
+ * e.g., If a player's top hits a door's top, or a player's bottom hits a door's bottom
+ */
 export function rectangularDoorCollision(
   rectangle1: Rectangle,
   rectangle2: Rectangle,
@@ -38,7 +44,6 @@ export function rectangularDoorCollision(
         rectangle2.position.x + rectangle2.width && // rect1 right is inside rect2 riht
       rectangle1.position.x >= rectangle2.position.x && // rect1 left is inside rect2 left
       rectangle1.position.y <= rectangle2.position.y // rect1 top hits rect2 top
-      // rectangle1.position.y + rectangle1.height >= rectangle2.position.y // rect2 bottom hits rect2 top
     );
   }
   if (collisionDirection === Keys.S) {
@@ -48,7 +53,6 @@ export function rectangularDoorCollision(
       rectangle1.position.x >= rectangle2.position.x && // rect1 left is inside rect2 left
       rectangle1.position.y + rectangle1.height >=
         rectangle2.position.y + rectangle2.height // rect1 bottom hits rect2 bottom
-      // rectangle1.position.y + rectangle1.height >= rectangle2.position.y // rect2 bottom hits rect2 top
     );
   }
 }
