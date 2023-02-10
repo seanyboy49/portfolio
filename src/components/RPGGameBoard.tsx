@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import islandV1Src from "../images/RPG/island_v1.png";
 import playerUpSrc from "../images/RPG/player-up.png";
 import playerDownSrc from "../images/RPG/player-down.png";
 import playerRightSrc from "../images/RPG/player-right.png";
@@ -7,18 +6,11 @@ import playerLeftSrc from "../images/RPG/player-left.png";
 
 import Sprite from "../games/RPG/Sprite";
 import RPGGame from "../games/RPG/RPGGame";
-import collisions from "../games/RPG/collisions";
 import useCanvas from "../hooks/useCanvas";
-import { MAP_DIMENSIONS, OFFSET } from "../games/RPG/types";
 import PortfolioMenuUI from "./PortfolioMenuUI";
 import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
 
-// Set up collision boundaries
-const collisionsMap: Array<number[]> = [];
-// map is 70 tiles map and 40 tiles tall
-for (let i = 0; i < collisions.length; i += MAP_DIMENSIONS.width) {
-  collisionsMap.push(collisions.slice(i, i + MAP_DIMENSIONS.width));
-}
+const islandConfig = MAPS_CONFIG[Maps.ISLAND];
 
 const RPGGameBoard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,11 +29,11 @@ const RPGGameBoard = () => {
       movable: false,
     });
 
-    const background = new Sprite({
-      ctx: ctx,
-      position: { x: OFFSET.x, y: OFFSET.y },
-      imageSrc: islandV1Src,
-    });
+    // const background = new Sprite({
+    //   ctx: ctx,
+    //   position: { x: islandConfig.offset.x, y: islandConfig.offset.y },
+    //   imageSrc: islandConfig.imageBackgroundSrc,
+    // });
     // const foreground = new Sprite({
     //   ctx: ctx,
     //   position: { x: OFFSET.x, y: OFFSET.y },
@@ -50,11 +42,12 @@ const RPGGameBoard = () => {
 
     const game = new RPGGame({
       ctx,
-      background,
-      // foreground,
-      doors: MAPS_CONFIG[Maps.ISLAND].doors,
       player,
-      collisions: collisionsMap,
+      mapConfig: islandConfig,
+      // background,
+      // foreground,
+      // doors: MAPS_CONFIG[Maps.ISLAND].doors,
+      // collisions: islandConfig.collisions,
     });
 
     return game;
