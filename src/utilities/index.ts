@@ -26,7 +26,9 @@ export function rectangularCollision(
 }
 
 /**
- * Similar to rectangularCollision except it also accounts for collisionDirection.
+ * Similar to rectangularCollision except it also accounts for entryDirection,
+ * i.e., the direction in which someone is entering the door.
+ *
  * Whereas rectangularCollision detects if outer edges touch, this function detects if
  * rect1's outer edge touches rect2's inner edge.
  * e.g., If a player's top hits a door's top, or a player's bottom hits a door's bottom
@@ -34,11 +36,11 @@ export function rectangularCollision(
 export function rectangularDoorCollision(
   rectangle1: Rectangle,
   rectangle2: Rectangle,
-  collisionDirection?: Keys
+  entryDirection?: Keys
 ) {
-  if (!collisionDirection) return false;
+  if (!entryDirection) return false;
 
-  if (collisionDirection === Keys.W) {
+  if (entryDirection === Keys.W) {
     return (
       rectangle1.position.x + rectangle1.width <=
         rectangle2.position.x + rectangle2.width && // rect1 right is inside rect2 riht
@@ -46,7 +48,7 @@ export function rectangularDoorCollision(
       rectangle1.position.y <= rectangle2.position.y // rect1 top hits rect2 top
     );
   }
-  if (collisionDirection === Keys.S) {
+  if (entryDirection === Keys.S) {
     return (
       rectangle1.position.x + rectangle1.width <=
         rectangle2.position.x + rectangle2.width && // rect1 right is inside rect2 riht

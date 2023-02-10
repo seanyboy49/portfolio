@@ -174,7 +174,7 @@ class RPGGame implements CanvasGame {
         rectangularDoorCollision(
           this.player.collisionBox,
           paddedDoor,
-          this.collisionDirection
+          door.entryDirection
         )
       ) {
         this.loadMap(door.map);
@@ -218,7 +218,6 @@ class RPGGame implements CanvasGame {
       }
 
       this.boundaries = this.createBoundariesFromCollisions(newMap.collisions);
-
       this.doors = this.createDoors(newMap.doors);
 
       this.draw();
@@ -306,6 +305,7 @@ class RPGGame implements CanvasGame {
           x: door.position.x,
           y: door.position.y,
         },
+        entryDirection: door.entryDirection,
         span: door.span,
         map: door.map,
       });

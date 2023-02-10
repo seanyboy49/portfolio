@@ -4,6 +4,7 @@ import { Keys, KeysPressed, Position, TILE_WIDTH, VELOCITY } from "./types";
 
 interface IDoor extends IBoundary {
   map: Maps;
+  entryDirection: Keys;
   span?: {
     width: number;
     height: number;
@@ -17,12 +18,14 @@ class Door {
   height: number;
   color: string;
   map: Maps;
+  entryDirection: Keys;
 
   constructor({
     ctx,
     position,
     zoomScale,
     map,
+    entryDirection,
     span = {
       width: 1,
       height: 1,
@@ -33,6 +36,7 @@ class Door {
     this.width = TILE_WIDTH * span.width * zoomScale; // Each map has a different zoom scale, so it must be applied to the width/height
     this.height = TILE_WIDTH * span.height * zoomScale;
 
+    this.entryDirection = entryDirection;
     this.map = map;
     this.color = `rgba(0, 26, 255, 0.5)`;
   }
