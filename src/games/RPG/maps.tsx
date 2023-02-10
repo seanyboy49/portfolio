@@ -88,8 +88,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
     ],
-    zoomScale: 3.5,
-    collisions: COLLISIONS[Maps.ISLAND],
+    zoomScale: 1,
+    collisions: COLLISIONS[Maps.MUSEUM],
   },
   //   [Maps.HOME]: {
   //     imageBackgroundSrc: museumBackgroundImgSrc,

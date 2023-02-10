@@ -6,7 +6,7 @@ import {
 import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
-import { Keys, KeysPressed } from "./types";
+import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { Events } from "../types";
 import { COLLISION } from "./collisions";
 import Door from "./Door";
@@ -166,18 +166,9 @@ class RPGGame implements CanvasGame {
       const door = this.doors[i];
       const paddedDoor = padRectangle(this.doors[i], keyEvents);
 
-      // If there is a collision, set the collision direction
+      // If there is a door collision, load the new map
       if (rectangularDoorCollision(this.player.collisionBox, paddedDoor)) {
         this.loadMap(door.map);
-        // if (keyEvents[Keys.W].pressed) {
-        //   this.collisionDirection = Keys.W;
-        // } else if (keyEvents[Keys.S].pressed) {
-        //   this.collisionDirection = Keys.S;
-        // } else if (keyEvents[Keys.A].pressed) {
-        //   this.collisionDirection = Keys.A;
-        // } else if (keyEvents[Keys.D].pressed) {
-        //   this.collisionDirection = Keys.D;
-        // }
       }
     }
   }
@@ -208,7 +199,9 @@ class RPGGame implements CanvasGame {
 
         this.foreground = foreground;
       }
-      this.boundaries = [];
+      this.boundaries = this.createBoundariesFromCollisions(newMap.collisions)
+      // this.boundaries = []
+      console.log('this.boundaries', this.boundaries)
       this.doors = [];
 
       this.draw();
@@ -250,7 +243,7 @@ class RPGGame implements CanvasGame {
   }
 
   private createBoundariesFromCollisions(collisions: Collisions) {
-    const { dimensions, offset } = this.mapConfig;
+    const { dimensions, offset, zoomScale } = this.mapConfig;
 
     // Set up a 2d Array of collisions
     const collisionsMap: number[][] = [];
@@ -265,8 +258,8 @@ class RPGGame implements CanvasGame {
             return new Boundary({
               ctx: this.ctx,
               position: {
-                x: x * Boundary.width + offset.x,
-                y: y * Boundary.height + offset.y,
+                x: x * TILE_WIDTH * zoomScale + offset.x,
+                y: y * TILE_WIDTH * zoomScale + offset.y,
               },
             });
           }
