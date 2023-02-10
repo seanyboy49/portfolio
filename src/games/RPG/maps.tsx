@@ -1,6 +1,6 @@
-import museumBackgroundImgSrc from "../../images/museum_v2.png";
-import museumForegroundImgSrc from "../../images/museum_foreground_v2.png";
-import islandImgSrc from "../../images/island_v1.png";
+import museumBackgroundImgSrc from "../../images/RPG/museum_v2.png";
+import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
+import islandImgSrc from "../../images/RPG/island_v1.png";
 
 export enum Maps {
   ISLAND = "island",

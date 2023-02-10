@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import islandV1Src from "../images/island_v1.png";
-import playerUpSrc from "../images/player-up.png";
-import playerDownSrc from "../images/player-down.png";
-import playerRightSrc from "../images/player-right.png";
-import playerLeftSrc from "../images/player-left.png";
+import islandV1Src from "../images/RPG/island_v1.png";
+import playerUpSrc from "../images/RPG/player-up.png";
+import playerDownSrc from "../images/RPG/player-down.png";
+import playerRightSrc from "../images/RPG/player-right.png";
+import playerLeftSrc from "../images/RPG/player-left.png";
 
 import Sprite from "../games/RPG/Sprite";
 import RPGGame from "../games/RPG/RPGGame";
