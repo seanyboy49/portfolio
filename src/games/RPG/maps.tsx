@@ -1,7 +1,7 @@
 import islandImgSrc from "../../images/RPG/island_v1.png";
 import { COLLISIONS } from "./collisions";
 
-import museumBackgroundImgSrc from "../../images/RPG/museum_v2.png";
+import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 
 export enum Maps {
