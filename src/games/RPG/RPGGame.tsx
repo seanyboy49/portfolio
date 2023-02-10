@@ -155,6 +155,9 @@ class RPGGame implements CanvasGame {
     }
   }
 
+  /**
+   * Similar to handleCollision. Detects collisions with doors and loads a new map upon door entry
+   */
   private handleDoorEntry(keyEvents: KeysPressed) {
     const isKeyPressed = Object.values(keyEvents).some(
       (x) => x.pressed === true
@@ -173,24 +176,31 @@ class RPGGame implements CanvasGame {
     }
   }
 
+  /**
+   * Sets the new mapConfig and updates background, foreground, boundaries and doors
+   */
   private loadMap(map: Maps) {
     const newMap = MAPS_CONFIG[map];
     this.mapConfig = newMap
+
     const background = new Sprite({
       ctx: this.ctx,
       position: { x: newMap.offset.x, y: newMap.offset.y },
       imageSrc: newMap.imageBackgroundSrc,
     });
 
-    // Wipe ctx
+    // Wipe ctx and briefly white it out
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
 
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     cancelAnimationFrame(this.animationId!);
 
+    // Add a slight delay to give the illusion of loading
     setTimeout(() => {
       this.background = background;
+      
+      // Not all maps have a foreground
       if (newMap.imageForegroundSrc) {
         const foreground = new Sprite({
           ctx: this.ctx,
@@ -200,9 +210,9 @@ class RPGGame implements CanvasGame {
 
         this.foreground = foreground;
       }
+
       this.boundaries = this.createBoundariesFromCollisions(newMap.collisions)
-      // this.boundaries = []
-      console.log('this.boundaries', this.boundaries)
+      
       this.doors = [];
 
       this.draw();
