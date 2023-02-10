@@ -3,6 +3,7 @@ import { COLLISIONS } from "./collisions";
 
 import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
+import { Keys } from "./types";
 
 export enum Maps {
   ISLAND = "island",
@@ -36,6 +37,11 @@ export type DoorConfig = {
     x: number;
     y: number;
   };
+  entryDirection: Keys;
+  span?: {
+    width: number;
+    height: number;
+  };
 };
 export const MAPS_CONFIG: MapsConfig = {
   [Maps.ISLAND]: {
@@ -52,6 +58,7 @@ export const MAPS_CONFIG: MapsConfig = {
     doors: [
       {
         map: Maps.MUSEUM,
+        entryDirection: Keys.W,
         position: {
           x: 1197,
           y: -124,
@@ -72,24 +79,29 @@ export const MAPS_CONFIG: MapsConfig = {
     imageBackgroundSrc: museumBackgroundImgSrc,
     imageForegroundSrc: museumForegroundImgSrc,
     offset: {
-      x: -2025,
+      x: -2180,
       y: -1200,
     },
     dimensions: {
-      width: 70,
+      width: 100,
       height: 40,
     },
     doors: [
       {
-        map: Maps.MUSEUM,
+        map: Maps.ISLAND,
+        entryDirection: Keys.S,
         position: {
-          x: 1197,
-          y: -124,
+          x: 508,
+          y: 424,
+        },
+        span: {
+          width: 5,
+          height: 1,
         },
       },
     ],
     zoomScale: 3.5,
-    collisions: COLLISIONS[Maps.ISLAND],
+    collisions: COLLISIONS[Maps.MUSEUM],
   },
   //   [Maps.HOME]: {
   //     imageBackgroundSrc: museumBackgroundImgSrc,

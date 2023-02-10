@@ -6,9 +6,9 @@ import {
 import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
-import { Keys, KeysPressed } from "./types";
+import { Keys, KeysPressed, Position, TILE_WIDTH } from "./types";
 import { Events } from "../types";
-import { COLLISION } from "./collisions";
+import { COLLISION, DOOR } from "./collisions";
 import Door from "./Door";
 import { DoorConfig, Maps, MapConfig, MAPS_CONFIG } from "./maps";
 
@@ -155,6 +155,9 @@ class RPGGame implements CanvasGame {
     }
   }
 
+  /**
+   * Similar to handleCollision. Detects collisions with doors and loads a new map upon door entry
+   */
   private handleDoorEntry(keyEvents: KeysPressed) {
     const isKeyPressed = Object.values(keyEvents).some(
       (x) => x.pressed === true
@@ -166,39 +169,46 @@ class RPGGame implements CanvasGame {
       const door = this.doors[i];
       const paddedDoor = padRectangle(this.doors[i], keyEvents);
 
-      // If there is a collision, set the collision direction
-      if (rectangularDoorCollision(this.player.collisionBox, paddedDoor)) {
+      // If there is a door collision, load the new map
+      if (
+        rectangularDoorCollision(
+          this.player.collisionBox,
+          paddedDoor,
+          door.entryDirection
+        )
+      ) {
         this.loadMap(door.map);
-        // if (keyEvents[Keys.W].pressed) {
-        //   this.collisionDirection = Keys.W;
-        // } else if (keyEvents[Keys.S].pressed) {
-        //   this.collisionDirection = Keys.S;
-        // } else if (keyEvents[Keys.A].pressed) {
-        //   this.collisionDirection = Keys.A;
-        // } else if (keyEvents[Keys.D].pressed) {
-        //   this.collisionDirection = Keys.D;
-        // }
       }
     }
   }
 
+  /**
+   * Sets the new mapConfig and updates background, foreground, boundaries and doors
+   */
   private loadMap(map: Maps) {
     const newMap = MAPS_CONFIG[map];
+
+    this.mapConfig = newMap;
+
     const background = new Sprite({
       ctx: this.ctx,
       position: { x: newMap.offset.x, y: newMap.offset.y },
       imageSrc: newMap.imageBackgroundSrc,
     });
 
-    // Wipe ctx
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    // Wipe ctx and briefly white it out
+    // this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
 
-    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     cancelAnimationFrame(this.animationId!);
 
+    // Add a slight delay to give the illusion of loading
     setTimeout(() => {
+      this.foreground = undefined;
       this.background = background;
+
+      // Not all maps have a foreground
       if (newMap.imageForegroundSrc) {
         const foreground = new Sprite({
           ctx: this.ctx,
@@ -208,8 +218,9 @@ class RPGGame implements CanvasGame {
 
         this.foreground = foreground;
       }
-      this.boundaries = [];
-      this.doors = [];
+
+      this.boundaries = this.createBoundariesFromCollisions(newMap.collisions);
+      this.doors = this.createDoors(newMap.doors);
 
       this.draw();
     }, 100);
@@ -250,7 +261,7 @@ class RPGGame implements CanvasGame {
   }
 
   private createBoundariesFromCollisions(collisions: Collisions) {
-    const { dimensions, offset } = this.mapConfig;
+    const { dimensions, offset, zoomScale } = this.mapConfig;
 
     // Set up a 2d Array of collisions
     const collisionsMap: number[][] = [];
@@ -264,12 +275,21 @@ class RPGGame implements CanvasGame {
           if (cell === COLLISION) {
             return new Boundary({
               ctx: this.ctx,
+              zoomScale: zoomScale,
               position: {
-                x: x * Boundary.width + offset.x,
-                y: y * Boundary.height + offset.y,
+                x: x * TILE_WIDTH * zoomScale + offset.x,
+                y: y * TILE_WIDTH * zoomScale + offset.y,
               },
             });
           }
+          // Get Door positions
+          // if (cell === DOOR) {
+          //   const xPos = x * TILE_WIDTH * zoomScale + offset.x;
+          //   const yPos = y * TILE_WIDTH * zoomScale + offset.y;
+
+          //   console.log("xPos", xPos);
+          //   console.log("yPos", yPos);
+          // }
           return null;
         });
       })
@@ -277,13 +297,18 @@ class RPGGame implements CanvasGame {
   }
 
   private createDoors(doors: DoorConfig[]) {
+    const { zoomScale } = this.mapConfig;
+
     return doors.map((door) => {
       return new Door({
         ctx: this.ctx,
+        zoomScale: zoomScale,
         position: {
           x: door.position.x,
           y: door.position.y,
         },
+        entryDirection: door.entryDirection,
+        span: door.span,
         map: door.map,
       });
     });
