@@ -1,4 +1,4 @@
-import { Keys, KeysPressed } from "../RPG/types";
+import { Keys, KeysPressed } from "./types";
 import { Position, VELOCITY, TILE_WIDTH } from "./types";
 
 export interface IBoundary {
