@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+
 import playerUpSrc from "../images/RPG/player-up.png";
 import playerDownSrc from "../images/RPG/player-down.png";
 import playerRightSrc from "../images/RPG/player-right.png";
@@ -29,25 +30,10 @@ const RPGGameBoard = () => {
       movable: false,
     });
 
-    // const background = new Sprite({
-    //   ctx: ctx,
-    //   position: { x: islandConfig.offset.x, y: islandConfig.offset.y },
-    //   imageSrc: islandConfig.imageBackgroundSrc,
-    // });
-    // const foreground = new Sprite({
-    //   ctx: ctx,
-    //   position: { x: OFFSET.x, y: OFFSET.y },
-    //   imageSrc: islandV1Src,
-    // });
-
     const game = new RPGGame({
       ctx,
       player,
       mapConfig: islandConfig,
-      // background,
-      // foreground,
-      // doors: MAPS_CONFIG[Maps.ISLAND].doors,
-      // collisions: islandConfig.collisions,
     });
 
     return game;

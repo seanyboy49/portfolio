@@ -18,10 +18,6 @@ interface IRPGGame {
   ctx: CanvasRenderingContext2D;
   mapConfig: MapConfig;
   player: Sprite;
-  // background: Sprite;
-  // foreground?: Sprite;
-  // collisions: Collisions;
-  // doors: DoorConfig[];
 }
 
 class RPGGame implements CanvasGame {
@@ -31,23 +27,15 @@ class RPGGame implements CanvasGame {
   foreground?: Sprite;
   player: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
-  boundaries: Array<Boundary>; // An array of Boundaries that cause collisions
-  doors: Array<Door>; // An array of Doors that lead to other maps
+  boundaries: Boundary[]; // An array of Boundaries that cause collisions
+  doors: Door[]; // An array of Doors that lead to other maps
   collisionDirection?: Keys; // The direction the player was moving when colliding
   isPlaying = true;
   eventListeners: EventHandler[];
 
   public animationId?: number;
 
-  constructor({
-    ctx,
-    mapConfig,
-    player,
-  }: // background,
-  // foreground,
-  // collisions,
-  // doors,
-  IRPGGame) {
+  constructor({ ctx, mapConfig, player }: IRPGGame) {
     this.mapConfig = mapConfig;
     this.ctx = ctx;
 
