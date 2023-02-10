@@ -175,6 +175,7 @@ class RPGGame implements CanvasGame {
 
   private loadMap(map: Maps) {
     const newMap = MAPS_CONFIG[map];
+    this.mapConfig = newMap
     const background = new Sprite({
       ctx: this.ctx,
       position: { x: newMap.offset.x, y: newMap.offset.y },
@@ -257,6 +258,7 @@ class RPGGame implements CanvasGame {
           if (cell === COLLISION) {
             return new Boundary({
               ctx: this.ctx,
+              zoomScale: zoomScale,
               position: {
                 x: x * TILE_WIDTH * zoomScale + offset.x,
                 y: y * TILE_WIDTH * zoomScale + offset.y,
@@ -270,9 +272,11 @@ class RPGGame implements CanvasGame {
   }
 
   private createDoors(doors: DoorConfig[]) {
+    const {  zoomScale } = this.mapConfig;
     return doors.map((door) => {
       return new Door({
         ctx: this.ctx,
+        zoomScale: zoomScale,
         position: {
           x: door.position.x,
           y: door.position.y,

@@ -76,7 +76,7 @@ export const MAPS_CONFIG: MapsConfig = {
       y: -1200,
     },
     dimensions: {
-      width: 70,
+      width: 100,
       height: 40,
     },
     doors: [
@@ -88,7 +88,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
     ],
-    zoomScale: 1,
+    zoomScale: 3.5,
     collisions: COLLISIONS[Maps.MUSEUM],
   },
   //   [Maps.HOME]: {
