@@ -10,6 +10,7 @@ import RPGGame from "../games/RPG/RPGGame";
 import useCanvas from "../hooks/useCanvas";
 import PortfolioMenuUI from "./PortfolioMenuUI";
 import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
+import { island } from "../games/RPG/collisions";
 
 const islandConfig = MAPS_CONFIG[Maps.ISLAND];
 
@@ -33,7 +34,8 @@ const RPGGameBoard = () => {
     const game = new RPGGame({
       ctx,
       player,
-      mapConfig: islandConfig,
+      map: Maps.ISLAND,
+      mapsConfig: MAPS_CONFIG,
     });
 
     return game;

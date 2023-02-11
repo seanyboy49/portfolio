@@ -10,19 +10,21 @@ import { Keys, KeysPressed, Position, TILE_WIDTH } from "./types";
 import { Events } from "../types";
 import { COLLISION, DOOR } from "./collisions";
 import Door from "./Door";
-import { DoorConfig, Maps, MapConfig, MAPS_CONFIG } from "./maps";
+import { DoorConfig, Maps, MapConfig, MapsConfig, MAPS_CONFIG } from "./maps";
 
 type Collisions = number[];
 
 interface IRPGGame {
   ctx: CanvasRenderingContext2D;
-  mapConfig: MapConfig;
+  mapsConfig: MapsConfig;
+  map: Maps;
   player: Sprite;
 }
 
 class RPGGame implements CanvasGame {
   ctx: CanvasRenderingContext2D;
-  mapConfig: MapConfig;
+  mapsConfig: MapsConfig;
+  map: Maps;
   background: Sprite;
   foreground?: Sprite;
   player: Sprite;
@@ -35,30 +37,38 @@ class RPGGame implements CanvasGame {
 
   public animationId?: number;
 
-  constructor({ ctx, mapConfig, player }: IRPGGame) {
-    this.mapConfig = mapConfig;
+  constructor({ ctx, mapsConfig, player, map }: IRPGGame) {
     this.ctx = ctx;
+    this.mapsConfig = mapsConfig;
+    this.map = map;
+
+    const currentMapConfig = mapsConfig[map];
 
     const background = new Sprite({
       ctx: ctx,
-      position: { x: mapConfig.offset.x, y: mapConfig.offset.y },
-      imageSrc: mapConfig.imageBackgroundSrc,
+      position: { x: currentMapConfig.offset.x, y: currentMapConfig.offset.y },
+      imageSrc: currentMapConfig.imageBackgroundSrc,
     });
 
     this.background = background;
 
-    if (mapConfig.imageForegroundSrc) {
+    if (currentMapConfig.imageForegroundSrc) {
       const foreground = new Sprite({
         ctx: ctx,
-        position: { x: mapConfig.offset.x, y: mapConfig.offset.y },
-        imageSrc: mapConfig.imageForegroundSrc,
+        position: {
+          x: currentMapConfig.offset.x,
+          y: currentMapConfig.offset.y,
+        },
+        imageSrc: currentMapConfig.imageForegroundSrc,
       });
       this.foreground = foreground;
     }
 
     this.player = player;
-    this.boundaries = this.createBoundariesFromCollisions(mapConfig.collisions);
-    this.doors = this.createDoors(mapConfig.doors);
+    this.boundaries = this.createBoundariesFromCollisions(
+      currentMapConfig.collisions
+    );
+    this.doors = this.createDoors(currentMapConfig.doors);
 
     this.keyEvents = {
       [Keys.W]: {
@@ -186,14 +196,14 @@ class RPGGame implements CanvasGame {
    * Sets the new mapConfig and updates background, foreground, boundaries and doors
    */
   private loadMap(map: Maps) {
-    const newMap = MAPS_CONFIG[map];
+    this.map = map;
 
-    this.mapConfig = newMap;
+    const currentMapConfig = this.mapsConfig[this.map];
 
     const background = new Sprite({
       ctx: this.ctx,
-      position: { x: newMap.offset.x, y: newMap.offset.y },
-      imageSrc: newMap.imageBackgroundSrc,
+      position: { x: currentMapConfig.offset.x, y: currentMapConfig.offset.y },
+      imageSrc: currentMapConfig.imageBackgroundSrc,
     });
 
     // Wipe ctx and briefly white it out
@@ -209,18 +219,23 @@ class RPGGame implements CanvasGame {
       this.background = background;
 
       // Not all maps have a foreground
-      if (newMap.imageForegroundSrc) {
+      if (currentMapConfig.imageForegroundSrc) {
         const foreground = new Sprite({
           ctx: this.ctx,
-          position: { x: newMap.offset.x, y: newMap.offset.y },
-          imageSrc: newMap.imageForegroundSrc,
+          position: {
+            x: currentMapConfig.offset.x,
+            y: currentMapConfig.offset.y,
+          },
+          imageSrc: currentMapConfig.imageForegroundSrc,
         });
 
         this.foreground = foreground;
       }
 
-      this.boundaries = this.createBoundariesFromCollisions(newMap.collisions);
-      this.doors = this.createDoors(newMap.doors);
+      this.boundaries = this.createBoundariesFromCollisions(
+        currentMapConfig.collisions
+      );
+      this.doors = this.createDoors(currentMapConfig.doors);
 
       this.draw();
     }, 100);
@@ -261,7 +276,8 @@ class RPGGame implements CanvasGame {
   }
 
   private createBoundariesFromCollisions(collisions: Collisions) {
-    const { dimensions, offset, zoomScale } = this.mapConfig;
+    const currentMapConfig = this.mapsConfig[this.map];
+    const { dimensions, offset, zoomScale } = currentMapConfig;
 
     // Set up a 2d Array of collisions
     const collisionsMap: number[][] = [];
@@ -297,7 +313,8 @@ class RPGGame implements CanvasGame {
   }
 
   private createDoors(doors: DoorConfig[]) {
-    const { zoomScale } = this.mapConfig;
+    const currentMapConfig = this.mapsConfig[this.map];
+    const { zoomScale } = currentMapConfig;
 
     return doors.map((door) => {
       return new Door({
