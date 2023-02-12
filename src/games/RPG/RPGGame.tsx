@@ -10,6 +10,7 @@ import { IDs } from "./collisions";
 import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./maps";
 import {
   padRectangle,
+  Rectangle,
   rectangularCollision,
   rectangularDoorCollision,
 } from "../../utilities";
@@ -215,11 +216,26 @@ class RPGGame implements CanvasGame {
       const paddedPrompt = padRectangle(prompt, keyEvents);
 
       // If there is a door collision, load the new map
-      if (rectangularCollision(this.player.collisionBox, paddedPrompt)) {
-        this.updateGameState((prev) => ({
-          ...prev,
-          content: prompt.content,
-        }));
+      if (rectangularCollision(this.player as Rectangle, paddedPrompt)) {
+        console.log("yes");
+        this.updateGameState((prev) => {
+          return {
+            ...prev,
+            content: prompt.content,
+          };
+        });
+      } else {
+        console.log("no");
+
+        this.updateGameState((prev) => {
+          // If content is already undefined, cancel the setState so as to not trigger another React re-render
+          if (prev.content === undefined) return prev;
+
+          return {
+            ...prev,
+            content: undefined,
+          };
+        });
       }
     }
   }
@@ -308,17 +324,17 @@ class RPGGame implements CanvasGame {
         event.preventDefault();
 
         this.updateGameState((prev) => {
-          if (prev.showContent) {
-            return {
-              ...prev,
-              showContent: false,
-              content: undefined,
-            };
-          }
+          // if (prev.showContent) {
+          //   return {
+          //     ...prev,
+          //     showContent: false,
+          //     content: undefined,
+          //   };
+          // }
 
           return {
             ...prev,
-            showContent: true,
+            showContent: !prev.showContent,
           };
         });
         break;
