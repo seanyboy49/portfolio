@@ -11,8 +11,6 @@ import useCanvas from "../hooks/useCanvas";
 import PortfolioMenuUI from "./PortfolioMenuUI";
 import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
 
-const islandConfig = MAPS_CONFIG[Maps.ISLAND];
-
 const RPGGameBoard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const setUpGame = useCallback((ctx: CanvasRenderingContext2D) => {
@@ -33,7 +31,8 @@ const RPGGameBoard = () => {
     const game = new RPGGame({
       ctx,
       player,
-      mapConfig: islandConfig,
+      map: Maps.ISLAND,
+      mapsConfig: MAPS_CONFIG,
     });
 
     return game;
