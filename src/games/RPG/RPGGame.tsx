@@ -6,11 +6,11 @@ import {
 import { CanvasGame, EventHandler } from "../types";
 import Boundary from "./Boundary";
 import Sprite from "./Sprite";
-import { Keys, KeysPressed, Position, TILE_WIDTH } from "./types";
+import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { Events } from "../types";
-import { COLLISION, DOOR } from "./collisions";
+import { COLLISION } from "./collisions";
 import Door from "./Door";
-import { DoorConfig, Maps, MapConfig, MapsConfig, MAPS_CONFIG } from "./maps";
+import { DoorConfig, Maps, MapsConfig } from "./maps";
 
 type Collisions = number[];
 
@@ -187,9 +187,9 @@ class RPGGame implements CanvasGame {
    * Sets the new mapConfig and updates background, foreground, boundaries and doors
    */
   private loadMap(map: Maps) {
-    console.log("this.cache", this.cache);
     // Set the new map
     this.map = map;
+
     // Load from cache if possible
     if (this.cache.has(map)) {
       const mapConfigFromCache = this.cache.get(map)!;
@@ -202,7 +202,9 @@ class RPGGame implements CanvasGame {
       this.background = background;
       this.doors = doors;
       this.boundaries = boundaries;
-    } else {
+    }
+    // If cache miss, set up the new map from scratch and store it in cache
+    else {
       const currentMapConfig = this.mapsConfig[this.map];
       const { offset } = currentMapConfig;
       const background = new Sprite({
