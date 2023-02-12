@@ -27,7 +27,7 @@ class Prompt extends MovableObject {
     this.height = TILE_WIDTH * span.height * zoomScale;
 
     this.content = content;
-    this.color = `rgba(0, 26, 255, 0.5)`;
+    this.color = `rgba(255, 255, 255, 0.5)`;
   }
 }
 

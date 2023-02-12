@@ -1,6 +1,6 @@
 import { Maps } from "./maps";
 import MovableObject, { IMovableObject } from "./MovableObject";
-import { Keys, Position, TILE_WIDTH } from "./types";
+import { Keys, TILE_WIDTH } from "./types";
 
 interface IDoor extends IMovableObject {
   map: Maps;

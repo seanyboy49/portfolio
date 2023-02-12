@@ -52,19 +52,19 @@ export type DoorConfig = {
   };
 };
 export type PromptConfig = {
-    content: string
-    /**
-     * Matrix Coordinates in collisionMap
-     */
-    position: {
-      x: number;
-      y: number;
-    };
-    span?: {
-      width: number;
-      height: number;
-    };
+  content: string;
+  /**
+   * Matrix Coordinates in collisionMap
+   */
+  position: {
+    x: number;
+    y: number;
   };
+  span?: {
+    width: number;
+    height: number;
+  };
+};
 
 // doors
 // island
@@ -133,18 +133,69 @@ export const MAPS_CONFIG: MapsConfig = {
     zoomScale: 3.5,
     collisions: COLLISIONS[Maps.MUSEUM],
     prompts: [
-        {
-            content: 'hello world',
-            position: {
-                x: 48,
-                y: 29
-            },
-            span: {
-                width: 5,
-                height: 1,
-              }
-        }
-    ]
+      {
+        content: "aaa",
+        position: {
+          x: 59,
+          y: 16,
+        },
+        span: {
+          width: 3,
+          height: 2,
+        },
+      },
+      {
+        content: "bbb",
+        position: {
+          x: 65,
+          y: 16,
+        },
+        span: {
+          width: 3,
+          height: 2,
+        },
+      },
+      {
+        content: "ccc",
+        position: {
+          x: 71,
+          y: 16,
+        },
+        span: {
+          width: 3,
+          height: 2,
+        },
+      },
+      {
+        content: "ddd",
+        position: {
+          x: 77,
+          y: 16,
+        },
+        span: {
+          width: 3,
+          height: 2,
+        },
+      },
+      {
+        content: "eee",
+        position: {
+          x: 82,
+          y: 16,
+        },
+        span: {
+          width: 3,
+          height: 2,
+        },
+      },
+      {
+        content: "fff",
+        position: {
+          x: 50,
+          y: 26,
+        },
+      },
+    ],
   },
   //   [Maps.HOME]: {
   //     imageBackgroundSrc: museumBackgroundImgSrc,
