@@ -224,12 +224,6 @@ class RPGGame implements CanvasGame {
         }));
       }
       // cancelAnimationFrame(this.animationId!);
-      // } else {
-      //   this.updateGameState((prev) => ({
-      //     ...prev,
-      //     content: undefined,
-      //   }));
-      // }
     }
   }
 
