@@ -32,7 +32,6 @@ class RPGGame implements CanvasGame {
   boundaries: Boundary[]; // An array of Boundaries that cause collisions
   doors: Door[]; // An array of Doors that lead to other maps
   collisionDirection?: Keys; // The direction the player was moving when colliding
-  isPlaying = true;
   eventListeners: EventHandler[];
   cache: Map<
     Maps,
@@ -50,50 +49,13 @@ class RPGGame implements CanvasGame {
     this.ctx = ctx;
     this.mapsConfig = mapsConfig;
     this.map = map;
-
-    const currentMapConfig = mapsConfig[map];
-
-    const background = new Sprite({
-      ctx: ctx,
-      position: { x: currentMapConfig.offset.x, y: currentMapConfig.offset.y },
-      imageSrc: currentMapConfig.imageBackgroundSrc,
-    });
-
-    this.background = background;
-
-    if (currentMapConfig.imageForegroundSrc) {
-      const foreground = new Sprite({
-        ctx: ctx,
-        position: {
-          x: currentMapConfig.offset.x,
-          y: currentMapConfig.offset.y,
-        },
-        imageSrc: currentMapConfig.imageForegroundSrc,
-      });
-      this.foreground = foreground;
-    }
-
-    this.boundaries = this.createBoundariesFromCollisions(
-      currentMapConfig.collisions
-    );
-    this.doors = this.createDoors(currentMapConfig.doors);
-
-    // Cache maps so we don't have to recompute last known position, boundaries, doors, objects, etc
-    const cache = new Map([
-      [
-        map,
-        {
-          background,
-          boundaries: this.boundaries,
-          doors: this.doors,
-          foreground: this.foreground,
-        },
-      ],
-    ]);
-    this.cache = cache;
-
     this.player = player;
+    this.cache = new Map();
 
+    // Sets background, foreground, doors, boundaries
+    this.loadMap(this.map);
+
+    // Keep track of currently pressed keys
     this.keyEvents = {
       [Keys.W]: {
         pressed: false,
@@ -125,7 +87,7 @@ class RPGGame implements CanvasGame {
   /**
    * The main animation loop to be handled in useCanvas
    * Draw each game element
-   * Detect for collisions
+   * Detect for collisions with boundaries and doors
    * Handle keyboard input for each game element
    */
   public draw() {
@@ -190,7 +152,7 @@ class RPGGame implements CanvasGame {
   }
 
   /**
-   * Similar to handleCollision. Detects collisions with doors and loads a new map upon door entry
+   * Similar to handleCollision. Detects collisions with doors and loads a new map upon door entry.
    */
   private handleDoorEntry(keyEvents: KeysPressed) {
     const isKeyPressed = Object.values(keyEvents).some(
@@ -211,7 +173,12 @@ class RPGGame implements CanvasGame {
           door.entryDirection
         )
       ) {
+        // Pause animation while we load the new map
+        cancelAnimationFrame(this.animationId!);
+
         this.loadMap(door.map);
+        // Restart animation
+        this.draw();
       }
     }
   }
@@ -220,33 +187,30 @@ class RPGGame implements CanvasGame {
    * Sets the new mapConfig and updates background, foreground, boundaries and doors
    */
   private loadMap(map: Maps) {
-    // Set last position on the previous map
-    const lastPosition = this.background.position;
-
-    this.mapsConfig[this.map].lastPosition = lastPosition;
-
+    console.log("this.cache", this.cache);
     // Set the new map
     this.map = map;
+    // Load from cache if possible
+    if (this.cache.has(map)) {
+      const mapConfigFromCache = this.cache.get(map)!;
+      const { background, foreground, doors, boundaries } = mapConfigFromCache;
 
-    const currentMapConfig = this.mapsConfig[this.map];
+      this.foreground = undefined;
+      if (foreground) {
+        this.foreground = foreground;
+      }
+      this.background = background;
+      this.doors = doors;
+      this.boundaries = boundaries;
+    } else {
+      const currentMapConfig = this.mapsConfig[this.map];
+      const { offset } = currentMapConfig;
+      const background = new Sprite({
+        ctx: this.ctx,
+        position: { x: offset.x, y: offset.y },
+        imageSrc: currentMapConfig.imageBackgroundSrc,
+      });
 
-    const offset = currentMapConfig.lastPosition || currentMapConfig.offset;
-
-    const background = new Sprite({
-      ctx: this.ctx,
-      position: { x: offset.x, y: offset.y },
-      imageSrc: currentMapConfig.imageBackgroundSrc,
-    });
-
-    // Wipe ctx and briefly white it out
-    // this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-    this.ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-
-    // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-    cancelAnimationFrame(this.animationId!);
-
-    // Add a slight delay to give the illusion of loading
-    setTimeout(() => {
       this.foreground = undefined;
       this.background = background;
 
@@ -269,8 +233,13 @@ class RPGGame implements CanvasGame {
       );
       this.doors = this.createDoors(currentMapConfig.doors);
 
-      this.draw();
-    }, 100);
+      this.cache.set(map, {
+        background,
+        boundaries: this.boundaries,
+        doors: this.doors,
+        foreground: this.foreground,
+      });
+    }
   }
 
   private handleKeyDown(event: KeyboardEvent) {
@@ -309,9 +278,7 @@ class RPGGame implements CanvasGame {
 
   private createBoundariesFromCollisions(collisions: Collisions) {
     const currentMapConfig = this.mapsConfig[this.map];
-    const { dimensions, zoomScale } = currentMapConfig;
-
-    const offset = currentMapConfig.lastPosition || currentMapConfig.offset;
+    const { dimensions, zoomScale, offset } = currentMapConfig;
 
     // Set up a 2d Array of collisions
     const collisionsMap: number[][] = [];

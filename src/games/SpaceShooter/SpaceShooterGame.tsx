@@ -26,7 +26,6 @@ class SpaceShooterGame implements CanvasGame {
   };
   public animationId?: number;
   public score: number = 0;
-  public isPlaying: boolean = false;
 
   player: Player;
   enemies: Enemy[];
