@@ -8,7 +8,7 @@ import Boundary from "./Boundary";
 import Sprite from "./Sprite";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { Events } from "../types";
-import { COLLISION } from "./collisions";
+import { IDs } from "./collisions";
 import Door from "./Door";
 import { DoorConfig, Maps, MapsConfig } from "./maps";
 
@@ -291,7 +291,7 @@ class RPGGame implements CanvasGame {
     return collisionsMap
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if (cell === COLLISION) {
+          if (cell === IDs.COLLISION) {
             return new Boundary({
               ctx: this.ctx,
               zoomScale: zoomScale,

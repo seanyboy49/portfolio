@@ -27,6 +27,7 @@ export type MapConfig = {
     height: number;
   };
   doors: DoorConfig[];
+  prompts?: PromptConfig[];
   zoomScale: number;
   collisions: number[];
 };
@@ -50,6 +51,20 @@ export type DoorConfig = {
     height: number;
   };
 };
+export type PromptConfig = {
+    content: string
+    /**
+     * Matrix Coordinates in collisionMap
+     */
+    position: {
+      x: number;
+      y: number;
+    };
+    span?: {
+      width: number;
+      height: number;
+    };
+  };
 
 // doors
 // island
@@ -117,6 +132,19 @@ export const MAPS_CONFIG: MapsConfig = {
     ],
     zoomScale: 3.5,
     collisions: COLLISIONS[Maps.MUSEUM],
+    prompts: [
+        {
+            content: 'hello world',
+            position: {
+                x: 48,
+                y: 29
+            },
+            span: {
+                width: 5,
+                height: 1,
+              }
+        }
+    ]
   },
   //   [Maps.HOME]: {
   //     imageBackgroundSrc: museumBackgroundImgSrc,

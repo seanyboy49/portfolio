@@ -31,7 +31,7 @@ const RPGGameBoard = () => {
     const game = new RPGGame({
       ctx,
       player,
-      map: Maps.ISLAND,
+      map: Maps.MUSEUM,
       mapsConfig: MAPS_CONFIG,
     });
 

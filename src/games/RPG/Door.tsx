@@ -18,19 +18,12 @@ interface IDoor extends IMovableObject {
  * They can also span multiple blocks, so span is an optional attribute
  */
 class Door extends MovableObject {
-  ctx: CanvasRenderingContext2D;
-  position: Position;
-  width: number;
-  height: number;
-  color: string;
   map: Maps;
   entryDirection: Keys;
 
   constructor(props: IDoor) {
     super(props);
     const {
-      ctx,
-      position,
       zoomScale,
       map,
       entryDirection,
@@ -40,8 +33,8 @@ class Door extends MovableObject {
       },
     } = props;
 
-    this.ctx = ctx;
-    this.position = position;
+    // this.ctx = ctx;
+    // this.position = position;
     this.width = TILE_WIDTH * span.width * zoomScale; // Each map has a different zoom scale, so it must be applied to the width/height
     this.height = TILE_WIDTH * span.height * zoomScale;
 
