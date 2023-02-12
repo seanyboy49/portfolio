@@ -1,19 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
 
+import Boundary from "./Boundary";
+import Sprite from "./Sprite";
+import Door from "./Door";
+import Prompt from "./Prompt";
+import { Keys, KeysPressed, TILE_WIDTH } from "./types";
+import { CanvasGame, EventHandler, Events } from "../types";
+import { IDs } from "./collisions";
+import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./maps";
 import {
   padRectangle,
   rectangularCollision,
   rectangularDoorCollision,
 } from "../../utilities";
-import { CanvasGame, EventHandler } from "../types";
-import Boundary from "./Boundary";
-import Sprite from "./Sprite";
-import { Keys, KeysPressed, TILE_WIDTH } from "./types";
-import { Events } from "../types";
-import { IDs } from "./collisions";
-import Door from "./Door";
-import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./maps";
-import Prompt from "./Prompt";
 
 type Collisions = number[];
 
@@ -217,13 +216,11 @@ class RPGGame implements CanvasGame {
 
       // If there is a door collision, load the new map
       if (rectangularCollision(this.player.collisionBox, paddedPrompt)) {
-        console.log("prompt");
         this.updateGameState((prev) => ({
           ...prev,
           content: prompt.content,
         }));
       }
-      // cancelAnimationFrame(this.animationId!);
     }
   }
 
@@ -257,6 +254,7 @@ class RPGGame implements CanvasGame {
         imageSrc: currentMapConfig.imageBackgroundSrc,
       });
 
+      // Todo: replace this since every map should have a foreground
       this.foreground = undefined;
       this.background = background;
 
@@ -307,11 +305,22 @@ class RPGGame implements CanvasGame {
         break;
       case " ":
         // Default behavior is scroll the page down
-        this.updateGameState((prev) => ({
-          ...prev,
-          showContent: !prev.showContent,
-        }));
         event.preventDefault();
+
+        this.updateGameState((prev) => {
+          if (prev.showContent) {
+            return {
+              ...prev,
+              showContent: false,
+              content: undefined,
+            };
+          }
+
+          return {
+            ...prev,
+            showContent: true,
+          };
+        });
         break;
     }
   }
@@ -406,13 +415,5 @@ class RPGGame implements CanvasGame {
     });
   }
 }
-
-// ctx
-// background
-// foreground
-// collisions
-// player
-// sprites
-// animation loop
 
 export default RPGGame;
