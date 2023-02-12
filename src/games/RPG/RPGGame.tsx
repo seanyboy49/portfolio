@@ -18,7 +18,8 @@ import Prompt from "./Prompt";
 type Collisions = number[];
 
 export type RPGGameState = {
-  content: Content[];
+  showContent: boolean;
+  content?: Content[];
 };
 
 export type UpdateGameState = Dispatch<SetStateAction<RPGGameState>>;
@@ -221,9 +222,14 @@ class RPGGame implements CanvasGame {
           ...prev,
           content: prompt.content,
         }));
-        // Pause animation while we load the new map
-        // cancelAnimationFrame(this.animationId!);
       }
+      // cancelAnimationFrame(this.animationId!);
+      // } else {
+      //   this.updateGameState((prev) => ({
+      //     ...prev,
+      //     content: undefined,
+      //   }));
+      // }
     }
   }
 
@@ -304,6 +310,14 @@ class RPGGame implements CanvasGame {
         break;
       case Keys.D:
         this.keyEvents.d.pressed = true;
+        break;
+      case " ":
+        // Default behavior is scroll the page down
+        this.updateGameState((prev) => ({
+          ...prev,
+          showContent: !prev.showContent,
+        }));
+        event.preventDefault();
         break;
     }
   }

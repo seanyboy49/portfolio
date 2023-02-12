@@ -8,33 +8,26 @@ import {
 } from "./styled";
 
 interface IPortfolioMenuUI {
+  showContent: boolean;
   content?: Content[];
 }
-const RPGDialogueUI = ({ content }: IPortfolioMenuUI) => {
-  console.log("content", content);
-  if (!content) return null;
+const RPGDialogueUI = ({ showContent, content }: IPortfolioMenuUI) => {
+  if (!showContent || !content) return null;
 
-  //   if (typeof content === "string") {
   return (
     <GameUI>
       <MenuContainer>
         <Modal>
           {content.map((c) => {
             if (typeof c === "string") {
-              return <div>{c}</div>;
+              return <div key={c}>{c}</div>;
             }
+            return null;
           })}
         </Modal>
       </MenuContainer>
     </GameUI>
   );
-  //   }
-  //   const Content = content;
-  //   return (
-  //     <GameUI>
-  //       <Content />
-  //     </GameUI>
-  //   );
 };
 
 export default RPGDialogueUI;

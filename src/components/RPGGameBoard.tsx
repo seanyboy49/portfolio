@@ -57,17 +57,20 @@ const RPGGameBoard = () => {
     setIsMenuOpen((isMenuOpen) => !isMenuOpen);
   }, []);
 
-  // console.log("gameState", gameState);
+  console.log("gameState", gameState);
   return (
     <>
       <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
-      {/* <RPGDialogueUI content={gameState.content} /> */}
       <RPGDialogueUI
+        content={gameState.content}
+        showContent={gameState.showContent}
+      />
+      {/* <RPGDialogueUI
         content={[
           "A payments company powered by crypto",
           "Sean built KYC and KYB flows.",
         ]}
-      />
+      /> */}
       <canvas ref={canvasRef} />
     </>
   );
