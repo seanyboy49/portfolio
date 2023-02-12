@@ -101,11 +101,11 @@ class RPGGame implements CanvasGame {
   /**
    * The main animation loop to be handled in useCanvas
    * Draw each game element
-   * Detect for collisions with boundaries and doors
+   * Detect for collisions with boundaries, doors, and prompts
    * Handle keyboard input for each game element
    */
   public draw() {
-    // Set canvas fill style so we don't get side effects from other objects setting wfill styles
+    // Set canvas fill style so we don't get side effects from other objects setting fill styles
     this.ctx.fillStyle = `rgba(0,0,0,0.1)`;
 
     // You must pass an arrow function to keep the reference to this
@@ -218,25 +218,27 @@ class RPGGame implements CanvasGame {
 
       // If there is a door collision, load the new map
       if (rectangularCollision(this.player as Rectangle, paddedPrompt)) {
-        console.log("yes");
         this.updateGameState((prev) => {
-          return {
-            ...prev,
-            content: prompt.content,
-          };
+          if (prev.content !== prompt.content)
+            return {
+              ...prev,
+              content: prompt.content,
+            };
+          return prev;
         });
       } else {
         /**
          * This is tricky.
          * Since this inner logic runs for every prompt, we only want to clear the content
          * once because every time we update state, we'll trigger a re-render.
-         *
+         * We clear the content and automatically set showContent to false
          */
         this.updateGameState((prev) => {
           if (prev.content === prompt.content) {
             return {
               ...prev,
               content: undefined,
+              showContent: false,
             };
           }
           // We can cancel the state update by simply returning prev
