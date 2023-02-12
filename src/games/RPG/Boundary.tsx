@@ -25,7 +25,7 @@ class Boundary {
   draw() {
     const { x, y } = this.position;
     this.ctx.fillStyle = this.color;
-    // this.ctx.fillRect(x, y, this.width, this.height);
+    this.ctx.fillRect(x, y, this.width, this.height);
   }
 
   handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {

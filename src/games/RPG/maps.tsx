@@ -18,6 +18,10 @@ export type MapConfig = {
     x: number;
     y: number;
   };
+  lastPosition?: {
+    x: number;
+    y: number;
+  };
   dimensions: {
     width: number;
     height: number;
@@ -33,6 +37,9 @@ export type MapsConfig = {
 
 export type DoorConfig = {
   map: Maps;
+  /**
+   * Matrix Coordinates in collisionMap
+   */
   position: {
     x: number;
     y: number;
@@ -43,6 +50,14 @@ export type DoorConfig = {
     height: number;
   };
 };
+
+// doors
+// island
+// museum: {x:43, y: 9}
+
+// museum
+// island: {x: 48, y: 29}
+
 export const MAPS_CONFIG: MapsConfig = {
   [Maps.ISLAND]: {
     imageBackgroundSrc: islandImgSrc,
@@ -60,8 +75,8 @@ export const MAPS_CONFIG: MapsConfig = {
         map: Maps.MUSEUM,
         entryDirection: Keys.W,
         position: {
-          x: 1197,
-          y: -124,
+          x: 43,
+          y: 9,
         },
       },
       //   {
@@ -91,8 +106,8 @@ export const MAPS_CONFIG: MapsConfig = {
         map: Maps.ISLAND,
         entryDirection: Keys.S,
         position: {
-          x: 508,
-          y: 424,
+          x: 48,
+          y: 29,
         },
         span: {
           width: 5,
