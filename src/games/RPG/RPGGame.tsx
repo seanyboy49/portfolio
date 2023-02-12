@@ -213,6 +213,7 @@ class RPGGame implements CanvasGame {
 
     for (let i = 0; i <= this.prompts.length - 1; i++) {
       const prompt = this.prompts[i];
+
       const paddedPrompt = padRectangle(prompt, keyEvents);
 
       // If there is a door collision, load the new map
@@ -225,16 +226,21 @@ class RPGGame implements CanvasGame {
           };
         });
       } else {
-        console.log("no");
-
+        /**
+         * This is tricky.
+         * Since this inner logic runs for every prompt, we only want to clear the content
+         * once because every time we update state, we'll trigger a re-render.
+         *
+         */
         this.updateGameState((prev) => {
-          // If content is already undefined, cancel the setState so as to not trigger another React re-render
-          if (prev.content === undefined) return prev;
-
-          return {
-            ...prev,
-            content: undefined,
-          };
+          if (prev.content === prompt.content) {
+            return {
+              ...prev,
+              content: undefined,
+            };
+          }
+          // We can cancel the state update by simply returning prev
+          return prev;
         });
       }
     }
@@ -324,18 +330,13 @@ class RPGGame implements CanvasGame {
         event.preventDefault();
 
         this.updateGameState((prev) => {
-          // if (prev.showContent) {
-          //   return {
-          //     ...prev,
-          //     showContent: false,
-          //     content: undefined,
-          //   };
-          // }
-
-          return {
-            ...prev,
-            showContent: !prev.showContent,
-          };
+          if (prev.content) {
+            return {
+              ...prev,
+              showContent: !prev.showContent,
+            };
+          }
+          return prev;
         });
         break;
     }
