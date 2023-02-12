@@ -10,6 +10,7 @@ import RPGGame from "../games/RPG/RPGGame";
 import useCanvas from "../hooks/useCanvas";
 import PortfolioMenuUI from "./PortfolioMenuUI";
 import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
+import RPGDialogueUI from "./RPGDialogueUI";
 
 const RPGGameBoard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -45,7 +46,7 @@ const RPGGameBoard = () => {
     []
   );
 
-  const { canvasRef } = useCanvas({
+  const { canvasRef, gameState } = useCanvas({
     setUpGame,
     initialState: {
       isPlaying: true,
@@ -56,9 +57,17 @@ const RPGGameBoard = () => {
     setIsMenuOpen((isMenuOpen) => !isMenuOpen);
   }, []);
 
+  // console.log("gameState", gameState);
   return (
     <>
       <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
+      {/* <RPGDialogueUI content={gameState.content} /> */}
+      <RPGDialogueUI
+        content={[
+          "A payments company powered by crypto",
+          "Sean built KYC and KYB flows.",
+        ]}
+      />
       <canvas ref={canvasRef} />
     </>
   );

@@ -51,8 +51,10 @@ export type DoorConfig = {
     height: number;
   };
 };
+export type Content = string | React.FunctionComponent;
 export type PromptConfig = {
-  content: string;
+  id: string;
+  content: Content[];
   /**
    * Matrix Coordinates in collisionMap
    */
@@ -134,7 +136,11 @@ export const MAPS_CONFIG: MapsConfig = {
     collisions: COLLISIONS[Maps.MUSEUM],
     prompts: [
       {
-        content: "aaa",
+        id: "Paysail",
+        content: [
+          "A payments company powered by crypto",
+          "Sean built KYC and KYB flows.",
+        ],
         position: {
           x: 59,
           y: 16,
@@ -145,7 +151,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        content: "bbb",
+        id: "VettedVC",
+        content: ["bbb"],
         position: {
           x: 65,
           y: 16,
@@ -156,7 +163,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        content: "ccc",
+        id: "Scoop",
+        content: ["ccc"],
         position: {
           x: 71,
           y: 16,
@@ -167,7 +175,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        content: "ddd",
+        id: "Awayco",
+        content: ["ddd"],
         position: {
           x: 77,
           y: 16,
@@ -178,7 +187,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        content: "eee",
+        id: "Fetch",
+        content: ["eee"],
         position: {
           x: 82,
           y: 16,
@@ -189,7 +199,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        content: "fff",
+        id: "Museum welcome sign",
+        content: ["fff"],
         position: {
           x: 50,
           y: 26,

@@ -12,14 +12,13 @@ import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { Events } from "../types";
 import { IDs } from "./collisions";
 import Door from "./Door";
-import { DoorConfig, Maps, MapsConfig, PromptConfig } from "./maps";
+import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./maps";
 import Prompt from "./Prompt";
 
 type Collisions = number[];
 
 export type RPGGameState = {
-  isPlaying: boolean;
-  score: number;
+  content: Content[];
 };
 
 export type UpdateGameState = Dispatch<SetStateAction<RPGGameState>>;
@@ -218,6 +217,10 @@ class RPGGame implements CanvasGame {
       // If there is a door collision, load the new map
       if (rectangularCollision(this.player.collisionBox, paddedPrompt)) {
         console.log("prompt");
+        this.updateGameState((prev) => ({
+          ...prev,
+          content: prompt.content,
+        }));
         // Pause animation while we load the new map
         // cancelAnimationFrame(this.animationId!);
       }

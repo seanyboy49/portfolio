@@ -1,8 +1,9 @@
+import { Content } from "./maps";
 import MovableObject, { IMovableObject } from "./MovableObject";
 import { TILE_WIDTH } from "./types";
 
 interface IDoor extends IMovableObject {
-  content: string;
+  content: Content[];
   span?: {
     width: number;
     height: number;
@@ -10,7 +11,7 @@ interface IDoor extends IMovableObject {
 }
 
 class Prompt extends MovableObject {
-  content: string
+  content: Content[];
 
   constructor(props: IDoor) {
     super(props);
