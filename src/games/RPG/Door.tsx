@@ -1,8 +1,8 @@
-import { IBoundary } from "./Boundary";
 import { Maps } from "./maps";
-import { Keys, KeysPressed, Position, TILE_WIDTH, VELOCITY } from "./types";
+import MovableObject, { IMovableObject } from "./MovableObject";
+import { Keys, Position, TILE_WIDTH } from "./types";
 
-interface IDoor extends IBoundary {
+interface IDoor extends IMovableObject {
   map: Maps;
   entryDirection: Keys;
   span?: {
@@ -17,7 +17,7 @@ interface IDoor extends IBoundary {
  * Doors can be entered from multiple directions, so entryDirection is specified.
  * They can also span multiple blocks, so span is an optional attribute
  */
-class Door {
+class Door extends MovableObject {
   ctx: CanvasRenderingContext2D;
   position: Position;
   width: number;
@@ -26,17 +26,20 @@ class Door {
   map: Maps;
   entryDirection: Keys;
 
-  constructor({
-    ctx,
-    position,
-    zoomScale,
-    map,
-    entryDirection,
-    span = {
-      width: 1,
-      height: 1,
-    },
-  }: IDoor) {
+  constructor(props: IDoor) {
+    super(props);
+    const {
+      ctx,
+      position,
+      zoomScale,
+      map,
+      entryDirection,
+      span = {
+        width: 1,
+        height: 1,
+      },
+    } = props;
+
     this.ctx = ctx;
     this.position = position;
     this.width = TILE_WIDTH * span.width * zoomScale; // Each map has a different zoom scale, so it must be applied to the width/height
@@ -45,30 +48,6 @@ class Door {
     this.entryDirection = entryDirection;
     this.map = map;
     this.color = `rgba(0, 26, 255, 0.5)`;
-  }
-
-  draw() {
-    const { x, y } = this.position;
-    this.ctx.fillStyle = this.color;
-    this.ctx.fillRect(x, y, this.width, this.height);
-  }
-
-  handleKeyboardInput(key: KeysPressed, collisionDirection?: Keys) {
-    if (collisionDirection) return;
-    if (key[Keys.W].pressed) {
-      if (collisionDirection && collisionDirection === Keys.W) return;
-
-      this.position.y += VELOCITY;
-    } else if (key[Keys.S].pressed) {
-      if (collisionDirection && collisionDirection === Keys.S) return;
-      this.position.y -= VELOCITY;
-    } else if (key[Keys.A].pressed) {
-      if (collisionDirection && collisionDirection === Keys.A) return;
-      this.position.x += VELOCITY;
-    } else if (key[Keys.D].pressed) {
-      if (collisionDirection && collisionDirection === Keys.D) return;
-      this.position.x -= VELOCITY;
-    }
   }
 }
 
