@@ -11,6 +11,7 @@ import useCanvas from "../hooks/useCanvas";
 import PortfolioMenuUI from "./PortfolioMenuUI";
 import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
 import RPGDialogueUI from "./RPGDialogueUI";
+import { WORK_HISTORY } from "../games/RPG/workHistory";
 
 const RPGGameBoard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -54,19 +55,20 @@ const RPGGameBoard = () => {
   });
 
   const toggleMenuOpen = useCallback(() => {
-    console.log("click");
     setIsMenuOpen((isMenuOpen) => !isMenuOpen);
   }, []);
 
-  console.log("gameState", gameState);
   return (
     <>
       <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
-      <RPGDialogueUI
+      {/* <RPGDialogueUI
         content={gameState.content}
         showContent={gameState.showContent}
+      /> */}
+      <RPGDialogueUI
+        content={WORK_HISTORY.paysail.content}
+        showContent={true}
       />
-      <RPGDialogueUI content={["Hello", "World"]} showContent={true} />
       <canvas ref={canvasRef} />
     </>
   );

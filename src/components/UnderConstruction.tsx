@@ -5,6 +5,7 @@ import linkedInSrc from "../images/social/linkedIn.png";
 import meteorSrc from "../images/meteor.png";
 import Icon from "./Icon";
 import SpaceShooterGameBoard from "./SpaceShooterGame";
+import IconButton from "./IconButton";
 
 const FlexContainer = styled.div`
   display: flex;
@@ -25,12 +26,6 @@ const Hero = styled.div`
   flex-direction: column;
   margin: auto;
   text-align: center;
-`;
-
-const GameButton = styled.button`
-  border: none;
-  cursor: pointer;
-  background: none;
 `;
 
 const socialLinks = [
@@ -54,9 +49,11 @@ const UnderConstruction = () => {
             return <Icon {...link} />;
           })}
 
-          <GameButton onClick={() => setPlayGame(true)}>
-            <img src={meteorSrc} alt="icon of meteor" height={50} />
-          </GameButton>
+          <IconButton
+            iconSrc={meteorSrc}
+            alt="Flaming meteor"
+            handleClick={() => setPlayGame(true)}
+          />
         </FlexContainer>
       </Hero>
     </FlexContainer>

@@ -4,6 +4,7 @@ import { COLLISIONS } from "./collisions";
 import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 import { Keys } from "./types";
+import { WORK_HISTORY } from "./workHistory";
 
 export enum Maps {
   ISLAND = "island",
@@ -130,10 +131,7 @@ export const MAPS_CONFIG: MapsConfig = {
     prompts: [
       {
         id: "Paysail",
-        content: [
-          "A payments company powered by crypto",
-          "Sean built KYC and KYB flows.",
-        ],
+        content: WORK_HISTORY.paysail.content,
         position: {
           x: 59,
           y: 16,

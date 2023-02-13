@@ -1,0 +1,58 @@
+import styled from "styled-components";
+
+import { Content } from "../games/RPG/maps";
+import arrowRightSrc from "../images/RPG/arrow-right.png";
+import arrowLeftSrc from "../images/RPG/arrow-left.png";
+import IconButton from "./IconButton";
+
+const FlexContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Spacer = styled.div`
+  width: 50px;
+`;
+
+export enum PaginationDirection {
+  forward = "forward",
+  backward = "backward",
+}
+interface IPagination {
+  page: number;
+  pagesLength: number;
+  handleClick: (direction: PaginationDirection) => void;
+  children: React.ReactNode;
+}
+const PaginationArrows = ({
+  page,
+  pagesLength,
+  handleClick,
+  children,
+}: IPagination) => {
+  return (
+    <FlexContainer>
+      {page !== 0 ? (
+        <IconButton
+          handleClick={() => handleClick(PaginationDirection.backward)}
+          iconSrc={arrowLeftSrc}
+          alt="Arrow pointed left"
+        />
+      ) : (
+        <Spacer />
+      )}
+      {children}
+      {page !== pagesLength ? (
+        <IconButton
+          handleClick={() => handleClick(PaginationDirection.forward)}
+          iconSrc={arrowRightSrc}
+          alt="Arrow pointed right"
+        />
+      ) : (
+        <Spacer />
+      )}
+    </FlexContainer>
+  );
+};
+
+export default PaginationArrows;

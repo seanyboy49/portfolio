@@ -33,6 +33,7 @@ export const Modal = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
+  padding: 2rem;
 `;
 
 export const MenuItemsContainer = styled.div`
