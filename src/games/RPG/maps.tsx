@@ -68,13 +68,6 @@ export type PromptConfig = {
   };
 };
 
-// doors
-// island
-// museum: {x:43, y: 9}
-
-// museum
-// island: {x: 48, y: 29}
-
 export const MAPS_CONFIG: MapsConfig = {
   [Maps.ISLAND]: {
     imageBackgroundSrc: islandImgSrc,

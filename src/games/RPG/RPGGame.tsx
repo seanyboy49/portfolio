@@ -216,7 +216,8 @@ class RPGGame implements CanvasGame {
 
       const paddedPrompt = padRectangle(prompt, keyEvents);
 
-      // If there is a door collision, load the new map
+      // If the player is in the boundaries of a prompt, we want to update React state
+      // to display the prompt
       if (rectangularCollision(this.player as Rectangle, paddedPrompt)) {
         this.updateGameState((prev) => {
           if (prev.content !== prompt.content)

@@ -16,10 +16,21 @@ export const MenuContainer = styled.div`
   /* background: rgba(120, 83, 212, 0.772); */
 `;
 
+export const DialogueContainer = styled.div`
+  bottom: 0;
+  width: 100%;
+  position: relative;
+  /* height: 80%; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background: rgba(120, 83, 212, 0.772); */
+`;
 export const Modal = styled.div`
   background: white;
-  border: 1px lightgray solid;
-  border-radius: 5px;
+  border: 5px lightgray solid;
+  border-radius: 15px;
   width: 30%;
   justify-content: center;
   text-align: center;

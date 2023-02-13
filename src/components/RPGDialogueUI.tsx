@@ -4,6 +4,7 @@ import {
   GameUI,
   MenuItem,
   MenuItemsContainer,
+  DialogueContainer,
   Modal,
 } from "./styled";
 
@@ -16,7 +17,7 @@ const RPGDialogueUI = ({ showContent, content }: IPortfolioMenuUI) => {
 
   return (
     <GameUI>
-      <MenuContainer>
+      <DialogueContainer>
         <Modal>
           {content.map((c) => {
             if (typeof c === "string") {
@@ -25,7 +26,7 @@ const RPGDialogueUI = ({ showContent, content }: IPortfolioMenuUI) => {
             return null;
           })}
         </Modal>
-      </MenuContainer>
+      </DialogueContainer>
     </GameUI>
   );
 };
