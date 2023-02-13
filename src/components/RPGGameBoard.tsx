@@ -54,6 +54,7 @@ const RPGGameBoard = () => {
   });
 
   const toggleMenuOpen = useCallback(() => {
+    console.log("click");
     setIsMenuOpen((isMenuOpen) => !isMenuOpen);
   }, []);
 
@@ -61,10 +62,10 @@ const RPGGameBoard = () => {
   return (
     <>
       <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
-      {/* <RPGDialogueUI
+      <RPGDialogueUI
         content={gameState.content}
         showContent={gameState.showContent}
-      /> */}
+      />
       <RPGDialogueUI content={["Hello", "World"]} showContent={true} />
       <canvas ref={canvasRef} />
     </>

@@ -2,8 +2,18 @@ import styled, { css } from "styled-components";
 
 export const GameUI = styled.div`
   position: absolute;
+  width: 100vw;
+  height: 100vh;
+`;
+
+export const FlexContainer = styled.div`
+  display: flex;
   width: 100%;
   height: 100%;
+  background: rgba(120, 83, 212, 0.772);
+  justify-content: end;
+  flex-direction: column;
+  align-content: center;
 `;
 
 export const MenuContainer = styled.div`
@@ -16,25 +26,16 @@ export const MenuContainer = styled.div`
   /* background: rgba(120, 83, 212, 0.772); */
 `;
 
-export const DialogueContainer = styled.div`
-  bottom: 0;
-  width: 100%;
-  position: relative;
-  /* height: 80%; */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background: rgba(120, 83, 212, 0.772); */
-`;
 export const Modal = styled.div`
   background: white;
   border: 5px lightgray solid;
   border-radius: 15px;
-  width: 30%;
+  /* width: 100%; */
+  display: flex;
+  /* margin: 1rem; */
   justify-content: center;
   text-align: center;
-  padding: 2rem;
+  /* padding: 2rem; */
 `;
 
 export const MenuItemsContainer = styled.div`

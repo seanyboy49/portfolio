@@ -18,10 +18,15 @@ code {
 }
 
 * {
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 button {
   cursor: pointer;
+}
+
+/* Canvas is inline by default which adds a small space at bottom */
+canvas {
+  display: block;
 }
