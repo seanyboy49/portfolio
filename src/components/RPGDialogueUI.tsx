@@ -10,17 +10,7 @@ import {
 } from "./styled";
 
 const DialogueContainer = styled.div`
-  /* width: 100%; */
-  /* height: 100%; */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* justify-content: end; */
-  /* align-items: center; */
-  /* position: absolute; */
-  /* bottom: 5%; */
-
-  padding: 1rem;
-  /* background: rgba(120, 83, 212, 0.772); */
+  padding: 2rem;
 `;
 
 interface IPortfolioMenuUI {

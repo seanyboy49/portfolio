@@ -30,12 +30,9 @@ export const Modal = styled.div`
   background: white;
   border: 5px lightgray solid;
   border-radius: 15px;
-  /* width: 100%; */
   display: flex;
-  /* margin: 1rem; */
   justify-content: center;
   text-align: center;
-  /* padding: 2rem; */
 `;
 
 export const MenuItemsContainer = styled.div`
