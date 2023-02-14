@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-import { Content } from "../games/RPG/maps";
 import arrowRightSrc from "../images/RPG/arrow-right.png";
 import arrowLeftSrc from "../images/RPG/arrow-left.png";
 import IconButton from "./IconButton";
@@ -8,6 +7,13 @@ import IconButton from "./IconButton";
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const TextContainer = styled.div`
+  padding-left: 1rem;
+  padding-right: 1rem;
 `;
 
 const Spacer = styled.div`
@@ -41,7 +47,7 @@ const PaginationArrows = ({
       ) : (
         <Spacer />
       )}
-      {children}
+      <TextContainer>{children}</TextContainer>
       {page !== pagesLength ? (
         <IconButton
           handleClick={() => handleClick(PaginationDirection.forward)}

@@ -27,6 +27,7 @@ export const MenuContainer = styled.div`
 `;
 
 export const Modal = styled.div`
+  height: 20vh;
   background: white;
   border: 5px lightgray solid;
   border-radius: 15px;
@@ -45,4 +46,8 @@ export const MenuItem = styled.div`
   border-radius: 5px;
   margin: 1rem;
   padding: 1rem;
+`;
+
+export const Text = styled.p`
+  font-size: 1.5rem;
 `;

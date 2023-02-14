@@ -28,7 +28,7 @@ export type MapConfig = {
     height: number;
   };
   doors: DoorConfig[];
-  prompts?: PromptConfig[];
+  prompts: PromptConfig[];
   zoomScale: number;
   collisions: number[];
 };
@@ -98,6 +98,7 @@ export const MAPS_CONFIG: MapsConfig = {
       //     },
       //   },
     ],
+    prompts: [],
     zoomScale: 4,
     collisions: COLLISIONS[Maps.ISLAND],
   },

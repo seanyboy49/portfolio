@@ -2,16 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { Content } from "../games/RPG/maps";
-import IconButton from "./IconButton";
 import PaginationArrows, { PaginationDirection } from "./PaginationArrows";
-import {
-  MenuContainer,
-  GameUI,
-  MenuItem,
-  MenuItemsContainer,
-  Modal,
-  FlexContainer,
-} from "./styled";
+import { GameUI, Modal, FlexContainer, Text } from "./styled";
+import cancelSrc from "../images/RPG/cancel.png";
+import ImageSprite from "./ImageSprite";
 
 const DialogueContainer = styled.div`
   padding: 2rem;
@@ -39,16 +33,17 @@ const RPGDialogueUI = ({ showContent, content }: IPortfolioMenuUI) => {
       <FlexContainer>
         <DialogueContainer>
           <Modal>
+            <ImageSprite imgSrc={cancelSrc} framesTotal={2} />
             {isPaginated ? (
               <PaginationArrows
                 page={page}
                 pagesLength={content.length - 1}
                 handleClick={handleClick}
               >
-                <div>{content[page] as React.ReactNode}</div>
+                <Text>{content[page] as React.ReactNode}</Text>
               </PaginationArrows>
             ) : (
-              <div>{content[page] as React.ReactNode}</div>
+              <Text>{content[page] as React.ReactNode}</Text>
             )}
           </Modal>
         </DialogueContainer>
