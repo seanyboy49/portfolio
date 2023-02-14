@@ -1,5 +1,5 @@
-export const paysail = {
-  id: "Syro (formerly Paysail)",
+const paysail = {
+  id: "Syro (formerly Paysail) - Instant, cross-border payments powered by crypto",
   content: [
     "Sean joined Syro (formerly known as Paysail) in August 2022 as a Founding Engineer.",
     "At the time, Syro was focused on building instant, cross-border invoicing and payments through asset backed stablecoins.",
@@ -13,7 +13,7 @@ export const paysail = {
 };
 
 const vetted = {
-  id: "Vetted VC",
+  id: "Vetted VC - Disrupting venture capital",
   content: [
     "After 3 years at Scoop, an old colleague and friend of Sean's asked him to help him disrupt the world of venture capital.",
     "Sean joined Vetted VC as a Founding Engineer, designer, and all-around product guy.",
@@ -25,6 +25,28 @@ const vetted = {
     "Backend Technologies - Typescript, Nest.js (Node)",
     "Platform Technologies - Google Cloud Platform, Terraform",
   ],
+};
+
+const scoop = {
+  id: "Scoop Technologies - Carpooling as a perk",
+  content: [
+    "Sean joined Scoop at an exciting time. In 2019, Scoop had just raised a Series C funding round and was ready to start scaling its business to hundreds of thousands of users.",
+    "Up until this time, Scoop had only hired mobile and backend engineers, as its primary product was a mobile app that was serviced by a couple of mono repos.",
+    "Now that Scoop was being adopted by entire company workforces, Sean joined as the company's first frontend engineer to build our its first customer-facing web app.",
+    "Over three years, Sean worked on a variety of critical features across the stack",
+    "Customer dashboard - ",
+    "Chrome extension - ",
+    "Internal dashboard - ",
+    "Microservices - ",
+  ],
+};
+
+const awayco = {
+  id: "Awayco - Outdoor sports and gear rental",
+};
+
+const fetch = {
+  id: "Fetch - Digital advertising",
 };
 
 export const WORK_HISTORY = {
