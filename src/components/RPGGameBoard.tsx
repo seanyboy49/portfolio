@@ -47,7 +47,7 @@ const RPGGameBoard = () => {
     []
   );
 
-  const { canvasRef, gameState } = useCanvas({
+  const { canvasRef, gameState, updateGameState } = useCanvas({
     setUpGame,
     initialState: {
       isPlaying: true,
@@ -58,17 +58,23 @@ const RPGGameBoard = () => {
     setIsMenuOpen((isMenuOpen) => !isMenuOpen);
   }, []);
 
+  const closeDialogue = useCallback(() => {
+    updateGameState({ showContent: false });
+  }, [updateGameState]);
+
   return (
     <>
       <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
-      {/* <RPGDialogueUI
+      <RPGDialogueUI
         content={gameState.content}
         showContent={gameState.showContent}
-      /> */}
-      <RPGDialogueUI
+        handleClose={closeDialogue}
+      />
+      {/* <RPGDialogueUI
         content={WORK_HISTORY.paysail.content}
         showContent={true}
-      />
+        handleClose={closeDialogue}
+      /> */}
       <canvas ref={canvasRef} />
     </>
   );

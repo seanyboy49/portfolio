@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const GameButton = styled.button`
+const UnstyledButton = styled.button`
   border: none;
   cursor: pointer;
   background: none;
@@ -14,9 +14,9 @@ interface IIconButton {
 }
 const IconButton = ({ handleClick, alt, height, iconSrc }: IIconButton) => {
   return (
-    <GameButton onClick={handleClick}>
+    <UnstyledButton onClick={handleClick}>
       <img src={iconSrc} alt={alt} height={height || 50} />
-    </GameButton>
+    </UnstyledButton>
   );
 };
 

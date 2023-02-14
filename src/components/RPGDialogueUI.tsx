@@ -7,6 +7,13 @@ import { GameUI, Modal, FlexContainer, Text } from "./styled";
 import cancelSrc from "../images/RPG/cancel.png";
 import ImageSprite from "./ImageSprite";
 
+const CancelButtonContainer = styled.div`
+  position: relative;
+  top: -50px;
+  left: -50px;
+  height: 50px;
+`;
+
 const DialogueContainer = styled.div`
   padding: 2rem;
 `;
@@ -14,8 +21,13 @@ const DialogueContainer = styled.div`
 interface IPortfolioMenuUI {
   showContent: boolean;
   content?: Content[];
+  handleClose: () => void;
 }
-const RPGDialogueUI = ({ showContent, content }: IPortfolioMenuUI) => {
+const RPGDialogueUI = ({
+  showContent,
+  content,
+  handleClose,
+}: IPortfolioMenuUI) => {
   const [page, setPage] = useState(0);
   if (!showContent || !content) return null;
   const isPaginated = content.length > 1;
@@ -33,7 +45,13 @@ const RPGDialogueUI = ({ showContent, content }: IPortfolioMenuUI) => {
       <FlexContainer>
         <DialogueContainer>
           <Modal>
-            <ImageSprite imgSrc={cancelSrc} framesTotal={2} />
+            <CancelButtonContainer>
+              <ImageSprite
+                imgSrc={cancelSrc}
+                framesTotal={2}
+                handleClick={handleClose}
+              />
+            </CancelButtonContainer>
             {isPaginated ? (
               <PaginationArrows
                 page={page}

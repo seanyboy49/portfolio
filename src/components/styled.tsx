@@ -49,5 +49,5 @@ export const MenuItem = styled.div`
 `;
 
 export const Text = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 `;
