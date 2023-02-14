@@ -144,7 +144,7 @@ export const MAPS_CONFIG: MapsConfig = {
       },
       {
         id: "VettedVC",
-        content: ["bbb"],
+        content: WORK_HISTORY.vetted.content,
         position: {
           x: 65,
           y: 16,
