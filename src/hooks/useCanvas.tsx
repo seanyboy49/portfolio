@@ -83,7 +83,7 @@ const useCanvas = ({ setUpGame, dimensions, initialState }: IUseCanvas) => {
     }
   }, [setUpGame, dimensions, gameState.isPlaying]);
 
-  const updateGameState = (state: typeof initialState) => {
+  const updateGameState = (state: Partial<typeof initialState>) => {
     setGameState((prev) => ({
       ...prev,
       ...state,
