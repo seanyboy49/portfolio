@@ -34,7 +34,7 @@ const scoop = {
     "Up until this time, Scoop had only hired mobile and backend engineers, as its primary product was a mobile app that was serviced by a couple of mono repos.",
     "Now that Scoop was being adopted by entire company workforces, Sean joined as the company's first frontend engineer to build our its first customer-facing web app.",
     "Over three years, Sean worked on a variety of critical features across the stack",
-    "Customer dashboard - ",
+    "Customer dashboard - A dashboard used by customers to manage their company's carpool program. This scaled to tens of thousands of users. It operated in tandem with the internal dashboard to onboard new customers using Multi-Factor-Authentication",
     "Chrome extension - ",
     "Internal dashboard - ",
     "Microservices - ",
@@ -52,4 +52,5 @@ const fetch = {
 export const WORK_HISTORY = {
   paysail,
   vetted,
+  scoop,
 };
