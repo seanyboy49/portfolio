@@ -1,12 +1,12 @@
-import islandImgSrc from "../../images/RPG/island_v1.png";
 import { COLLISIONS } from "./collisions";
-
+import islandImgSrc from "../../images/RPG/island_v1.png";
 import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
-import { Keys } from "./types";
+import animatedRiverSrc from "../../images/RPG/animated_river_waterfall.png";
+
 import { WORK_HISTORY } from "./workHistory";
 import { WelcomeSign } from "../../components/Prompts/Museum";
-import { GameMap } from "./types";
+import { Keys, GameMap } from "./types";
 
 export const MAPS_CONFIG: GameMap.Maps = {
   [GameMap.MapNames.ISLAND]: {
@@ -38,7 +38,23 @@ export const MAPS_CONFIG: GameMap.Maps = {
       //     },
       //   },
     ],
-    prompts: [],
+    animations: [
+      {
+        spriteSheetSrc: animatedRiverSrc,
+        frames: {
+          total: 3,
+          rate: 80,
+        },
+        position: {
+          x: 12,
+          y: 9,
+        },
+        // position: {
+        //   x: 70,
+        //   y: -130,
+        // },
+      },
+    ],
     zoomScale: 4,
     collisions: COLLISIONS[GameMap.MapNames.ISLAND],
   },

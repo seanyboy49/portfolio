@@ -7,7 +7,6 @@ import Prompt from "./Prompt";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { CanvasGame, EventHandler, Events } from "../types";
 import { IDs } from "./collisions";
-// import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./config";
 import { GameMap } from "./types";
 import {
   padRectangle,
@@ -15,7 +14,6 @@ import {
   rectangularCollision,
   rectangularDoorCollision,
 } from "../../utilities";
-import animatedRiverSrc from "../../images/RPG/animated_river_waterfall.png";
 
 type Collisions = number[];
 
@@ -39,12 +37,13 @@ class RPGGame implements CanvasGame {
   mapsConfig: GameMap.Maps;
   map: GameMap.MapNames;
   background: Sprite;
-  foreground?: Sprite;
   player: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Boundary[]; // An array of Boundaries that cause collisions
   doors: Door[]; // An array of Doors that lead to other maps
-  prompts: Prompt[]; // An array of dialogue Prompts
+  foreground?: Sprite;
+  prompts?: Prompt[]; // An array of dialogue Prompts
+  animations?: Sprite[]; // An array of Sprites that autoPlay and loop
   collisionDirection?: Keys; // The direction the player was moving when colliding
   eventListeners: EventHandler[];
   updateGameState: UpdateGameState;
@@ -55,12 +54,12 @@ class RPGGame implements CanvasGame {
       foreground?: Sprite;
       doors: Door[];
       boundaries: Boundary[];
+      animations?: Sprite[];
+      prompts?: Prompt[];
     }
   >;
 
   public animationId?: number;
-
-  river: Sprite;
 
   constructor({ ctx, updateGameState, mapsConfig, player, map }: IRPGGame) {
     this.ctx = ctx;
@@ -69,20 +68,6 @@ class RPGGame implements CanvasGame {
     this.map = map;
     this.player = player;
     this.cache = new Map();
-    this.river = new Sprite({
-      ctx: this.ctx,
-      imageSrc: animatedRiverSrc,
-      movable: true,
-      autoLoop: true,
-      frames: {
-        total: 3,
-        rate: 80,
-      },
-      position: {
-        x: 70,
-        y: -130,
-      },
-    });
 
     // Sets background, foreground, doors, boundaries
     this.loadMap(this.map);
@@ -130,12 +115,12 @@ class RPGGame implements CanvasGame {
     this.animationId = requestAnimationFrame(() => this.draw());
 
     this.background.draw();
-    this.river.draw();
+    this.animations?.forEach((a) => a.draw());
     this.player.draw();
     this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
     this.doors.forEach((d) => d.draw());
-    this.prompts.forEach((p) => p.draw());
+    this.prompts?.forEach((p) => p.draw());
 
     // Handle collision detection
     // Initialize to undefined because it should only be defined when a collision is detected
@@ -148,7 +133,9 @@ class RPGGame implements CanvasGame {
     this.player.handleKeyboardInput(this.keyEvents);
 
     // Handle keyboard input for movables
-    this.river.handleKeyboardInput(this.keyEvents, this.collisionDirection);
+    this.animations?.forEach((a) =>
+      a.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    );
     this.background.handleKeyboardInput(
       this.keyEvents,
       this.collisionDirection
@@ -163,7 +150,7 @@ class RPGGame implements CanvasGame {
     this.doors.forEach((b) =>
       b.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
-    this.prompts.forEach((p) =>
+    this.prompts?.forEach((p) =>
       p.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
   }
@@ -225,6 +212,7 @@ class RPGGame implements CanvasGame {
     }
   }
   private handlePrompt(keyEvents: KeysPressed) {
+    if (!this.prompts) return;
     const isKeyPressed = Object.values(keyEvents).some(
       (x) => x.pressed === true
     );
@@ -279,11 +267,21 @@ class RPGGame implements CanvasGame {
     // Load from cache if possible
     if (this.cache.has(map)) {
       const mapConfigFromCache = this.cache.get(map)!;
-      const { background, foreground, doors, boundaries } = mapConfigFromCache;
+      const { background, foreground, doors, boundaries, prompts, animations } =
+        mapConfigFromCache;
 
       this.foreground = undefined;
+      this.prompts = undefined;
+      this.animations = undefined;
+
       if (foreground) {
         this.foreground = foreground;
+      }
+      if (prompts) {
+        this.prompts = prompts;
+      }
+      if (animations) {
+        this.animations = animations;
       }
       this.background = background;
       this.doors = doors;
@@ -303,7 +301,7 @@ class RPGGame implements CanvasGame {
       this.foreground = undefined;
       this.background = background;
 
-      // Not all maps have a foreground
+      // Create optional map objects like prompts, NPCs and autoPlayedAnimations
       if (currentMapConfig.imageForegroundSrc) {
         const foreground = new Sprite({
           ctx: this.ctx,
@@ -320,6 +318,12 @@ class RPGGame implements CanvasGame {
       if (currentMapConfig.prompts) {
         this.prompts = this.createPrompts(currentMapConfig.prompts);
       }
+      if (currentMapConfig.animations) {
+        this.animations = this.createAutoPlayAnimations(
+          currentMapConfig.animations
+        );
+      }
+
       this.boundaries = this.createBoundariesFromCollisions(
         currentMapConfig.collisions
       );
@@ -330,7 +334,10 @@ class RPGGame implements CanvasGame {
         boundaries: this.boundaries,
         doors: this.doors,
         foreground: this.foreground,
+        animations: this.animations,
       });
+
+      console.log("this.cache", this.cache.get(GameMap.MapNames.ISLAND));
     }
   }
 
@@ -418,8 +425,7 @@ class RPGGame implements CanvasGame {
 
   private createDoors(doors: GameMap.Door[]) {
     const currentMapConfig = this.mapsConfig[this.map];
-    const { zoomScale } = currentMapConfig;
-    const offset = currentMapConfig.lastPosition || currentMapConfig.offset;
+    const { zoomScale, offset } = currentMapConfig;
 
     return doors.map((door) => {
       return new Door({
@@ -438,8 +444,7 @@ class RPGGame implements CanvasGame {
 
   private createPrompts(prompts: GameMap.Prompt[]) {
     const currentMapConfig = this.mapsConfig[this.map];
-    const { zoomScale } = currentMapConfig;
-    const offset = currentMapConfig.lastPosition || currentMapConfig.offset;
+    const { zoomScale, offset } = currentMapConfig;
 
     return prompts.map((prompt) => {
       return new Prompt({
@@ -452,6 +457,25 @@ class RPGGame implements CanvasGame {
         title: prompt.title,
         content: prompt.content,
         span: prompt.span,
+      });
+    });
+  }
+
+  private createAutoPlayAnimations(animations: GameMap.AutoPlayAnimation[]) {
+    const currentMapConfig = this.mapsConfig[this.map];
+    const { zoomScale, offset } = currentMapConfig;
+
+    return animations.map((animation) => {
+      return new Sprite({
+        ctx: this.ctx,
+        imageSrc: animation.spriteSheetSrc,
+        movable: true,
+        autoLoop: true,
+        frames: animation.frames,
+        position: {
+          x: animation.position.x * TILE_WIDTH * zoomScale + offset.x,
+          y: animation.position.y * TILE_WIDTH * zoomScale + +offset.y,
+        },
       });
     });
   }

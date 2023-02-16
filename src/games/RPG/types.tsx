@@ -43,22 +43,29 @@ export namespace GameMap {
       x: number;
       y: number;
     };
-    lastPosition?: {
-      x: number;
-      y: number;
-    };
+
     dimensions: {
       width: number;
       height: number;
     };
     doors: Door[];
-    prompts: Prompt[];
+    prompts?: Prompt[];
+    animations?: AutoPlayAnimation[];
     zoomScale: number;
     collisions: number[];
   };
 
   export type Maps = {
     [key in MapNames]: Map;
+  };
+
+  export type AutoPlayAnimation = {
+    position: Position;
+    frames: {
+      total: number;
+      rate: number;
+    };
+    spriteSheetSrc: string;
   };
 
   export type Door = {
