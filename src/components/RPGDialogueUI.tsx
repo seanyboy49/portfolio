@@ -1,36 +1,57 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Content } from "../games/RPG/maps";
+import { Dialogue } from "../games/RPG/maps";
 import PaginationArrows, { PaginationDirection } from "./PaginationArrows";
-import { GameUI, Modal, FlexContainer, Text } from "./styled";
+import { GameUI, Modal, FlexContainer, SubTitle, Text } from "./styled";
 import cancelSrc from "../images/RPG/cancel.png";
 import ImageSprite from "./ImageSprite";
+import PageContent from "./PageContent";
 
-const CancelButtonContainer = styled.div`
-  position: relative;
-  top: -50px;
-  left: -50px;
+const OffsetContainer = styled.div`
+  position: absolute;
+  top: -25px;
+  left: -25px;
   height: 50px;
+  display: flex;
 `;
 
 const DialogueContainer = styled.div`
   padding: 2rem;
 `;
 
+const SubtitleContainer = styled.div`
+  margin-left: 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  align-items: center;
+  background: paleturquoise;
+  border: 5px lightgray solid;
+  border-radius: 15px;
+`;
+
 interface IPortfolioMenuUI {
-  showContent: boolean;
-  content?: Content[];
+  showDialogue: boolean;
+  dialogue?: Dialogue;
   handleClose: () => void;
 }
 const RPGDialogueUI = ({
-  showContent,
-  content,
+  showDialogue,
+  dialogue,
   handleClose,
 }: IPortfolioMenuUI) => {
   const [page, setPage] = useState(0);
-  if (!showContent || !content) return null;
-  const isPaginated = content.length > 1;
+
+  // Reset page to 0
+  useEffect(() => {
+    if (!dialogue) {
+      setPage(0);
+    }
+  }, [dialogue]);
+
+  if (!showDialogue || !dialogue) return null;
+
+  const isPaginated = dialogue.content.length > 1;
+  const { content } = dialogue;
 
   function handleClick(direction: PaginationDirection) {
     if (direction === PaginationDirection.forward) {
@@ -45,23 +66,27 @@ const RPGDialogueUI = ({
       <FlexContainer>
         <DialogueContainer>
           <Modal>
-            <CancelButtonContainer>
+            <OffsetContainer>
               <ImageSprite
                 imgSrc={cancelSrc}
                 framesTotal={2}
                 handleClick={handleClose}
               />
-            </CancelButtonContainer>
+              <SubtitleContainer>
+                <SubTitle>{dialogue.title}</SubTitle>
+              </SubtitleContainer>
+            </OffsetContainer>
+
             {isPaginated ? (
               <PaginationArrows
                 page={page}
                 pagesLength={content.length - 1}
                 handleClick={handleClick}
               >
-                <Text>{content[page] as React.ReactNode}</Text>
+                <PageContent content={content[page]} />
               </PaginationArrows>
             ) : (
-              <Text>{content[page] as React.ReactNode}</Text>
+              <PageContent content={content[page]} />
             )}
           </Modal>
         </DialogueContainer>

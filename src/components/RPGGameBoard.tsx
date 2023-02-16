@@ -59,15 +59,16 @@ const RPGGameBoard = () => {
   }, []);
 
   const closeDialogue = useCallback(() => {
-    updateGameState({ showContent: false });
+    updateGameState({ showDialogue: false });
   }, [updateGameState]);
 
+  // console.log("gameState", gameState);
   return (
     <>
       <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
       <RPGDialogueUI
-        content={gameState.content}
-        showContent={gameState.showContent}
+        dialogue={gameState.dialogue}
+        showDialogue={gameState.showDialogue}
         handleClose={closeDialogue}
       />
       {/* <RPGDialogueUI

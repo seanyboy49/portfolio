@@ -36,7 +36,7 @@ const ImageSprite = ({ imgSrc, framesTotal, handleClick }: IImageSprite) => {
   if (handleClick) {
     return (
       <UnstyledButton onClick={handleClick}>
-        <Sprite src={imgSrc} width={croppedWidth} height={croppedWidth} />;
+        <Sprite src={imgSrc} width={croppedWidth} height={croppedWidth} />
       </UnstyledButton>
     );
   }

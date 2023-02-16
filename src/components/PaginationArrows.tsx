@@ -11,11 +11,6 @@ const FlexContainer = styled.div`
   width: 100%;
 `;
 
-const TextContainer = styled.div`
-  padding-left: 1rem;
-  padding-right: 1rem;
-`;
-
 const Spacer = styled.div`
   width: 50px;
 `;
@@ -30,6 +25,7 @@ interface IPagination {
   handleClick: (direction: PaginationDirection) => void;
   children: React.ReactNode;
 }
+
 const PaginationArrows = ({
   page,
   pagesLength,
@@ -47,7 +43,9 @@ const PaginationArrows = ({
       ) : (
         <Spacer />
       )}
-      <TextContainer>{children}</TextContainer>
+
+      {children}
+
       {page !== pagesLength ? (
         <IconButton
           handleClick={() => handleClick(PaginationDirection.forward)}

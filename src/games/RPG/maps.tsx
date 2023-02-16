@@ -5,6 +5,7 @@ import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 import { Keys } from "./types";
 import { WORK_HISTORY } from "./workHistory";
+import { WelcomeSign } from "../../components/Prompts/Museum";
 
 export enum Maps {
   ISLAND = "island",
@@ -53,8 +54,12 @@ export type DoorConfig = {
   };
 };
 export type Content = string | React.FunctionComponent;
+export type Dialogue = {
+  title: string;
+  content: Content[];
+};
 export type PromptConfig = {
-  id: string;
+  title: string;
   content: Content[];
   /**
    * Matrix Coordinates in collisionMap
@@ -131,8 +136,7 @@ export const MAPS_CONFIG: MapsConfig = {
     collisions: COLLISIONS[Maps.MUSEUM],
     prompts: [
       {
-        id: "Paysail",
-        content: WORK_HISTORY.paysail.content,
+        ...WORK_HISTORY.paysail,
         position: {
           x: 59,
           y: 16,
@@ -143,8 +147,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "VettedVC",
-        content: ["bbb"],
+        ...WORK_HISTORY.vetted,
         position: {
           x: 65,
           y: 16,
@@ -155,8 +158,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Scoop",
-        content: ["ccc"],
+        ...WORK_HISTORY.scoop,
         position: {
           x: 71,
           y: 16,
@@ -167,8 +169,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Awayco",
-        content: ["ddd"],
+        ...WORK_HISTORY.awayco,
         position: {
           x: 77,
           y: 16,
@@ -179,8 +180,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Fetch",
-        content: ["eee"],
+        ...WORK_HISTORY.fetch,
         position: {
           x: 82,
           y: 16,
@@ -191,8 +191,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Museum welcome sign",
-        content: ["fff"],
+        title: "Museum of Sean Lee",
+        content: [WelcomeSign],
         position: {
           x: 50,
           y: 26,

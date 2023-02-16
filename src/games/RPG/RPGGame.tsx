@@ -18,8 +18,8 @@ import {
 type Collisions = number[];
 
 export type RPGGameState = {
-  showContent: boolean;
-  content?: Content[];
+  showDialogue: boolean;
+  dialogue?: { title: string; content: Content[] };
 };
 
 export type UpdateGameState = Dispatch<SetStateAction<RPGGameState>>;
@@ -220,10 +220,10 @@ class RPGGame implements CanvasGame {
       // to display the prompt
       if (rectangularCollision(this.player as Rectangle, paddedPrompt)) {
         this.updateGameState((prev) => {
-          if (prev.content !== prompt.content)
+          if (prev.dialogue?.title !== prompt.dialogue.title)
             return {
               ...prev,
-              content: prompt.content,
+              dialogue: prompt.dialogue,
             };
           return prev;
         });
@@ -235,11 +235,11 @@ class RPGGame implements CanvasGame {
          * We clear the content and automatically set showContent to false
          */
         this.updateGameState((prev) => {
-          if (prev.content === prompt.content) {
+          if (prev.dialogue === prompt.dialogue) {
             return {
               ...prev,
-              content: undefined,
-              showContent: false,
+              dialogue: undefined,
+              showDialogue: false,
             };
           }
           // We can cancel the state update by simply returning prev
@@ -333,10 +333,10 @@ class RPGGame implements CanvasGame {
         event.preventDefault();
 
         this.updateGameState((prev) => {
-          if (prev.content) {
+          if (prev.dialogue) {
             return {
               ...prev,
-              showContent: !prev.showContent,
+              showDialogue: !prev.showDialogue,
             };
           }
           return prev;
@@ -429,6 +429,7 @@ class RPGGame implements CanvasGame {
           x: prompt.position.x * TILE_WIDTH * zoomScale + offset.x,
           y: prompt.position.y * TILE_WIDTH * zoomScale + +offset.y,
         },
+        title: prompt.title,
         content: prompt.content,
         span: prompt.span,
       });
