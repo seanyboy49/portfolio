@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.df8b671f.css",
-    "main.js": "/static/js/main.c649ec96.js",
+    "main.js": "/static/js/main.84dea311.js",
     "static/js/787.1ed0c42c.chunk.js": "/static/js/787.1ed0c42c.chunk.js",
     "static/media/island_v1.png": "/static/media/island_v1.d5fb1d0e07dda88281a2.png",
     "static/media/museum_v3.png": "/static/media/museum_v3.649129af54244fccd1b6.png",
@@ -10,11 +10,11 @@
     "static/media/meteor.png": "/static/media/meteor.2375c9b00b7a2d59cfea.png",
     "index.html": "/index.html",
     "main.df8b671f.css.map": "/static/css/main.df8b671f.css.map",
-    "main.c649ec96.js.map": "/static/js/main.c649ec96.js.map",
+    "main.84dea311.js.map": "/static/js/main.84dea311.js.map",
     "787.1ed0c42c.chunk.js.map": "/static/js/787.1ed0c42c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.df8b671f.css",
-    "static/js/main.c649ec96.js"
+    "static/js/main.84dea311.js"
   ]
 }
