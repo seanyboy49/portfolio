@@ -5,6 +5,7 @@ import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 import { Keys } from "./types";
 import { WORK_HISTORY } from "./workHistory";
+import { WelcomeSign } from "../../components/Prompts/Museum";
 
 export enum Maps {
   ISLAND = "island",
@@ -190,8 +191,8 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        title: "Museum welcome sign",
-        content: ["Welcome to the museum of Sean!"],
+        title: "Museum of Sean Lee",
+        content: [WelcomeSign],
         position: {
           x: 50,
           y: 26,
