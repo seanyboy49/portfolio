@@ -1,4 +1,4 @@
-import { Content, Dialogue } from "./maps";
+import { Content, Dialogue } from "./config";
 import MovableObject, { IMovableObject } from "./MovableObject";
 import { TILE_WIDTH } from "./types";
 

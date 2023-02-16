@@ -9,7 +9,7 @@ import Sprite from "../games/RPG/Sprite";
 import RPGGame from "../games/RPG/RPGGame";
 import useCanvas from "../hooks/useCanvas";
 import PortfolioMenuUI from "./PortfolioMenuUI";
-import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
+import { MAPS_CONFIG, Maps } from "../games/RPG/config";
 import RPGDialogueUI from "./RPGDialogueUI";
 
 const RPGGameBoard = () => {

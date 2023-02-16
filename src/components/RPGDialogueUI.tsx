@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Dialogue } from "../games/RPG/maps";
+import { Dialogue } from "../games/RPG/config";
 import PaginationArrows, { PaginationDirection } from "./PaginationArrows";
 import { GameUI, Modal, FlexContainer, SubTitle, Text } from "./styled";
 import cancelSrc from "../images/RPG/cancel.png";

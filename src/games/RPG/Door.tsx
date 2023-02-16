@@ -1,4 +1,4 @@
-import { Maps } from "./maps";
+import { Maps } from "./config";
 import MovableObject, { IMovableObject } from "./MovableObject";
 import { Keys, TILE_WIDTH } from "./types";
 

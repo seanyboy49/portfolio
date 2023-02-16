@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { Content } from "../games/RPG/maps";
+import { Content } from "../games/RPG/config";
 import { Text } from "./styled";
 
 interface IPageContent {

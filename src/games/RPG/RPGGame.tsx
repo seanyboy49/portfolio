@@ -7,7 +7,7 @@ import Prompt from "./Prompt";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { CanvasGame, EventHandler, Events } from "../types";
 import { IDs } from "./collisions";
-import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./maps";
+import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./config";
 import {
   padRectangle,
   Rectangle,
