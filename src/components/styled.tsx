@@ -27,6 +27,7 @@ export const MenuContainer = styled.div`
 `;
 
 export const Modal = styled.div`
+  position: relative;
   height: 20vh;
   background: white;
   border: 5px lightgray solid;
@@ -48,6 +49,11 @@ export const MenuItem = styled.div`
   padding: 1rem;
 `;
 
+export const SubTitle = styled.h2`
+  font-family: "FinkHeavyRegular";
+`;
+
 export const Text = styled.p`
-  font-size: 1.8rem;
+  font-size: 1rem;
+  text-align: left;
 `;

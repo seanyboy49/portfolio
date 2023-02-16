@@ -1,22 +1,32 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Dialogue } from "../games/RPG/maps";
 import PaginationArrows, { PaginationDirection } from "./PaginationArrows";
-import { GameUI, Modal, FlexContainer, Text } from "./styled";
+import { GameUI, Modal, FlexContainer, SubTitle, Text } from "./styled";
 import cancelSrc from "../images/RPG/cancel.png";
 import ImageSprite from "./ImageSprite";
 import PageContent from "./PageContent";
 
-const CancelButtonContainer = styled.div`
-  position: relative;
-  top: -50px;
-  left: -50px;
+const OffsetContainer = styled.div`
+  position: absolute;
+  top: -25px;
+  left: -25px;
   height: 50px;
+  display: flex;
 `;
 
 const DialogueContainer = styled.div`
   padding: 2rem;
+`;
+
+const SubtitleContainer = styled.div`
+  margin-left: 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  align-items: center;
+  background: paleturquoise;
+  border: 5px lightgray solid;
+  border-radius: 15px;
 `;
 
 interface IPortfolioMenuUI {
@@ -55,14 +65,17 @@ const RPGDialogueUI = ({
       <FlexContainer>
         <DialogueContainer>
           <Modal>
-            <CancelButtonContainer>
+            <OffsetContainer>
               <ImageSprite
                 imgSrc={cancelSrc}
                 framesTotal={2}
                 handleClick={handleClose}
               />
-            </CancelButtonContainer>
-            <div>{dialogue.title}</div>
+              <SubtitleContainer>
+                <SubTitle>{dialogue.title}</SubTitle>
+              </SubtitleContainer>
+            </OffsetContainer>
+
             {isPaginated ? (
               <PaginationArrows
                 page={page}
@@ -70,11 +83,9 @@ const RPGDialogueUI = ({
                 handleClick={handleClick}
               >
                 <PageContent content={content[page]} />
-                {/* <Text>{content[page] as React.ReactNode}</Text> */}
               </PaginationArrows>
             ) : (
               <PageContent content={content[page]} />
-              // <Text>{content[page] as React.ReactNode}</Text>
             )}
           </Modal>
         </DialogueContainer>
