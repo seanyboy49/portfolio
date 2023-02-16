@@ -72,8 +72,7 @@ class RPGGame implements CanvasGame {
       ctx: this.ctx,
       imageSrc: animatedRiverSrc,
       movable: true,
-      autoPlay: true,
-      loop: true,
+      autoLoop: true,
       frames: {
         total: 3,
         rate: 80,

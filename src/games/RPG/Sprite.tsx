@@ -18,8 +18,7 @@ interface ISprite {
   frames?: { total: number; rate: number };
   sprites?: SpriteSheets;
   movable?: boolean;
-  autoPlay?: boolean;
-  loop?: boolean;
+  autoLoop?: boolean;
 }
 class Sprite {
   ctx: CanvasRenderingContext2D;
@@ -37,8 +36,7 @@ class Sprite {
     height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
     position: Position;
   };
-  autoPlay: boolean; // Controls weather we automate the animation loop across each sprite
-  loop: boolean;
+  autoLoop: boolean; // Automatically animate the Sprite in a loop
 
   constructor({
     ctx,
@@ -47,8 +45,7 @@ class Sprite {
     frames = { total: 1, rate: 10 },
     sprites,
     movable = true,
-    autoPlay = false,
-    loop = false,
+    autoLoop = false,
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
@@ -78,12 +75,11 @@ class Sprite {
 
     this.movable = movable;
     this.animate = false;
-    this.autoPlay = autoPlay;
-    this.loop = loop;
+    this.autoLoop = autoLoop;
 
-    // If the sprite is supposed to auto play, then call updateFrames
-    if (this.autoPlay) {
-      this.updateFrames();
+    // Automatically begin animation if autoLoop = true
+    if (this.autoLoop) {
+      this.loopAnimation();
     }
   }
 
@@ -194,13 +190,16 @@ class Sprite {
     // Once this frame of animation is done, animate should be false
     this.animate = false;
 
-    if (this.loop) {
-      this.updateFrames();
+    if (this.autoLoop) {
+      this.loopAnimation();
     }
   }
 
-  private updateFrames() {
-    if (!this.autoPlay) return;
+  private loopAnimation() {
+    if (!this.autoLoop) return;
+    // The trick to auto animation is to make this.animate true
+    // Normally, this.animate is set to true when keyboard input is detected
+    // By setting it to true, this.draw() handles the incrementing of frames
     this.animate = true;
   }
 }
