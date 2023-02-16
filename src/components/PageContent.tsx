@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-import { Content } from "../games/RPG/config";
+import { GameMap } from "../games/RPG/types";
 import { Text } from "./styled";
 
 interface IPageContent {
-  content: Content;
+  content: GameMap.Content;
 }
 
 const OverflowContainer = styled.div`

@@ -9,7 +9,8 @@ import Sprite from "../games/RPG/Sprite";
 import RPGGame from "../games/RPG/RPGGame";
 import useCanvas from "../hooks/useCanvas";
 import PortfolioMenuUI from "./PortfolioMenuUI";
-import { MAPS_CONFIG, Maps } from "../games/RPG/config";
+import { MAPS_CONFIG } from "../games/RPG/config";
+import { GameMap } from "../games/RPG/types";
 import RPGDialogueUI from "./RPGDialogueUI";
 
 const RPGGameBoard = () => {
@@ -36,7 +37,7 @@ const RPGGameBoard = () => {
       const game = new RPGGame({
         ctx,
         player,
-        map: Maps.ISLAND,
+        map: GameMap.MapNames.ISLAND,
         mapsConfig: MAPS_CONFIG,
         updateGameState: setGameState,
       });

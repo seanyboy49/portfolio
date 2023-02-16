@@ -7,7 +7,8 @@ import Prompt from "./Prompt";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { CanvasGame, EventHandler, Events } from "../types";
 import { IDs } from "./collisions";
-import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./config";
+// import { Content, DoorConfig, Maps, MapsConfig, PromptConfig } from "./config";
+import { GameMap } from "./types";
 import {
   padRectangle,
   Rectangle,
@@ -20,23 +21,23 @@ type Collisions = number[];
 
 export type RPGGameState = {
   showDialogue: boolean;
-  dialogue?: { title: string; content: Content[] };
+  dialogue?: { title: string; content: GameMap.Content[] };
 };
 
 export type UpdateGameState = Dispatch<SetStateAction<RPGGameState>>;
 
 interface IRPGGame {
   ctx: CanvasRenderingContext2D;
-  mapsConfig: MapsConfig;
-  map: Maps;
+  mapsConfig: GameMap.Maps;
+  map: GameMap.MapNames;
   player: Sprite;
   updateGameState: UpdateGameState;
 }
 
 class RPGGame implements CanvasGame {
   ctx: CanvasRenderingContext2D;
-  mapsConfig: MapsConfig;
-  map: Maps;
+  mapsConfig: GameMap.Maps;
+  map: GameMap.MapNames;
   background: Sprite;
   foreground?: Sprite;
   player: Sprite;
@@ -48,7 +49,7 @@ class RPGGame implements CanvasGame {
   eventListeners: EventHandler[];
   updateGameState: UpdateGameState;
   cache: Map<
-    Maps,
+    GameMap.MapNames,
     {
       background: Sprite;
       foreground?: Sprite;
@@ -272,7 +273,7 @@ class RPGGame implements CanvasGame {
   /**
    * Sets the new mapConfig and updates background, foreground, boundaries and doors
    */
-  private loadMap(map: Maps) {
+  private loadMap(map: GameMap.MapNames) {
     // Set the new map
     this.map = map;
 
@@ -416,7 +417,7 @@ class RPGGame implements CanvasGame {
       .filter((x): x is Boundary => x !== null);
   }
 
-  private createDoors(doors: DoorConfig[]) {
+  private createDoors(doors: GameMap.Door[]) {
     const currentMapConfig = this.mapsConfig[this.map];
     const { zoomScale } = currentMapConfig;
     const offset = currentMapConfig.lastPosition || currentMapConfig.offset;
@@ -436,7 +437,7 @@ class RPGGame implements CanvasGame {
     });
   }
 
-  private createPrompts(prompts: PromptConfig[]) {
+  private createPrompts(prompts: GameMap.Prompt[]) {
     const currentMapConfig = this.mapsConfig[this.map];
     const { zoomScale } = currentMapConfig;
     const offset = currentMapConfig.lastPosition || currentMapConfig.offset;

@@ -1,9 +1,9 @@
-import { Maps } from "./config";
+import { GameMap } from "./types";
 import MovableObject, { IMovableObject } from "./MovableObject";
 import { Keys, TILE_WIDTH } from "./types";
 
 interface IDoor extends IMovableObject {
-  map: Maps;
+  map: GameMap.MapNames;
   entryDirection: Keys;
   span?: {
     width: number;
@@ -18,7 +18,7 @@ interface IDoor extends IMovableObject {
  * They can also span multiple blocks, so span is an optional attribute
  */
 class Door extends MovableObject {
-  map: Maps;
+  map: GameMap.MapNames;
   entryDirection: Keys;
 
   constructor(props: IDoor) {

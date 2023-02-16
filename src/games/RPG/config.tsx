@@ -6,76 +6,10 @@ import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 import { Keys } from "./types";
 import { WORK_HISTORY } from "./workHistory";
 import { WelcomeSign } from "../../components/Prompts/Museum";
+import { GameMap } from "./types";
 
-export enum Maps {
-  ISLAND = "island",
-  MUSEUM = "museum",
-  //   HOME = "home",
-}
-
-export type MapConfig = {
-  imageBackgroundSrc: string;
-  imageForegroundSrc?: string;
-  offset: {
-    x: number;
-    y: number;
-  };
-  lastPosition?: {
-    x: number;
-    y: number;
-  };
-  dimensions: {
-    width: number;
-    height: number;
-  };
-  doors: DoorConfig[];
-  prompts: PromptConfig[];
-  zoomScale: number;
-  collisions: number[];
-};
-
-export type MapsConfig = {
-  [key in Maps]: MapConfig;
-};
-
-export type DoorConfig = {
-  map: Maps;
-  /**
-   * Matrix Coordinates in collisionMap
-   */
-  position: {
-    x: number;
-    y: number;
-  };
-  entryDirection: Keys;
-  span?: {
-    width: number;
-    height: number;
-  };
-};
-export type Content = string | React.FunctionComponent;
-export type Dialogue = {
-  title: string;
-  content: Content[];
-};
-export type PromptConfig = {
-  title: string;
-  content: Content[];
-  /**
-   * Matrix Coordinates in collisionMap
-   */
-  position: {
-    x: number;
-    y: number;
-  };
-  span?: {
-    width: number;
-    height: number;
-  };
-};
-
-export const MAPS_CONFIG: MapsConfig = {
-  [Maps.ISLAND]: {
+export const MAPS_CONFIG: GameMap.Maps = {
+  [GameMap.MapNames.ISLAND]: {
     imageBackgroundSrc: islandImgSrc,
     // imageForegroundSrc: islandImgSrc,
     offset: {
@@ -89,7 +23,7 @@ export const MAPS_CONFIG: MapsConfig = {
     },
     doors: [
       {
-        map: Maps.MUSEUM,
+        map: GameMap.MapNames.MUSEUM,
         entryDirection: Keys.W,
         position: {
           x: 43,
@@ -106,9 +40,9 @@ export const MAPS_CONFIG: MapsConfig = {
     ],
     prompts: [],
     zoomScale: 4,
-    collisions: COLLISIONS[Maps.ISLAND],
+    collisions: COLLISIONS[GameMap.MapNames.ISLAND],
   },
-  [Maps.MUSEUM]: {
+  [GameMap.MapNames.MUSEUM]: {
     imageBackgroundSrc: museumBackgroundImgSrc,
     imageForegroundSrc: museumForegroundImgSrc,
     offset: {
@@ -121,7 +55,7 @@ export const MAPS_CONFIG: MapsConfig = {
     },
     doors: [
       {
-        map: Maps.ISLAND,
+        map: GameMap.MapNames.ISLAND,
         entryDirection: Keys.S,
         position: {
           x: 48,
@@ -134,7 +68,7 @@ export const MAPS_CONFIG: MapsConfig = {
       },
     ],
     zoomScale: 3.5,
-    collisions: COLLISIONS[Maps.MUSEUM],
+    collisions: COLLISIONS[GameMap.MapNames.MUSEUM],
     prompts: [
       {
         ...WORK_HISTORY.paysail,
