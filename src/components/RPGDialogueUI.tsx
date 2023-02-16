@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Content } from "../games/RPG/maps";
+import { Content, Dialogue } from "../games/RPG/maps";
 import PaginationArrows, { PaginationDirection } from "./PaginationArrows";
 import { GameUI, Modal, FlexContainer, Text } from "./styled";
 import cancelSrc from "../images/RPG/cancel.png";
@@ -19,18 +19,19 @@ const DialogueContainer = styled.div`
 `;
 
 interface IPortfolioMenuUI {
-  showContent: boolean;
-  content?: Content[];
+  showDialogue: boolean;
+  dialogue?: Dialogue;
   handleClose: () => void;
 }
 const RPGDialogueUI = ({
-  showContent,
-  content,
+  showDialogue,
+  dialogue,
   handleClose,
 }: IPortfolioMenuUI) => {
   const [page, setPage] = useState(0);
-  if (!showContent || !content) return null;
-  const isPaginated = content.length > 1;
+  if (!showDialogue || !dialogue) return null;
+  const isPaginated = dialogue.content.length > 1;
+  const { content } = dialogue;
 
   function handleClick(direction: PaginationDirection) {
     if (direction === PaginationDirection.forward) {
@@ -52,6 +53,7 @@ const RPGDialogueUI = ({
                 handleClick={handleClose}
               />
             </CancelButtonContainer>
+            <div>{dialogue.title}</div>
             {isPaginated ? (
               <PaginationArrows
                 page={page}

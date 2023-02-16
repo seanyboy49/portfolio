@@ -53,8 +53,12 @@ export type DoorConfig = {
   };
 };
 export type Content = string | React.FunctionComponent;
+export type Dialogue = {
+  title: string;
+  content: Content[];
+};
 export type PromptConfig = {
-  id: string;
+  title: string;
   content: Content[];
   /**
    * Matrix Coordinates in collisionMap
@@ -131,7 +135,7 @@ export const MAPS_CONFIG: MapsConfig = {
     collisions: COLLISIONS[Maps.MUSEUM],
     prompts: [
       {
-        id: "Paysail",
+        title: "Paysail",
         content: WORK_HISTORY.paysail.content,
         position: {
           x: 59,
@@ -143,7 +147,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "VettedVC",
+        title: "Vetted VC",
         content: WORK_HISTORY.vetted.content,
         position: {
           x: 65,
@@ -155,7 +159,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Scoop",
+        title: "Scoop",
         content: ["ccc"],
         position: {
           x: 71,
@@ -167,7 +171,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Awayco",
+        title: "Awayco",
         content: ["ddd"],
         position: {
           x: 77,
@@ -179,7 +183,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Fetch",
+        title: "Fetch",
         content: ["eee"],
         position: {
           x: 82,
@@ -191,7 +195,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        id: "Museum welcome sign",
+        title: "Museum welcome sign",
         content: ["fff"],
         position: {
           x: 50,
