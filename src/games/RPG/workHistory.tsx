@@ -1,25 +1,9 @@
-import {
-  DashboardHybridWork,
-  DashboardManagedCarpoolProgram,
-  ExtensionHybridWork,
-  Intro,
-  MicroservicesPlatform,
-  Technology,
-} from "./ScoopWorkHistory";
+import syroHistory from "../../components/WorkHistory/Syro";
+import scoopHistory from "../../components/WorkHistory/Scoop";
 
 const paysail = {
-  title:
-    "Syro (formerly Paysail) - Instant, cross-border payments powered by crypto",
-  content: [
-    "Sean joined Syro (formerly known as Paysail) in August 2022 as a Founding Engineer.",
-    "At the time, Syro was focused on building instant, cross-border invoicing and payments through asset backed stablecoins.",
-    "Sean led and built multiple features that were critical to onboarding new customers and adhering to the company's Anti Money Laundering Policy.",
-    "KYC/KYB (Know Your Customer/Business) - A complex UI with steps that could branch into multiple paths. Syro customers could verify themselves as individuals or businesses and onboard other business owners via email. Web sockets were used to sync server state with a frontend state machine.",
-    "AML (Anti-Money Laundering) - Transactions monitoring. To comply with our new AML Policy, every transaction had to be tagged with metadata that could be vetted by our vendor service. Syro admin users could then manually approve or deny flagged transactions.",
-    "Multi-signature wallets - A frequently requested feature by customers that wanted multi-signature approval of transactions on the Gnosis Chain. Used long-running jobs to sync transaction status from the Gnosis Chain with other block chains to our systems.",
-    "Frontend Technologies - Typescript, React, Material UI, Node, Cypress",
-    "Backend Technologies - Typescript, Node, Parse Server",
-  ],
+  title: "Syro (formerly Paysail) - Instant, cross-border payments",
+  content: syroHistory,
 };
 
 const vetted = {
@@ -39,14 +23,7 @@ const vetted = {
 
 const scoop = {
   title: "Scoop Technologies - Carpooling as a perk",
-  content: [
-    Intro,
-    DashboardManagedCarpoolProgram,
-    DashboardHybridWork,
-    ExtensionHybridWork,
-    MicroservicesPlatform,
-    Technology,
-  ],
+  content: scoopHistory,
 };
 
 const awayco = {

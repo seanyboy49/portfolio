@@ -7,6 +7,7 @@ import IconButton from "./IconButton";
 const OverflowContainer = styled.div`
   overflow-y: scroll;
   height: 100%;
+  width: 100%;
   margin-top: 2rem;
 `;
 

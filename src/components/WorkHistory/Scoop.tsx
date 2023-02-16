@@ -1,6 +1,6 @@
-import { Text } from "../../components/styled";
+import { Text } from "../styled";
 
-export const Intro = () => {
+const Intro = () => {
   return (
     <ul>
       <li>
@@ -29,7 +29,7 @@ export const Intro = () => {
   );
 };
 
-export const DashboardManagedCarpoolProgram = () => {
+const DashboardManagedCarpoolProgram = () => {
   return (
     <>
       <Text>
@@ -55,7 +55,7 @@ export const DashboardManagedCarpoolProgram = () => {
   );
 };
 
-export const DashboardHybridWork = () => {
+const DashboardHybridWork = () => {
   return (
     <>
       <Text>
@@ -114,7 +114,7 @@ export const DashboardHybridWork = () => {
   );
 };
 
-export const ExtensionHybridWork = () => {
+const ExtensionHybridWork = () => {
   return (
     <>
       <Text>
@@ -152,7 +152,7 @@ export const ExtensionHybridWork = () => {
   );
 };
 
-export const MicroservicesPlatform = () => {
+const MicroservicesPlatform = () => {
   return (
     <>
       <Text>
@@ -177,7 +177,7 @@ export const MicroservicesPlatform = () => {
   );
 };
 
-export const Technology = () => {
+const Technology = () => {
   return (
     <>
       <Text>
@@ -211,3 +211,13 @@ export const Technology = () => {
     </>
   );
 };
+
+const history = [
+  Intro,
+  DashboardManagedCarpoolProgram,
+  DashboardHybridWork,
+  ExtensionHybridWork,
+  MicroservicesPlatform,
+  Technology,
+];
+export default history;
