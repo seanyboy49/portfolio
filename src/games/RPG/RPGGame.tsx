@@ -14,6 +14,7 @@ import {
   rectangularCollision,
   rectangularDoorCollision,
 } from "../../utilities";
+import animatedRiverSrc from "../../images/RPG/animated_river_waterfall.png";
 
 type Collisions = number[];
 
@@ -58,6 +59,8 @@ class RPGGame implements CanvasGame {
 
   public animationId?: number;
 
+  river: Sprite;
+
   constructor({ ctx, updateGameState, mapsConfig, player, map }: IRPGGame) {
     this.ctx = ctx;
     this.updateGameState = updateGameState;
@@ -65,6 +68,21 @@ class RPGGame implements CanvasGame {
     this.map = map;
     this.player = player;
     this.cache = new Map();
+    this.river = new Sprite({
+      ctx: this.ctx,
+      imageSrc: animatedRiverSrc,
+      movable: true,
+      autoPlay: true,
+      loop: true,
+      frames: {
+        total: 3,
+        rate: 80,
+      },
+      position: {
+        x: 70,
+        y: -130,
+      },
+    });
 
     // Sets background, foreground, doors, boundaries
     this.loadMap(this.map);
@@ -112,6 +130,7 @@ class RPGGame implements CanvasGame {
     this.animationId = requestAnimationFrame(() => this.draw());
 
     this.background.draw();
+    this.river.draw();
     this.player.draw();
     this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
@@ -127,6 +146,8 @@ class RPGGame implements CanvasGame {
 
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
+
+    this.river.handleKeyboardInput(this.keyEvents, this.collisionDirection);
 
     // Handle keyboard input for movables
     this.background.handleKeyboardInput(

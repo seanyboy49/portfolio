@@ -18,6 +18,8 @@ interface ISprite {
   frames?: { total: number; rate: number };
   sprites?: SpriteSheets;
   movable?: boolean;
+  autoPlay?: boolean;
+  loop?: boolean;
 }
 class Sprite {
   ctx: CanvasRenderingContext2D;
@@ -35,6 +37,8 @@ class Sprite {
     height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
     position: Position;
   };
+  autoPlay: boolean; // Controls weather we automate the animation loop across each sprite
+  loop: boolean;
 
   constructor({
     ctx,
@@ -43,6 +47,8 @@ class Sprite {
     frames = { total: 1, rate: 10 },
     sprites,
     movable = true,
+    autoPlay = false,
+    loop = false,
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
@@ -72,6 +78,13 @@ class Sprite {
 
     this.movable = movable;
     this.animate = false;
+    this.autoPlay = autoPlay;
+    this.loop = loop;
+
+    // If the sprite is supposed to auto play, then call updateFrames
+    if (this.autoPlay) {
+      this.updateFrames();
+    }
   }
 
   /**
@@ -180,6 +193,15 @@ class Sprite {
 
     // Once this frame of animation is done, animate should be false
     this.animate = false;
+
+    if (this.loop) {
+      this.updateFrames();
+    }
+  }
+
+  private updateFrames() {
+    if (!this.autoPlay) return;
+    this.animate = true;
   }
 }
 

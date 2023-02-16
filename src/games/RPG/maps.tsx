@@ -79,7 +79,8 @@ export const MAPS_CONFIG: MapsConfig = {
     imageBackgroundSrc: islandImgSrc,
     // imageForegroundSrc: islandImgSrc,
     offset: {
-      x: -1555,
+      // x: -1555,
+      x: -700,
       y: -700,
     },
     dimensions: {
