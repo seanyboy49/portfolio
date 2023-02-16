@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Dialogue } from "../games/RPG/maps";
@@ -30,6 +30,14 @@ const RPGDialogueUI = ({
   handleClose,
 }: IPortfolioMenuUI) => {
   const [page, setPage] = useState(0);
+
+  // Reset page to 0
+  useEffect(() => {
+    return () => {
+      setPage(0);
+    };
+  }, []);
+
   if (!showDialogue || !dialogue) return null;
   const isPaginated = dialogue.content.length > 1;
   const { content } = dialogue;
