@@ -1,5 +1,15 @@
+import {
+  DashboardHybridWork,
+  DashboardManagedCarpoolProgram,
+  ExtensionHybridWork,
+  Intro,
+  MicroservicesPlatform,
+  Technology,
+} from "./ScoopWorkHistory";
+
 const paysail = {
-  id: "Syro (formerly Paysail) - Instant, cross-border payments powered by crypto",
+  title:
+    "Syro (formerly Paysail) - Instant, cross-border payments powered by crypto",
   content: [
     "Sean joined Syro (formerly known as Paysail) in August 2022 as a Founding Engineer.",
     "At the time, Syro was focused on building instant, cross-border invoicing and payments through asset backed stablecoins.",
@@ -13,13 +23,13 @@ const paysail = {
 };
 
 const vetted = {
-  id: "Vetted VC - Disrupting venture capital",
+  title: "Vetted VC - Disrupting venture capital",
   content: [
-    "After 3 years at Scoop, an old colleague and friend of Sean's asked him to help him disrupt the world of venture capital.",
-    "Sean joined Vetted VC as a Founding Engineer, designer, and all-around product guy.",
-    "With only 3 months of runway, Sean designed, built and shipped an MVP.",
+    "Sean landed at Vetted when an old colleague and friend asked him to help him disrupt the world of venture capital. The idea was to use a special fund structure to enable fund managers to raise a fund from an unlimited amount of investors. Traditional venture capital funds are limited to 99 investors.",
+    "Sean joined Vetted as a Founding Engineer, designer, and all-around product guy.",
+    "With only 3 months of runway, Sean and one other engineer designed, built and shipped a web app",
     "Investor onboarding and KYC - A multi-step investor onboarding and accreditation flow.",
-    "Fund discovery and investing - A flow for discovering relevant funds and requesting allocation in the fund.",
+    "Fund discovery and investing - Enabled investors to discover relevant funds and requesting allocation in the fund.",
     "Marketing website - A performant and mobile responsive website that showcased the Vetted VC brand and its mission.",
     "Frontend Technologies - Typescript, Next.js (React), Material UI, Node, Cypress",
     "Backend Technologies - Typescript, Nest.js (Node)",
@@ -28,29 +38,31 @@ const vetted = {
 };
 
 const scoop = {
-  id: "Scoop Technologies - Carpooling as a perk",
+  title: "Scoop Technologies - Carpooling as a perk",
   content: [
-    "Sean joined Scoop at an exciting time. In 2019, Scoop had just raised a Series C funding round and was ready to start scaling its business to hundreds of thousands of users.",
-    "Up until this time, Scoop had only hired mobile and backend engineers, as its primary product was a mobile app that was serviced by a couple of mono repos.",
-    "Now that Scoop was being adopted by entire company workforces, Sean joined as the company's first frontend engineer to build our its first customer-facing web app.",
-    "Over three years, Sean worked on a variety of critical features across the stack",
-    "Customer dashboard - A dashboard used by customers to manage their company's carpool program. This scaled to tens of thousands of users. It operated in tandem with the internal dashboard to onboard new customers using Multi-Factor-Authentication",
-    "Chrome extension - ",
-    "Internal dashboard - ",
-    "Microservices - ",
+    Intro,
+    DashboardManagedCarpoolProgram,
+    DashboardHybridWork,
+    ExtensionHybridWork,
+    MicroservicesPlatform,
+    Technology,
   ],
 };
 
 const awayco = {
-  id: "Awayco - Outdoor sports and gear rental",
+  title: "Awayco - Outdoor sports and gear rental",
+  content: [""],
 };
 
 const fetch = {
-  id: "Fetch - Digital advertising",
+  title: "Fetch - Digital advertising",
+  content: [""],
 };
 
 export const WORK_HISTORY = {
   paysail,
   vetted,
   scoop,
+  awayco,
+  fetch,
 };

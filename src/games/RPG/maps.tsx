@@ -135,8 +135,7 @@ export const MAPS_CONFIG: MapsConfig = {
     collisions: COLLISIONS[Maps.MUSEUM],
     prompts: [
       {
-        title: "Paysail",
-        content: WORK_HISTORY.paysail.content,
+        ...WORK_HISTORY.paysail,
         position: {
           x: 59,
           y: 16,
@@ -147,8 +146,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        title: "Vetted VC",
-        content: WORK_HISTORY.vetted.content,
+        ...WORK_HISTORY.vetted,
         position: {
           x: 65,
           y: 16,
@@ -159,8 +157,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        title: "Scoop",
-        content: ["ccc"],
+        ...WORK_HISTORY.scoop,
         position: {
           x: 71,
           y: 16,
@@ -171,8 +168,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        title: "Awayco",
-        content: ["ddd"],
+        ...WORK_HISTORY.awayco,
         position: {
           x: 77,
           y: 16,
@@ -183,8 +179,7 @@ export const MAPS_CONFIG: MapsConfig = {
         },
       },
       {
-        title: "Fetch",
-        content: ["eee"],
+        ...WORK_HISTORY.fetch,
         position: {
           x: 82,
           y: 16,
@@ -196,7 +191,7 @@ export const MAPS_CONFIG: MapsConfig = {
       },
       {
         title: "Museum welcome sign",
-        content: ["fff"],
+        content: ["Welcome to the museum of Sean!"],
         position: {
           x: 50,
           y: 26,

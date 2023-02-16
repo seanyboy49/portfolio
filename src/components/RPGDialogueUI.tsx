@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Content, Dialogue } from "../games/RPG/maps";
+import { Dialogue } from "../games/RPG/maps";
 import PaginationArrows, { PaginationDirection } from "./PaginationArrows";
 import { GameUI, Modal, FlexContainer, Text } from "./styled";
 import cancelSrc from "../images/RPG/cancel.png";
 import ImageSprite from "./ImageSprite";
+import PageContent from "./PageContent";
 
 const CancelButtonContainer = styled.div`
   position: relative;
@@ -60,10 +61,12 @@ const RPGDialogueUI = ({
                 pagesLength={content.length - 1}
                 handleClick={handleClick}
               >
-                <Text>{content[page] as React.ReactNode}</Text>
+                <PageContent content={content[page]} />
+                {/* <Text>{content[page] as React.ReactNode}</Text> */}
               </PaginationArrows>
             ) : (
-              <Text>{content[page] as React.ReactNode}</Text>
+              <PageContent content={content[page]} />
+              // <Text>{content[page] as React.ReactNode}</Text>
             )}
           </Modal>
         </DialogueContainer>
