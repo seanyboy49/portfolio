@@ -147,9 +147,8 @@ class RPGGame implements CanvasGame {
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
 
-    this.river.handleKeyboardInput(this.keyEvents, this.collisionDirection);
-
     // Handle keyboard input for movables
+    this.river.handleKeyboardInput(this.keyEvents, this.collisionDirection);
     this.background.handleKeyboardInput(
       this.keyEvents,
       this.collisionDirection

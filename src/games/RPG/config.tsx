@@ -47,7 +47,7 @@ export const MAPS_CONFIG: GameMap.Maps = {
     imageForegroundSrc: museumForegroundImgSrc,
     offset: {
       x: -2180,
-      y: -1200,
+      y: -1150,
     },
     dimensions: {
       width: 100,
