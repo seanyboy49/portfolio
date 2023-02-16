@@ -4,6 +4,12 @@ import arrowRightSrc from "../images/RPG/arrow-right.png";
 import arrowLeftSrc from "../images/RPG/arrow-left.png";
 import IconButton from "./IconButton";
 
+const OverflowContainer = styled.div`
+  overflow-y: scroll;
+  height: 100%;
+  margin-top: 2rem;
+`;
+
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -47,7 +53,9 @@ const PaginationArrows = ({
       ) : (
         <Spacer />
       )}
-      <TextContainer>{children}</TextContainer>
+      <OverflowContainer>
+        <TextContainer>{children}</TextContainer>
+      </OverflowContainer>
       {page !== pagesLength ? (
         <IconButton
           handleClick={() => handleClick(PaginationDirection.forward)}
