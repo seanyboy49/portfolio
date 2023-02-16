@@ -43,12 +43,13 @@ const RPGDialogueUI = ({
 
   // Reset page to 0
   useEffect(() => {
-    return () => {
+    if (!dialogue) {
       setPage(0);
-    };
-  }, []);
+    }
+  }, [dialogue]);
 
   if (!showDialogue || !dialogue) return null;
+
   const isPaginated = dialogue.content.length > 1;
   const { content } = dialogue;
 
