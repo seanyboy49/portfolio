@@ -108,12 +108,15 @@ class RPGGame implements CanvasGame {
    * Handle keyboard input for each game element
    */
   public draw() {
-    // Set canvas fill style so we don't get side effects from other objects setting fill styles
-    this.ctx.fillStyle = `rgba(0,0,0,0.1)`;
+    // Set canvas fill style to transparent so we don't get side effects from other objects setting fill styles
+    // this.ctx.fillStyle = `rgba(0,0,0,0.1)`;
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.ctx.fillStyle = `rgba(0,0,0,0)`;
 
     // You must pass an arrow function to keep the reference to this
     this.animationId = requestAnimationFrame(() => this.draw());
 
+    // Draw elements
     this.background.draw();
     this.animations?.forEach((a) => a.draw());
     this.player.draw();
@@ -337,7 +340,10 @@ class RPGGame implements CanvasGame {
         animations: this.animations,
       });
 
-      console.log("this.cache", this.cache.get(GameMap.MapNames.ISLAND));
+      console.log(
+        "this.cache",
+        this.cache.get(GameMap.MapNames.ISLAND)?.animations
+      );
     }
   }
 
@@ -474,7 +480,7 @@ class RPGGame implements CanvasGame {
         frames: animation.frames,
         position: {
           x: animation.position.x * TILE_WIDTH * zoomScale + offset.x,
-          y: animation.position.y * TILE_WIDTH * zoomScale + +offset.y,
+          y: animation.position.y * TILE_WIDTH * zoomScale + offset.y,
         },
       });
     });

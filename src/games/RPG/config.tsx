@@ -14,6 +14,7 @@ export const MAPS_CONFIG: GameMap.Maps = {
     // imageForegroundSrc: islandImgSrc,
     offset: {
       // x: -1555,
+      // y: -700,
       x: -700,
       y: -700,
     },
