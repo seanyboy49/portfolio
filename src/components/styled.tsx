@@ -55,4 +55,5 @@ export const SubTitle = styled.h2`
 export const Text = styled.p`
   font-size: 1rem;
   text-align: left;
+  line-height: 1.5rem;
 `;

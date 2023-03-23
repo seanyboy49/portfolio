@@ -9,9 +9,9 @@ import Sprite from "../games/RPG/Sprite";
 import RPGGame from "../games/RPG/RPGGame";
 import useCanvas from "../hooks/useCanvas";
 import PortfolioMenuUI from "./PortfolioMenuUI";
-import { MAPS_CONFIG, Maps } from "../games/RPG/maps";
+import { MAPS_CONFIG } from "../games/RPG/config";
+import { GameMap } from "../games/RPG/types";
 import RPGDialogueUI from "./RPGDialogueUI";
-import { WORK_HISTORY } from "../games/RPG/workHistory";
 
 const RPGGameBoard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,7 +37,7 @@ const RPGGameBoard = () => {
       const game = new RPGGame({
         ctx,
         player,
-        map: Maps.MUSEUM,
+        map: GameMap.MapNames.ISLAND,
         mapsConfig: MAPS_CONFIG,
         updateGameState: setGameState,
       });
@@ -62,7 +62,6 @@ const RPGGameBoard = () => {
     updateGameState({ showDialogue: false });
   }, [updateGameState]);
 
-  // console.log("gameState", gameState);
   return (
     <>
       <PortfolioMenuUI isOpen={isMenuOpen} toggleMenuOpen={toggleMenuOpen} />
@@ -71,11 +70,6 @@ const RPGGameBoard = () => {
         showDialogue={gameState.showDialogue}
         handleClose={closeDialogue}
       />
-      {/* <RPGDialogueUI
-        content={WORK_HISTORY.paysail.content}
-        showContent={true}
-        handleClose={closeDialogue}
-      /> */}
       <canvas ref={canvasRef} />
     </>
   );

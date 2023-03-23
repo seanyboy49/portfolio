@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Dialogue } from "../games/RPG/maps";
+import { GameMap } from "../games/RPG/types";
 import PaginationArrows, { PaginationDirection } from "./PaginationArrows";
-import { GameUI, Modal, FlexContainer, SubTitle, Text } from "./styled";
+import { GameUI, Modal, FlexContainer, SubTitle } from "./styled";
 import cancelSrc from "../images/RPG/cancel.png";
 import ImageSprite from "./ImageSprite";
 import PageContent from "./PageContent";
@@ -31,7 +31,7 @@ const SubtitleContainer = styled.div`
 
 interface IPortfolioMenuUI {
   showDialogue: boolean;
-  dialogue?: Dialogue;
+  dialogue?: GameMap.Dialogue;
   handleClose: () => void;
 }
 const RPGDialogueUI = ({

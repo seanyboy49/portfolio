@@ -1,10 +1,10 @@
-import { Content, Dialogue } from "./maps";
+import { GameMap } from "./types";
 import MovableObject, { IMovableObject } from "./MovableObject";
 import { TILE_WIDTH } from "./types";
 
 interface IDoor extends IMovableObject {
   title: string;
-  content: Content[];
+  content: GameMap.Content[];
   span?: {
     width: number;
     height: number;
@@ -12,7 +12,7 @@ interface IDoor extends IMovableObject {
 }
 
 class Prompt extends MovableObject {
-  dialogue: Dialogue;
+  dialogue: GameMap.Dialogue;
 
   constructor(props: IDoor) {
     super(props);

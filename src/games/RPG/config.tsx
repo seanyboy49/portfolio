@@ -1,86 +1,22 @@
-import islandImgSrc from "../../images/RPG/island_v1.png";
 import { COLLISIONS } from "./collisions";
-
+import islandImgSrc from "../../images/RPG/island_v1.png";
 import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
-import { Keys } from "./types";
+import animatedRiverSrc from "../../images/RPG/animated_river_waterfall.png";
+
 import { WORK_HISTORY } from "./workHistory";
 import { WelcomeSign } from "../../components/Prompts/Museum";
+import { Keys, GameMap } from "./types";
 
-export enum Maps {
-  ISLAND = "island",
-  MUSEUM = "museum",
-  //   HOME = "home",
-}
-
-export type MapConfig = {
-  imageBackgroundSrc: string;
-  imageForegroundSrc?: string;
-  offset: {
-    x: number;
-    y: number;
-  };
-  lastPosition?: {
-    x: number;
-    y: number;
-  };
-  dimensions: {
-    width: number;
-    height: number;
-  };
-  doors: DoorConfig[];
-  prompts: PromptConfig[];
-  zoomScale: number;
-  collisions: number[];
-};
-
-export type MapsConfig = {
-  [key in Maps]: MapConfig;
-};
-
-export type DoorConfig = {
-  map: Maps;
-  /**
-   * Matrix Coordinates in collisionMap
-   */
-  position: {
-    x: number;
-    y: number;
-  };
-  entryDirection: Keys;
-  span?: {
-    width: number;
-    height: number;
-  };
-};
-export type Content = string | React.FunctionComponent;
-export type Dialogue = {
-  title: string;
-  content: Content[];
-};
-export type PromptConfig = {
-  title: string;
-  content: Content[];
-  /**
-   * Matrix Coordinates in collisionMap
-   */
-  position: {
-    x: number;
-    y: number;
-  };
-  span?: {
-    width: number;
-    height: number;
-  };
-};
-
-export const MAPS_CONFIG: MapsConfig = {
-  [Maps.ISLAND]: {
+export const MAPS_CONFIG: GameMap.Maps = {
+  [GameMap.MapNames.ISLAND]: {
     imageBackgroundSrc: islandImgSrc,
     // imageForegroundSrc: islandImgSrc,
     offset: {
-      x: -1555,
-      y: -700,
+      // x: -1555,
+      // y: -700,
+      x: -600,
+      y: -300,
     },
     dimensions: {
       width: 70,
@@ -88,10 +24,11 @@ export const MAPS_CONFIG: MapsConfig = {
     },
     doors: [
       {
-        map: Maps.MUSEUM,
+        map: GameMap.MapNames.MUSEUM,
         entryDirection: Keys.W,
         position: {
           x: 43,
+          // x: 20,
           y: 9,
         },
       },
@@ -103,16 +40,32 @@ export const MAPS_CONFIG: MapsConfig = {
       //     },
       //   },
     ],
-    prompts: [],
+    animations: [
+      {
+        spriteSheetSrc: animatedRiverSrc,
+        frames: {
+          total: 3,
+          rate: 80,
+        },
+        position: {
+          x: 12,
+          y: 9,
+        },
+        // position: {
+        //   x: 70,
+        //   y: -130,
+        // },
+      },
+    ],
     zoomScale: 4,
-    collisions: COLLISIONS[Maps.ISLAND],
+    collisions: COLLISIONS[GameMap.MapNames.ISLAND],
   },
-  [Maps.MUSEUM]: {
+  [GameMap.MapNames.MUSEUM]: {
     imageBackgroundSrc: museumBackgroundImgSrc,
     imageForegroundSrc: museumForegroundImgSrc,
     offset: {
       x: -2180,
-      y: -1200,
+      y: -1150,
     },
     dimensions: {
       width: 100,
@@ -120,7 +73,7 @@ export const MAPS_CONFIG: MapsConfig = {
     },
     doors: [
       {
-        map: Maps.ISLAND,
+        map: GameMap.MapNames.ISLAND,
         entryDirection: Keys.S,
         position: {
           x: 48,
@@ -133,7 +86,7 @@ export const MAPS_CONFIG: MapsConfig = {
       },
     ],
     zoomScale: 3.5,
-    collisions: COLLISIONS[Maps.MUSEUM],
+    collisions: COLLISIONS[GameMap.MapNames.MUSEUM],
     prompts: [
       {
         ...WORK_HISTORY.paysail,

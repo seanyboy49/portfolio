@@ -18,6 +18,7 @@ interface ISprite {
   frames?: { total: number; rate: number };
   sprites?: SpriteSheets;
   movable?: boolean;
+  autoLoop?: boolean;
 }
 class Sprite {
   ctx: CanvasRenderingContext2D;
@@ -35,6 +36,7 @@ class Sprite {
     height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
     position: Position;
   };
+  autoLoop: boolean; // Automatically animate the Sprite in a loop
 
   constructor({
     ctx,
@@ -43,6 +45,7 @@ class Sprite {
     frames = { total: 1, rate: 10 },
     sprites,
     movable = true,
+    autoLoop = false,
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
@@ -72,6 +75,12 @@ class Sprite {
 
     this.movable = movable;
     this.animate = false;
+    this.autoLoop = autoLoop;
+
+    // Automatically begin animation if autoLoop = true
+    if (this.autoLoop) {
+      this.loopAnimation();
+    }
   }
 
   /**
@@ -180,6 +189,18 @@ class Sprite {
 
     // Once this frame of animation is done, animate should be false
     this.animate = false;
+
+    if (this.autoLoop) {
+      this.loopAnimation();
+    }
+  }
+
+  private loopAnimation() {
+    if (!this.autoLoop) return;
+    // The trick to auto animation is to make this.animate true
+    // Normally, this.animate is set to true when keyboard input is detected
+    // By setting it to true, this.draw() handles the incrementing of frames
+    this.animate = true;
   }
 }
 
