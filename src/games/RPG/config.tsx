@@ -15,8 +15,8 @@ export const MAPS_CONFIG: GameMap.Maps = {
     offset: {
       // x: -1555,
       // y: -700,
-      x: -700,
-      y: -700,
+      x: -600,
+      y: -300,
     },
     dimensions: {
       width: 70,
@@ -28,6 +28,7 @@ export const MAPS_CONFIG: GameMap.Maps = {
         entryDirection: Keys.W,
         position: {
           x: 43,
+          // x: 20,
           y: 9,
         },
       },

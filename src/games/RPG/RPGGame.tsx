@@ -207,7 +207,6 @@ class RPGGame implements CanvasGame {
       ) {
         // Pause animation while we load the new map
         cancelAnimationFrame(this.animationId!);
-
         this.loadMap(door.map);
         // Restart animation
         this.draw();
@@ -303,6 +302,7 @@ class RPGGame implements CanvasGame {
       // Todo: replace this since every map should have a foreground
       this.foreground = undefined;
       this.background = background;
+      this.animations = undefined;
 
       // Create optional map objects like prompts, NPCs and autoPlayedAnimations
       if (currentMapConfig.imageForegroundSrc) {
