@@ -260,7 +260,7 @@ class RPGGame implements CanvasGame {
   }
 
   /**
-   * Sets the new mapConfig and updates background, foreground, boundaries and doors
+   * Sets the new mapConfig and updates background, foreground, boundaries, doors, animations, etc
    */
   private loadMap(map: GameMap.MapNames) {
     // Set the new map
@@ -272,19 +272,12 @@ class RPGGame implements CanvasGame {
       const { background, foreground, doors, boundaries, prompts, animations } =
         mapConfigFromCache;
 
-      this.foreground = undefined;
-      this.prompts = undefined;
-      this.animations = undefined;
+      // Optional properties
+      this.foreground = foreground || undefined;
+      this.prompts = prompts || undefined;
+      this.animations = animations || undefined;
 
-      if (foreground) {
-        this.foreground = foreground;
-      }
-      if (prompts) {
-        this.prompts = prompts;
-      }
-      if (animations) {
-        this.animations = animations;
-      }
+      // Required properties
       this.background = background;
       this.doors = doors;
       this.boundaries = boundaries;
@@ -293,57 +286,46 @@ class RPGGame implements CanvasGame {
     else {
       const currentMapConfig = this.mapsConfig[this.map];
       const { offset } = currentMapConfig;
-      const background = new Sprite({
+
+      // Optional properties
+      this.foreground = currentMapConfig.imageForegroundSrc
+        ? new Sprite({
+            ctx: this.ctx,
+            position: {
+              x: offset.x,
+              y: offset.y,
+            },
+            imageSrc: currentMapConfig.imageForegroundSrc,
+          })
+        : undefined;
+
+      this.animations = currentMapConfig.animations
+        ? this.createAutoPlayAnimations(currentMapConfig.animations)
+        : undefined;
+
+      this.prompts = currentMapConfig.prompts
+        ? this.createPrompts(currentMapConfig.prompts)
+        : undefined;
+
+      // Required properties
+      this.background = new Sprite({
         ctx: this.ctx,
         position: { x: offset.x, y: offset.y },
         imageSrc: currentMapConfig.imageBackgroundSrc,
       });
-
-      // Todo: replace this since every map should have a foreground
-      this.foreground = undefined;
-      this.background = background;
-      this.animations = undefined;
-
-      // Create optional map objects like prompts, NPCs and autoPlayedAnimations
-      if (currentMapConfig.imageForegroundSrc) {
-        const foreground = new Sprite({
-          ctx: this.ctx,
-          position: {
-            x: offset.x,
-            y: offset.y,
-          },
-          imageSrc: currentMapConfig.imageForegroundSrc,
-        });
-
-        this.foreground = foreground;
-      }
-
-      if (currentMapConfig.prompts) {
-        this.prompts = this.createPrompts(currentMapConfig.prompts);
-      }
-      if (currentMapConfig.animations) {
-        this.animations = this.createAutoPlayAnimations(
-          currentMapConfig.animations
-        );
-      }
-
       this.boundaries = this.createBoundariesFromCollisions(
         currentMapConfig.collisions
       );
       this.doors = this.createDoors(currentMapConfig.doors);
 
+      // Set cache values
       this.cache.set(map, {
-        background,
+        background: this.background,
         boundaries: this.boundaries,
         doors: this.doors,
         foreground: this.foreground,
         animations: this.animations,
       });
-
-      console.log(
-        "this.cache",
-        this.cache.get(GameMap.MapNames.ISLAND)?.animations
-      );
     }
   }
 
