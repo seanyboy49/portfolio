@@ -134,6 +134,10 @@ export enum IDs {
   FULL = 1610,
   LEFT = 1614,
   RIGHT = 1611,
+  TOP = 1612,
+  BOTTOM = 1613,
+  VERTICAL_CENTER = 1615,
+  HORIZONTAL_CENTER = 1616,
   
   EMPTY = 0,
   DOOR = 1619,
