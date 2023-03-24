@@ -390,10 +390,11 @@ class RPGGame implements CanvasGame {
     return collisionsMap
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if (cell === IDs.COLLISION) {
+          if (cell !== IDs.EMPTY) {
             return new Boundary({
               ctx: this.ctx,
               zoomScale: zoomScale,
+              ID: cell,
               position: {
                 x: x * TILE_WIDTH * zoomScale + offset.x,
                 y: y * TILE_WIDTH * zoomScale + offset.y,

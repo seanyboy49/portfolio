@@ -19,8 +19,8 @@ class MovableObject {
 
   constructor({ position, ctx, zoomScale }: IMovableObject) {
     this.position = position;
-    this.width = TILE_WIDTH * zoomScale; // Each map has a different zoom scale, so it must be applied to the width/height
-    this.height = TILE_WIDTH * zoomScale;
+    this.width = TILE_WIDTH * zoomScale 
+    this.height = TILE_WIDTH * zoomScale
     this.ctx = ctx;
     this.color = `rgba(255, 0, 0, 0.5)`;
   }
