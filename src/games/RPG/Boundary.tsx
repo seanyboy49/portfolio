@@ -1,9 +1,9 @@
-import { IDs } from "./collisions";
+import { COLLISION_IDS } from "./collisions";
 import MovableObject, { IMovableObject } from "./MovableObject";
 import { Position, TILE_WIDTH } from "./types";
 
 export interface IBoundary extends IMovableObject{
-  ID: IDs
+  ID: COLLISION_IDS
 }
 class Boundary extends MovableObject {
   constructor(props: IBoundary) {
@@ -18,37 +18,37 @@ class Boundary extends MovableObject {
     this.color = `rgba(255, 0, 0, 0.5)`;
   }
 
-  private createDimensions(ID: IDs, zoomScale: number) {
+  private createDimensions(ID: COLLISION_IDS, zoomScale: number) {
     let dimensions = {
       width: (TILE_WIDTH) * zoomScale,
       height: (TILE_WIDTH) * zoomScale
     }
     
     // Each map has a different zoom scale, so it must be applied to the width/height
-    if (ID === IDs.LEFT || ID === IDs.RIGHT || ID === IDs.VERTICAL_CENTER) {
+    if (ID === COLLISION_IDS.LEFT || ID === COLLISION_IDS.RIGHT || ID === COLLISION_IDS.VERTICAL_CENTER) {
       dimensions.width = (TILE_WIDTH / 2) * zoomScale
     }
 
-    if (ID === IDs.TOP || ID === IDs.BOTTOM || ID === IDs.HORIZONTAL_CENTER) {
+    if (ID === COLLISION_IDS.TOP || ID === COLLISION_IDS.BOTTOM || ID === COLLISION_IDS.HORIZONTAL_CENTER) {
       dimensions.height = (TILE_WIDTH / 2) * zoomScale
     }
 
     return dimensions
   }
 
-  private createPosition(ID:IDs, zoomScale: number, _position: Position) {
+  private createPosition(ID:COLLISION_IDS, zoomScale: number, _position: Position) {
     let position = { ..._position }
 
-    if (ID === IDs.RIGHT) {
+    if (ID === COLLISION_IDS.RIGHT) {
       position.x = position.x + ((TILE_WIDTH  / 2) * zoomScale)
     }
-    if (ID === IDs.BOTTOM) {
+    if (ID === COLLISION_IDS.BOTTOM) {
       position.y = position.y + ((TILE_WIDTH  / 2) * zoomScale)
     }
-    if (ID === IDs.HORIZONTAL_CENTER) {
+    if (ID === COLLISION_IDS.HORIZONTAL_CENTER) {
       position.y = position.y + ((TILE_WIDTH  / 4) * zoomScale)
     }
-    if (ID === IDs.VERTICAL_CENTER) {
+    if (ID === COLLISION_IDS.VERTICAL_CENTER) {
       position.x = position.x + ((TILE_WIDTH  / 4) * zoomScale)
     }
 

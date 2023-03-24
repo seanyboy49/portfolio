@@ -129,7 +129,13 @@ export const COLLISIONS = {
    museum: museum
 }
 
-export enum IDs {
+export enum OBJECT_IDs {  
+  EMPTY = 0,
+  DOOR = 1619,
+  PROMPT = 3695
+}
+
+export enum COLLISION_IDS {
   // Collisions
   FULL = 1610,
   LEFT = 1614,
@@ -138,10 +144,6 @@ export enum IDs {
   BOTTOM = 1613,
   VERTICAL_CENTER = 1615,
   HORIZONTAL_CENTER = 1616,
-  
-  EMPTY = 0,
-  DOOR = 1619,
-  PROMPT = 3695
 }
 
 

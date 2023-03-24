@@ -6,7 +6,7 @@ import Door from "./Door";
 import Prompt from "./Prompt";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
 import { CanvasGame, EventHandler, Events } from "../types";
-import { IDs } from "./collisions";
+import { COLLISION_IDS, OBJECT_IDs } from "./collisions";
 import { GameMap } from "./types";
 import {
   padRectangle,
@@ -382,15 +382,16 @@ class RPGGame implements CanvasGame {
     const { dimensions, zoomScale, offset } = currentMapConfig;
 
     // Set up a 2d Array of collisions
-    const collisionsMap: number[][] = [];
+    const collisionsMap: OBJECT_IDs | COLLISION_IDS[][] = [];
     for (let i = 0; i < collisions.length; i += dimensions.width) {
       collisionsMap.push(collisions.slice(i, i + dimensions.width));
     }
 
+    const collisionIds = Object.values(COLLISION_IDS)
     return collisionsMap
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if (cell !== IDs.EMPTY) {
+          if ( collisionIds.includes(cell)) {
             return new Boundary({
               ctx: this.ctx,
               zoomScale: zoomScale,
