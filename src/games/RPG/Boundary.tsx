@@ -18,6 +18,10 @@ class Boundary extends MovableObject {
     this.color = `rgba(255, 0, 0, 0.5)`;
   }
 
+  /**
+   * Boundaries can take different shapes so we calculate those shapes based on the Collision Boundary ID.
+   * zoomScale must be applied because different maps have different zoom scales
+   */
   private createDimensions(ID: COLLISION_IDS, zoomScale: number) {
     let dimensions = {
       width: (TILE_WIDTH) * zoomScale,
@@ -36,6 +40,10 @@ class Boundary extends MovableObject {
     return dimensions
   }
 
+  /**
+   * Depending on the Boundary shape, the Boundary position must be offset by a certain amount so 
+   * that it is drawn in the correct position. 
+   */
   private createPosition(ID:COLLISION_IDS, zoomScale: number, _position: Position) {
     let position = { ..._position }
 
