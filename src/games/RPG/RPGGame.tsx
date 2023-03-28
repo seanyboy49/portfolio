@@ -178,15 +178,7 @@ class RPGGame implements CanvasGame {
 
       // If there is a collision, set the collision direction
       if (rectangularCollision(this.player.collisionBox, boundary)) {
-        if (keyEvents[Keys.W].pressed) {
-          this.collisionDirection = Keys.W;
-        } else if (keyEvents[Keys.S].pressed) {
-          this.collisionDirection = Keys.S;
-        } else if (keyEvents[Keys.A].pressed) {
-          this.collisionDirection = Keys.A;
-        } else if (keyEvents[Keys.D].pressed) {
-          this.collisionDirection = Keys.D;
-        }
+        this.setCollisionDirection(keyEvents)
       }
     }
   }
@@ -237,8 +229,24 @@ class RPGGame implements CanvasGame {
       const paddedNPC = padRectangle(npc.collisionBox, keyEvents)
 
       if(rectangularCollision(this.player.collisionBox, paddedNPC)) {
-        console.log('collision')
+        this.setCollisionDirection(keyEvents)
+
+        // npc.image
+        // console.log('this.collisionDirection', this.collisionDirection)
+        // npc.image.src=npc.sprites!.left
       }
+    }
+  }
+
+  private setCollisionDirection(keyEvents: KeysPressed) {
+    if (keyEvents[Keys.W].pressed) {
+      this.collisionDirection = Keys.W;
+    } else if (keyEvents[Keys.S].pressed) {
+      this.collisionDirection = Keys.S;
+    } else if (keyEvents[Keys.A].pressed) {
+      this.collisionDirection = Keys.A;
+    } else if (keyEvents[Keys.D].pressed) {
+      this.collisionDirection = Keys.D;
     }
   }
 
