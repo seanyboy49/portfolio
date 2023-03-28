@@ -135,6 +135,7 @@ class RPGGame implements CanvasGame {
     this.handleCollisions(this.keyEvents);
     this.handleDoorEntry(this.keyEvents);
     this.handlePrompt(this.keyEvents);
+    this.handleNPCCollision(this.keyEvents);
 
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
@@ -220,6 +221,27 @@ class RPGGame implements CanvasGame {
       }
     }
   }
+
+  private handleNPCCollision(keyEvents: KeysPressed) {
+    if(!this.npcs) return 
+    const isKeyPressed = Object.values(keyEvents).some(
+      (x) => x.pressed === true
+    );
+    if (!isKeyPressed) return;
+    if (!this.player.collisionBox) return;
+
+    for (let i = 0; i <= this.npcs.length - 1; i++) {
+      const npc = this.npcs[i]
+      if(!npc.collisionBox) return 
+
+      const paddedNPC = padRectangle(npc.collisionBox, keyEvents)
+
+      if(rectangularCollision(this.player.collisionBox, paddedNPC)) {
+        console.log('collision')
+      }
+    }
+  }
+
   private handlePrompt(keyEvents: KeysPressed) {
     if (!this.prompts) return;
     const isKeyPressed = Object.values(keyEvents).some(
@@ -292,7 +314,6 @@ class RPGGame implements CanvasGame {
     // If cache miss, set up the new map from scratch and store it in cache
     else {
       const currentMapConfig = this.mapsConfig[this.map];
-      console.log('currentMapConfig', currentMapConfig)
       const { offset } = currentMapConfig;
 
       // Optional properties
