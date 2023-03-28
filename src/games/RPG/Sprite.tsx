@@ -19,6 +19,7 @@ interface ISprite {
   sprites?: SpriteSheets;
   movable?: boolean;
   autoLoop?: boolean;
+  promptAnimation?: string
 }
 class Sprite {
   ctx: CanvasRenderingContext2D;
@@ -37,6 +38,7 @@ class Sprite {
     position: Position;
   };
   autoLoop: boolean; // Automatically animate the Sprite in a loop
+  promptAnimation?: Sprite
 
   constructor({
     ctx,
@@ -46,6 +48,7 @@ class Sprite {
     sprites,
     movable = true,
     autoLoop = false,
+    promptAnimation
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
@@ -81,6 +84,15 @@ class Sprite {
     if (this.autoLoop) {
       this.loopAnimation();
     }
+
+    this.promptAnimation = promptAnimation ? new Sprite({
+      ctx: ctx,
+      position: { x: position.x, y: position.y - 55 },
+      imageSrc: promptAnimation,
+      autoLoop: true,
+      frames: { total : 8, rate: 25},
+      movable: true
+    }) : undefined
   }
 
   /**
@@ -140,9 +152,12 @@ class Sprite {
         this.image.src = this.sprites!.right;
       }
     }
+
+    this.promptAnimation?.handleKeyboardInput(key, collisionDirection)
   }
 
   draw() {
+    
     this.updateCollisionBox();
 
     this.ctx.translate(
@@ -166,6 +181,9 @@ class Sprite {
       this.image.width / this.frames.total, // width of image
       this.image.height // heigth of image
     );
+
+    this.promptAnimation?.draw()
+    
 
     // Below, we increment frames in order to do math to animate frames
     // of the sprite sheet.
@@ -202,6 +220,8 @@ class Sprite {
     // By setting it to true, this.draw() handles the incrementing of frames
     this.animate = true;
   }
+
+  
 }
 
 export default Sprite;

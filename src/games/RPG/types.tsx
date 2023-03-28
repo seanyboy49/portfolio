@@ -125,5 +125,6 @@ export namespace GameMap {
       right: string,
     },
     movable: boolean,
+    promptAnimation?: string
   }
 }

@@ -498,7 +498,8 @@ class RPGGame implements CanvasGame {
         imageSrc: npc.imageSrc,
         frames: npc.frames,
         sprites: npc.sprites,
-        movable: npc.movable
+        movable: npc.movable,
+        promptAnimation: npc.promptAnimation
       })
     })
   }
