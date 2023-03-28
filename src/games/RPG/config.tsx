@@ -4,6 +4,10 @@ import islandForegroundImgSrc from "../../images/RPG/island_foreground_v2.png";
 import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 import animatedRiverSrc from "../../images/RPG/animated_river_waterfall.png";
+import yellowHatNPCDown from '../../images/RPG/characters/yellow-hat/down.png'
+import yellowHatNPCUp from '../../images/RPG/characters/yellow-hat/up.png'
+import yellowHatNPCLeft from '../../images/RPG/characters/yellow-hat/left.png'
+import yellowHatNPCRight from '../../images/RPG/characters/yellow-hat/right.png'
 
 import { WORK_HISTORY } from "./workHistory";
 import { WelcomeSign } from "../../components/Prompts/Museum";
@@ -14,10 +18,8 @@ export const MAPS_CONFIG: GameMap.Maps = {
     imageBackgroundSrc: islandImgSrc,
     imageForegroundSrc: islandForegroundImgSrc,
     offset: {
-      // x: -1555,
-      // y: -700,
-      x: -600,
-      y: -300,
+      x: -1555,
+      y: -700,
     },
     dimensions: {
       width: 70,
@@ -29,17 +31,9 @@ export const MAPS_CONFIG: GameMap.Maps = {
         entryDirection: Keys.W,
         position: {
           x: 43,
-          // x: 20,
           y: 9,
         },
       },
-      //   {
-      //     map: Maps.HOME,
-      //     position: {
-      //       x: 749,
-      //       y: 324,
-      //     },
-      //   },
     ],
     animations: [
       {
@@ -52,11 +46,24 @@ export const MAPS_CONFIG: GameMap.Maps = {
           x: 12,
           y: 9,
         },
-        // position: {
-        //   x: 70,
-        //   y: -130,
-        // },
       },
+    ],
+    npcs: [
+      {
+        position: {
+          x: 43,
+          y: 9,
+        },
+        imageSrc: yellowHatNPCDown,
+        frames: { total: 6, rate: 10 },
+        sprites: {
+          up: yellowHatNPCUp,
+          down: yellowHatNPCDown,
+          left: yellowHatNPCLeft,
+          right: yellowHatNPCRight,
+        },
+        movable: true,
+      }
     ],
     zoomScale: 4,
     collisions: COLLISIONS[GameMap.MapNames.ISLAND],
@@ -154,26 +161,4 @@ export const MAPS_CONFIG: GameMap.Maps = {
       },
     ],
   },
-  //   [Maps.HOME]: {
-  //     imageBackgroundSrc: museumBackgroundImgSrc,
-  //     imageForegroundSrc: museumForegroundImgSrc,
-  //     offset: {
-  //       x: -1555,
-  //       y: -700,
-  //     },
-  //     dimensions: {
-  //       width: 70,
-  //       height: 40,
-  //     },
-  //     doors: [
-  //       {
-  //         map: Maps.MUSEUM,
-  //         position: {
-  //           x: 1197,
-  //           y: -124,
-  //         },
-  //       },
-  //     ],
-  //     zoomScale: 3.5,
-  //   },
 };
