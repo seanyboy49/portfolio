@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
-import playerUpSrc from "../images/RPG/player-up.png";
-import playerDownSrc from "../images/RPG/player-down.png";
-import playerRightSrc from "../images/RPG/player-right.png";
-import playerLeftSrc from "../images/RPG/player-left.png";
+import playerUpSrc from "../images/RPG/characters/blue-hat/up.png";
+import playerDownSrc from "../images/RPG/characters/blue-hat/down.png";
+import playerRightSrc from "../images/RPG/characters/blue-hat/right.png";
+import playerLeftSrc from "../images/RPG/characters/blue-hat/left.png";
 
 import Sprite from "../games/RPG/Sprite";
 import RPGGame from "../games/RPG/RPGGame";
@@ -24,7 +24,7 @@ const RPGGameBoard = () => {
         ctx: ctx,
         position: { x: ctx.canvas.width / 2, y: ctx.canvas.height / 2 },
         imageSrc: playerDownSrc,
-        frames: { total: 4, rate: 10 },
+        frames: { total: 6, rate: 10 },
         sprites: {
           up: playerUpSrc,
           down: playerDownSrc,

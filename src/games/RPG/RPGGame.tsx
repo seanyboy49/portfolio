@@ -15,6 +15,8 @@ import {
   rectangularDoorCollision,
 } from "../../utilities";
 
+
+
 type Collisions = number[];
 
 export type RPGGameState = {
@@ -38,6 +40,7 @@ class RPGGame implements CanvasGame {
   map: GameMap.MapNames;
   background: Sprite;
   player: Sprite;
+  // npc: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Boundary[]; // An array of Boundaries that cause collisions
   doors: Door[]; // An array of Doors that lead to other maps
@@ -71,6 +74,10 @@ class RPGGame implements CanvasGame {
 
     // Sets background, foreground, doors, boundaries
     this.loadMap(this.map);
+
+
+
+    // this.npc = npc1
 
     // Keep track of currently pressed keys
     this.keyEvents = {
@@ -120,6 +127,7 @@ class RPGGame implements CanvasGame {
     this.background.draw();
     this.animations?.forEach((a) => a.draw());
     this.player.draw();
+    // this.npc.draw();
     this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
     this.doors.forEach((d) => d.draw());
@@ -134,6 +142,7 @@ class RPGGame implements CanvasGame {
 
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
+    // this.npc.handleKeyboardInput(this.keyEvents);
 
     // Handle keyboard input for movables
     this.animations?.forEach((a) =>
