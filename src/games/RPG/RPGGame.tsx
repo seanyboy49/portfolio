@@ -40,13 +40,13 @@ class RPGGame implements CanvasGame {
   map: GameMap.MapNames;
   background: Sprite;
   player: Sprite;
-  // npc: Sprite;
   keyEvents: KeysPressed; // A map of which key(s) are currently being pressed
   boundaries: Boundary[]; // An array of Boundaries that cause collisions
   doors: Door[]; // An array of Doors that lead to other maps
   foreground?: Sprite;
   prompts?: Prompt[]; // An array of dialogue Prompts
   animations?: Sprite[]; // An array of Sprites that autoPlay and loop
+  npcs?: Sprite[];
   collisionDirection?: Keys; // The direction the player was moving when colliding
   eventListeners: EventHandler[];
   updateGameState: UpdateGameState;
@@ -72,12 +72,8 @@ class RPGGame implements CanvasGame {
     this.player = player;
     this.cache = new Map();
 
-    // Sets background, foreground, doors, boundaries
+    // Sets background, foreground, doors, boundaries, prompts, npcs
     this.loadMap(this.map);
-
-
-
-    // this.npc = npc1
 
     // Keep track of currently pressed keys
     this.keyEvents = {
@@ -127,7 +123,7 @@ class RPGGame implements CanvasGame {
     this.background.draw();
     this.animations?.forEach((a) => a.draw());
     this.player.draw();
-    // this.npc.draw();
+    this.npcs?.forEach((n) => n.draw());
     this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
     this.doors.forEach((d) => d.draw());
@@ -142,11 +138,13 @@ class RPGGame implements CanvasGame {
 
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
-    // this.npc.handleKeyboardInput(this.keyEvents);
 
     // Handle keyboard input for movables
     this.animations?.forEach((a) =>
       a.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    );
+    this.npcs?.forEach((n) =>
+      n.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
     this.background.handleKeyboardInput(
       this.keyEvents,
@@ -294,6 +292,7 @@ class RPGGame implements CanvasGame {
     // If cache miss, set up the new map from scratch and store it in cache
     else {
       const currentMapConfig = this.mapsConfig[this.map];
+      console.log('currentMapConfig', currentMapConfig)
       const { offset } = currentMapConfig;
 
       // Optional properties
@@ -315,6 +314,10 @@ class RPGGame implements CanvasGame {
       this.prompts = currentMapConfig.prompts
         ? this.createPrompts(currentMapConfig.prompts)
         : undefined;
+      
+      this.npcs = currentMapConfig.npcs
+        ? this.createNPCs(currentMapConfig.npcs)
+        : undefined;
 
       // Required properties
       this.background = new Sprite({
@@ -322,7 +325,7 @@ class RPGGame implements CanvasGame {
         position: { x: offset.x, y: offset.y },
         imageSrc: currentMapConfig.imageBackgroundSrc,
       });
-      this.boundaries = this.createBoundariesFromCollisions(
+      this.boundaries = this.createBoundaries(
         currentMapConfig.collisions
       );
       this.doors = this.createDoors(currentMapConfig.doors);
@@ -386,7 +389,7 @@ class RPGGame implements CanvasGame {
     }
   }
 
-  private createBoundariesFromCollisions(collisions: Collisions) {
+  private createBoundaries(collisions: Collisions) {
     const currentMapConfig = this.mapsConfig[this.map];
     const { dimensions, zoomScale, offset } = currentMapConfig;
 
@@ -432,7 +435,7 @@ class RPGGame implements CanvasGame {
         zoomScale: zoomScale,
         position: {
           x: door.position.x * TILE_WIDTH * zoomScale + offset.x,
-          y: door.position.y * TILE_WIDTH * zoomScale + +offset.y,
+          y: door.position.y * TILE_WIDTH * zoomScale + offset.y,
         },
         entryDirection: door.entryDirection,
         span: door.span,
@@ -458,6 +461,25 @@ class RPGGame implements CanvasGame {
         span: prompt.span,
       });
     });
+  }
+
+  private createNPCs(npcs: GameMap.NPC[]) {
+    const currentMapConfig = this.mapsConfig[this.map]
+    const { offset, zoomScale } = currentMapConfig;
+
+    return npcs.map((npc) => {
+      return new Sprite({
+        ctx: this.ctx, 
+        position: {
+          x: npc.position.x * TILE_WIDTH * zoomScale + offset.x, 
+          y: npc.position.y * TILE_WIDTH * zoomScale + offset.y
+        },
+        imageSrc: npc.imageSrc,
+        frames: npc.frames,
+        sprites: npc.sprites,
+        movable: npc.movable
+      })
+    })
   }
 
   private createAutoPlayAnimations(animations: GameMap.AutoPlayAnimation[]) {

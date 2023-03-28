@@ -205,6 +205,3 @@ class Sprite {
 }
 
 export default Sprite;
-
-// pass keyboard input to sprites
-// movable property

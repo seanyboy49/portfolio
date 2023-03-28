@@ -51,8 +51,8 @@ export const MAPS_CONFIG: GameMap.Maps = {
     npcs: [
       {
         position: {
-          x: 43,
-          y: 9,
+          x: 47.2,
+          y: 20,
         },
         imageSrc: yellowHatNPCDown,
         frames: { total: 6, rate: 10 },
