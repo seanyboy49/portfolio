@@ -122,8 +122,8 @@ class RPGGame implements CanvasGame {
     // Draw elements
     this.background.draw();
     this.animations?.forEach((a) => a.draw());
-    this.player.draw();
     this.npcs?.forEach((n) => n.draw());
+    this.player.draw();
     this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
     this.doors.forEach((d) => d.draw());
@@ -231,13 +231,28 @@ class RPGGame implements CanvasGame {
       if(rectangularCollision(this.player.collisionBox, paddedNPC)) {
         this.setCollisionDirection(keyEvents)
 
+
         // npc.image
         // console.log('this.collisionDirection', this.collisionDirection)
-        // npc.image.src=npc.sprites!.left
+        npc.image.src=npc.sprites!.left
+
+        this.updateGameState((prev) => {
+          return {
+            ...prev,
+            dialogue: {
+              title: 'Arcade Owner',
+              content: ['Unfortunately the arcade is under renovations. Check back later.']
+            }
+          }
+        })
       }
     }
   }
 
+  /**
+   * Used by handleNPCCollision and handleCollisions to set collision direction when player
+   * collides with a boundary or an NPC
+   */
   private setCollisionDirection(keyEvents: KeysPressed) {
     if (keyEvents[Keys.W].pressed) {
       this.collisionDirection = Keys.W;
@@ -389,6 +404,7 @@ class RPGGame implements CanvasGame {
         event.preventDefault();
 
         this.updateGameState((prev) => {
+          console.log('prev', prev)
           if (prev.dialogue) {
             return {
               ...prev,
