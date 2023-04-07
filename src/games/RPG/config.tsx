@@ -4,15 +4,11 @@ import islandForegroundImgSrc from "../../images/RPG/island_foreground_v2.png";
 import museumBackgroundImgSrc from "../../images/RPG/museum_v3.png";
 import museumForegroundImgSrc from "../../images/RPG/museum_foreground_v2.png";
 import animatedRiverSrc from "../../images/RPG/animated_river_waterfall.png";
-import yellowHatNPCDownSrc from "../../images/RPG/characters/yellow-hat/down.png";
-import yellowHatNPCUpSrc from "../../images/RPG/characters/yellow-hat/up.png";
-import yellowHatNPCLeftSrc from "../../images/RPG/characters/yellow-hat/left.png";
-import yellowHatNPCRightSrc from "../../images/RPG/characters/yellow-hat/right.png";
-import thinkingBubbleSrc from "../../images/RPG/thinking.png";
 
 import { WORK_HISTORY } from "./workHistory";
 import { WelcomeSign } from "../../components/Prompts/Museum";
 import { Keys, GameMap } from "./types";
+import { NPCS } from "./npcs";
 
 export const MAPS_CONFIG: GameMap.Maps = {
   [GameMap.MapNames.ISLAND]: {
@@ -50,30 +46,7 @@ export const MAPS_CONFIG: GameMap.Maps = {
         },
       },
     ],
-    npcs: [
-      {
-        position: {
-          x: 47.2,
-          y: 20,
-        },
-        imageSrc: yellowHatNPCDownSrc,
-        frames: { total: 6, rate: 10 },
-        sprites: {
-          up: yellowHatNPCUpSrc,
-          down: yellowHatNPCDownSrc,
-          left: yellowHatNPCLeftSrc,
-          right: yellowHatNPCRightSrc,
-        },
-        movable: true,
-        promptAnimation: thinkingBubbleSrc,
-        dialogue: {
-          title: "Arcade Owner",
-          content: [
-            "Unfortunately the arcade is under renovation. Check back later at another time. Have you visited the museum?",
-          ],
-        },
-      },
-    ],
+    npcs: [NPCS.arcadeOwner, NPCS.neighbor],
     zoomScale: 4,
     collisions: COLLISIONS[GameMap.MapNames.ISLAND],
   },
