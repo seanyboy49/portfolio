@@ -15,8 +15,6 @@ import {
   rectangularDoorCollision,
 } from "../../utilities";
 
-
-
 type Collisions = number[];
 
 export type RPGGameState = {
@@ -178,7 +176,7 @@ class RPGGame implements CanvasGame {
 
       // If there is a collision, set the collision direction
       if (rectangularCollision(this.player.collisionBox, boundary)) {
-        this.setCollisionDirection(keyEvents)
+        this.setCollisionDirection(keyEvents);
       }
     }
   }
@@ -215,7 +213,7 @@ class RPGGame implements CanvasGame {
   }
 
   private handleNPCCollision(keyEvents: KeysPressed) {
-    if(!this.npcs) return 
+    if (!this.npcs) return;
     const isKeyPressed = Object.values(keyEvents).some(
       (x) => x.pressed === true
     );
@@ -223,28 +221,59 @@ class RPGGame implements CanvasGame {
     if (!this.player.collisionBox) return;
 
     for (let i = 0; i <= this.npcs.length - 1; i++) {
-      const npc = this.npcs[i]
-      if(!npc.collisionBox) return 
+      const npc = this.npcs[i];
+      if (!npc.collisionBox) return;
 
-      const paddedNPC = padRectangle(npc.collisionBox, keyEvents)
+      const paddedNPC = padRectangle(npc.collisionBox, keyEvents);
 
-      if(rectangularCollision(this.player.collisionBox, paddedNPC)) {
-        this.setCollisionDirection(keyEvents)
+      if (rectangularCollision(this.player.collisionBox, paddedNPC)) {
+        this.setCollisionDirection(keyEvents);
 
-
-        // npc.image
-        // console.log('this.collisionDirection', this.collisionDirection)
-        npc.image.src=npc.sprites!.left
+        switch (this.collisionDirection) {
+          case Keys.D:
+            npc.image.src = npc.sprites!.left;
+            break;
+          case Keys.A:
+            npc.image.src = npc.sprites!.right;
+            break;
+          case Keys.W:
+            npc.image.src = npc.sprites!.down;
+            break;
+          case Keys.S:
+            npc.image.src = npc.sprites!.up;
+            break;
+          default:
+            break;
+        }
 
         this.updateGameState((prev) => {
-          return {
-            ...prev,
-            dialogue: {
-              title: 'Arcade Owner',
-              content: ['Unfortunately the arcade is under renovations. Check back later.']
-            }
+          if (prev.dialogue?.title !== npc.dialogue?.title) {
+            return {
+              ...prev,
+              dialogue: npc.dialogue,
+            };
+          } else {
+            return prev;
           }
-        })
+        });
+      } else {
+        /**
+         * This is tricky.
+         * Since this inner logic runs for every prompt, we only want to clear the content
+         * once because every time we update state, we'll trigger a re-render.
+         * We clear the content and automatically set showContent to false
+         */
+        this.updateGameState((prev) => {
+          if (prev.dialogue === npc.dialogue) {
+            return {
+              ...prev,
+              dialogue: undefined,
+              showDialogue: false,
+            };
+          }
+          // We can cancel the state update by simply returning prev
+          return prev;
+        });
       }
     }
   }
@@ -358,7 +387,7 @@ class RPGGame implements CanvasGame {
       this.prompts = currentMapConfig.prompts
         ? this.createPrompts(currentMapConfig.prompts)
         : undefined;
-      
+
       this.npcs = currentMapConfig.npcs
         ? this.createNPCs(currentMapConfig.npcs)
         : undefined;
@@ -369,9 +398,7 @@ class RPGGame implements CanvasGame {
         position: { x: offset.x, y: offset.y },
         imageSrc: currentMapConfig.imageBackgroundSrc,
       });
-      this.boundaries = this.createBoundaries(
-        currentMapConfig.collisions
-      );
+      this.boundaries = this.createBoundaries(currentMapConfig.collisions);
       this.doors = this.createDoors(currentMapConfig.doors);
 
       // Set cache values
@@ -404,7 +431,6 @@ class RPGGame implements CanvasGame {
         event.preventDefault();
 
         this.updateGameState((prev) => {
-          console.log('prev', prev)
           if (prev.dialogue) {
             return {
               ...prev,
@@ -444,11 +470,11 @@ class RPGGame implements CanvasGame {
       collisionsMap.push(collisions.slice(i, i + dimensions.width));
     }
 
-    const collisionIds = Object.values(COLLISION_IDS)
+    const collisionIds = Object.values(COLLISION_IDS);
     return collisionsMap
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if ( collisionIds.includes(cell)) {
+          if (collisionIds.includes(cell)) {
             return new Boundary({
               ctx: this.ctx,
               zoomScale: zoomScale,
@@ -509,23 +535,24 @@ class RPGGame implements CanvasGame {
   }
 
   private createNPCs(npcs: GameMap.NPC[]) {
-    const currentMapConfig = this.mapsConfig[this.map]
+    const currentMapConfig = this.mapsConfig[this.map];
     const { offset, zoomScale } = currentMapConfig;
 
     return npcs.map((npc) => {
       return new Sprite({
-        ctx: this.ctx, 
+        ctx: this.ctx,
         position: {
-          x: npc.position.x * TILE_WIDTH * zoomScale + offset.x, 
-          y: npc.position.y * TILE_WIDTH * zoomScale + offset.y
+          x: npc.position.x * TILE_WIDTH * zoomScale + offset.x,
+          y: npc.position.y * TILE_WIDTH * zoomScale + offset.y,
         },
         imageSrc: npc.imageSrc,
         frames: npc.frames,
         sprites: npc.sprites,
         movable: npc.movable,
-        promptAnimation: npc.promptAnimation
-      })
-    })
+        promptAnimation: npc.promptAnimation,
+        dialogue: npc.dialogue,
+      });
+    });
   }
 
   private createAutoPlayAnimations(animations: GameMap.AutoPlayAnimation[]) {

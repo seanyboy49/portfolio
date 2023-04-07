@@ -1,4 +1,4 @@
-import { Position, VELOCITY, Keys, KeysPressed } from "./types";
+import { Position, VELOCITY, Keys, KeysPressed, GameMap } from "./types";
 
 export const COLLISION_PADDING = 20 as const;
 
@@ -19,7 +19,8 @@ interface ISprite {
   sprites?: SpriteSheets;
   movable?: boolean;
   autoLoop?: boolean;
-  promptAnimation?: string
+  promptAnimation?: string;
+  dialogue?: GameMap.Dialogue;
 }
 class Sprite {
   ctx: CanvasRenderingContext2D;
@@ -38,7 +39,8 @@ class Sprite {
     position: Position;
   };
   autoLoop: boolean; // Automatically animate the Sprite in a loop
-  promptAnimation?: Sprite
+  promptAnimation?: Sprite;
+  dialogue?: GameMap.Dialogue;
 
   constructor({
     ctx,
@@ -48,7 +50,8 @@ class Sprite {
     sprites,
     movable = true,
     autoLoop = false,
-    promptAnimation
+    promptAnimation,
+    dialogue,
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
@@ -85,14 +88,18 @@ class Sprite {
       this.loopAnimation();
     }
 
-    this.promptAnimation = promptAnimation ? new Sprite({
-      ctx: ctx,
-      position: { x: position.x, y: position.y - 55 },
-      imageSrc: promptAnimation,
-      autoLoop: true,
-      frames: { total : 8, rate: 25},
-      movable: true
-    }) : undefined
+    this.promptAnimation = promptAnimation
+      ? new Sprite({
+          ctx: ctx,
+          position: { x: position.x, y: position.y - 55 },
+          imageSrc: promptAnimation,
+          autoLoop: true,
+          frames: { total: 8, rate: 25 },
+          movable: true,
+        })
+      : undefined;
+
+    this.dialogue = dialogue;
   }
 
   /**
@@ -153,11 +160,10 @@ class Sprite {
       }
     }
 
-    this.promptAnimation?.handleKeyboardInput(key, collisionDirection)
+    this.promptAnimation?.handleKeyboardInput(key, collisionDirection);
   }
 
   draw() {
-    
     this.updateCollisionBox();
 
     this.ctx.translate(
@@ -182,8 +188,7 @@ class Sprite {
       this.image.height // heigth of image
     );
 
-    this.promptAnimation?.draw()
-    
+    this.promptAnimation?.draw();
 
     // Below, we increment frames in order to do math to animate frames
     // of the sprite sheet.
@@ -220,8 +225,6 @@ class Sprite {
     // By setting it to true, this.draw() handles the incrementing of frames
     this.animate = true;
   }
-
-  
 }
 
 export default Sprite;
