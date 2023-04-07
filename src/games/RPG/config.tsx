@@ -69,7 +69,7 @@ export const MAPS_CONFIG: GameMap.Maps = {
         dialogue: {
           title: "Arcade Owner",
           content: [
-            "Unfortunately the arcade is under renovations. Check back later.",
+            "Unfortunately the arcade is under renovation. Check back later at another time. Have you visited the museum?",
           ],
         },
       },
