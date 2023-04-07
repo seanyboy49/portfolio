@@ -159,6 +159,9 @@ class RPGGame implements CanvasGame {
     );
   }
 
+  /**
+   * Calls the collision detection methods only if a key is currently being pressed
+   */
   private handleInteractions() {
     const isKeyPressed = Object.values(this.keyEvents).some(
       (x) => x.pressed === true
@@ -271,22 +274,6 @@ class RPGGame implements CanvasGame {
     }
   }
 
-  /**
-   * Used by handleNPCCollision and handleCollisions to set collision direction when player
-   * collides with a boundary or an NPC
-   */
-  private setCollisionDirection(keyEvents: KeysPressed) {
-    if (keyEvents[Keys.W].pressed) {
-      this.collisionDirection = Keys.W;
-    } else if (keyEvents[Keys.S].pressed) {
-      this.collisionDirection = Keys.S;
-    } else if (keyEvents[Keys.A].pressed) {
-      this.collisionDirection = Keys.A;
-    } else if (keyEvents[Keys.D].pressed) {
-      this.collisionDirection = Keys.D;
-    }
-  }
-
   private handlePrompt(playerCollisionBox: CollisionBox) {
     if (!this.prompts) return;
 
@@ -325,6 +312,22 @@ class RPGGame implements CanvasGame {
           return prev;
         });
       }
+    }
+  }
+
+  /**
+   * Used by handleNPCCollision and handleCollisions to set collision direction when player
+   * collides with a boundary or an NPC
+   */
+  private setCollisionDirection(keyEvents: KeysPressed) {
+    if (keyEvents[Keys.W].pressed) {
+      this.collisionDirection = Keys.W;
+    } else if (keyEvents[Keys.S].pressed) {
+      this.collisionDirection = Keys.S;
+    } else if (keyEvents[Keys.A].pressed) {
+      this.collisionDirection = Keys.A;
+    } else if (keyEvents[Keys.D].pressed) {
+      this.collisionDirection = Keys.D;
     }
   }
 
