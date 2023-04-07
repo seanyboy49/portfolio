@@ -11,6 +11,12 @@ type Frames = {
 
 type SpriteSheets = { [direction: string]: string };
 
+export type CollisionBox = {
+  width: number; // Same as sprite width
+  height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
+  position: Position;
+};
+
 interface ISprite {
   ctx: CanvasRenderingContext2D;
   position: Position;
@@ -33,11 +39,7 @@ class Sprite {
   movable: boolean; // whether or not the sprite moves with character movement
   animate: boolean;
   velocity: number;
-  collisionBox?: {
-    width: number; // Same as sprite width
-    height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
-    position: Position;
-  };
+  collisionBox?: CollisionBox;
   autoLoop: boolean; // Automatically animate the Sprite in a loop
   promptAnimation?: Sprite;
   dialogue?: GameMap.Dialogue;

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import Boundary from "./Boundary";
-import Sprite from "./Sprite";
+import Sprite, { CollisionBox } from "./Sprite";
 import Door from "./Door";
 import Prompt from "./Prompt";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
@@ -10,7 +10,6 @@ import { COLLISION_IDS, OBJECT_IDs } from "./collisions";
 import { GameMap } from "./types";
 import {
   padRectangle,
-  Rectangle,
   rectangularCollision,
   rectangularDoorCollision,
 } from "../../utilities";
@@ -128,13 +127,8 @@ class RPGGame implements CanvasGame {
     this.doors.forEach((d) => d.draw());
     this.prompts?.forEach((p) => p.draw());
 
-    // Handle collision detection
-    // Initialize to undefined because it should only be defined when a collision is detected
-    this.collisionDirection = undefined;
-    this.handleCollisions(this.keyEvents);
-    this.handleDoorEntry(this.keyEvents);
-    this.handlePrompt(this.keyEvents);
-    this.handleNPCCollision(this.keyEvents);
+    // Call each of the collisionDetection methods
+    this.handleInteractions();
 
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
@@ -165,19 +159,28 @@ class RPGGame implements CanvasGame {
     );
   }
 
-  private handleCollisions(keyEvents: KeysPressed) {
-    const isKeyPressed = Object.values(keyEvents).some(
+  private handleInteractions() {
+    const isKeyPressed = Object.values(this.keyEvents).some(
       (x) => x.pressed === true
     );
     if (!isKeyPressed) return;
     if (!this.player.collisionBox) return;
 
+    // Initialize to undefined because it should only be defined when a collision is detected
+    this.collisionDirection = undefined;
+    this.handleCollisions(this.player.collisionBox);
+    this.handleDoorEntry(this.player.collisionBox);
+    this.handlePrompt(this.player.collisionBox);
+    this.handleNPCCollision(this.player.collisionBox);
+  }
+
+  private handleCollisions(playerCollisionBox: CollisionBox) {
     for (let i = 0; i <= this.boundaries.length - 1; i++) {
-      const boundary = padRectangle(this.boundaries[i], keyEvents);
+      const boundary = padRectangle(this.boundaries[i], this.keyEvents);
 
       // If there is a collision, set the collision direction
-      if (rectangularCollision(this.player.collisionBox, boundary)) {
-        this.setCollisionDirection(keyEvents);
+      if (rectangularCollision(playerCollisionBox, boundary)) {
+        this.setCollisionDirection(this.keyEvents);
       }
     }
   }
@@ -185,21 +188,15 @@ class RPGGame implements CanvasGame {
   /**
    * Similar to handleCollision. Detects collisions with doors and loads a new map upon door entry.
    */
-  private handleDoorEntry(keyEvents: KeysPressed) {
-    const isKeyPressed = Object.values(keyEvents).some(
-      (x) => x.pressed === true
-    );
-    if (!isKeyPressed) return;
-    if (!this.player.collisionBox) return;
-
+  private handleDoorEntry(playerCollisionBox: CollisionBox) {
     for (let i = 0; i <= this.doors.length - 1; i++) {
       const door = this.doors[i];
-      const paddedDoor = padRectangle(this.doors[i], keyEvents);
+      const paddedDoor = padRectangle(this.doors[i], this.keyEvents);
 
       // If there is a door collision, load the new map
       if (
         rectangularDoorCollision(
-          this.player.collisionBox,
+          playerCollisionBox,
           paddedDoor,
           door.entryDirection
         )
@@ -213,22 +210,17 @@ class RPGGame implements CanvasGame {
     }
   }
 
-  private handleNPCCollision(keyEvents: KeysPressed) {
+  private handleNPCCollision(playerCollisionBox: CollisionBox) {
     if (!this.npcs) return;
-    const isKeyPressed = Object.values(keyEvents).some(
-      (x) => x.pressed === true
-    );
-    if (!isKeyPressed) return;
-    if (!this.player.collisionBox) return;
 
     for (let i = 0; i <= this.npcs.length - 1; i++) {
       const npc = this.npcs[i];
       if (!npc.collisionBox) return;
 
-      const paddedNPC = padRectangle(npc.collisionBox, keyEvents, 25);
+      const paddedNPC = padRectangle(npc.collisionBox, this.keyEvents, 25);
 
-      if (rectangularCollision(this.player.collisionBox, paddedNPC)) {
-        this.setCollisionDirection(keyEvents);
+      if (rectangularCollision(playerCollisionBox, paddedNPC)) {
+        this.setCollisionDirection(this.keyEvents);
 
         switch (this.collisionDirection) {
           case Keys.D:
@@ -295,22 +287,17 @@ class RPGGame implements CanvasGame {
     }
   }
 
-  private handlePrompt(keyEvents: KeysPressed) {
+  private handlePrompt(playerCollisionBox: CollisionBox) {
     if (!this.prompts) return;
-    const isKeyPressed = Object.values(keyEvents).some(
-      (x) => x.pressed === true
-    );
-    if (!isKeyPressed) return;
-    if (!this.player.collisionBox) return;
 
     for (let i = 0; i <= this.prompts.length - 1; i++) {
       const prompt = this.prompts[i];
 
-      const paddedPrompt = padRectangle(prompt, keyEvents);
+      const paddedPrompt = padRectangle(prompt, this.keyEvents);
 
       // If the player is in the boundaries of a prompt, we want to update React state
       // to display the prompt
-      if (rectangularCollision(this.player as Rectangle, paddedPrompt)) {
+      if (rectangularCollision(playerCollisionBox, paddedPrompt)) {
         this.updateGameState((prev) => {
           if (prev.dialogue?.title !== prompt.dialogue.title)
             return {
