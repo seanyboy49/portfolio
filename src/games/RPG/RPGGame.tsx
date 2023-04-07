@@ -57,6 +57,7 @@ class RPGGame implements CanvasGame {
       boundaries: Boundary[];
       animations?: Sprite[];
       prompts?: Prompt[];
+      npcs?: Sprite[];
     }
   >;
 
@@ -350,13 +351,21 @@ class RPGGame implements CanvasGame {
     // Load from cache if possible
     if (this.cache.has(map)) {
       const mapConfigFromCache = this.cache.get(map)!;
-      const { background, foreground, doors, boundaries, prompts, animations } =
-        mapConfigFromCache;
+      const {
+        background,
+        foreground,
+        doors,
+        boundaries,
+        prompts,
+        animations,
+        npcs,
+      } = mapConfigFromCache;
 
       // Optional properties
       this.foreground = foreground || undefined;
       this.prompts = prompts || undefined;
       this.animations = animations || undefined;
+      this.npcs = npcs || undefined;
 
       // Required properties
       this.background = background;
@@ -408,6 +417,7 @@ class RPGGame implements CanvasGame {
         doors: this.doors,
         foreground: this.foreground,
         animations: this.animations,
+        npcs: this.npcs,
       });
     }
   }
