@@ -224,7 +224,7 @@ class RPGGame implements CanvasGame {
       const npc = this.npcs[i];
       if (!npc.collisionBox) return;
 
-      const paddedNPC = padRectangle(npc.collisionBox, keyEvents);
+      const paddedNPC = padRectangle(npc.collisionBox, keyEvents, 25);
 
       if (rectangularCollision(this.player.collisionBox, paddedNPC)) {
         this.setCollisionDirection(keyEvents);
