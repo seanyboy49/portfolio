@@ -1,4 +1,4 @@
-import { Position, VELOCITY, Keys, KeysPressed } from "./types";
+import { Position, VELOCITY, Keys, KeysPressed, GameMap } from "./types";
 
 export const COLLISION_PADDING = 20 as const;
 
@@ -11,6 +11,12 @@ type Frames = {
 
 type SpriteSheets = { [direction: string]: string };
 
+export type CollisionBox = {
+  width: number; // Same as sprite width
+  height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
+  position: Position;
+};
+
 interface ISprite {
   ctx: CanvasRenderingContext2D;
   position: Position;
@@ -19,6 +25,8 @@ interface ISprite {
   sprites?: SpriteSheets;
   movable?: boolean;
   autoLoop?: boolean;
+  promptAnimation?: string;
+  dialogue?: GameMap.Dialogue;
 }
 class Sprite {
   ctx: CanvasRenderingContext2D;
@@ -31,12 +39,10 @@ class Sprite {
   movable: boolean; // whether or not the sprite moves with character movement
   animate: boolean;
   velocity: number;
-  collisionBox?: {
-    width: number; // Same as sprite width
-    height: number; // The height of the sprite - some padding so that the top of the sprite can move past background objects
-    position: Position;
-  };
+  collisionBox?: CollisionBox;
   autoLoop: boolean; // Automatically animate the Sprite in a loop
+  promptAnimation?: Sprite;
+  dialogue?: GameMap.Dialogue;
 
   constructor({
     ctx,
@@ -46,6 +52,8 @@ class Sprite {
     sprites,
     movable = true,
     autoLoop = false,
+    promptAnimation,
+    dialogue,
   }: ISprite) {
     this.ctx = ctx;
     this.position = position;
@@ -81,6 +89,19 @@ class Sprite {
     if (this.autoLoop) {
       this.loopAnimation();
     }
+
+    this.promptAnimation = promptAnimation
+      ? new Sprite({
+          ctx: ctx,
+          position: { x: position.x, y: position.y - 55 },
+          imageSrc: promptAnimation,
+          autoLoop: true,
+          frames: { total: 8, rate: 25 },
+          movable: true,
+        })
+      : undefined;
+
+    this.dialogue = dialogue;
   }
 
   /**
@@ -140,6 +161,8 @@ class Sprite {
         this.image.src = this.sprites!.right;
       }
     }
+
+    this.promptAnimation?.handleKeyboardInput(key, collisionDirection);
   }
 
   draw() {
@@ -166,6 +189,8 @@ class Sprite {
       this.image.width / this.frames.total, // width of image
       this.image.height // heigth of image
     );
+
+    this.promptAnimation?.draw();
 
     // Below, we increment frames in order to do math to animate frames
     // of the sprite sheet.
@@ -205,6 +230,3 @@ class Sprite {
 }
 
 export default Sprite;
-
-// pass keyboard input to sprites
-// movable property

@@ -26,7 +26,7 @@ const PageContent = ({ content }: IPageContent) => {
     return (
       <OverflowContainer>
         <TextContainer>
-          <Text>{content}</Text>;
+          <Text>{content}</Text>
         </TextContainer>
       </OverflowContainer>
     );

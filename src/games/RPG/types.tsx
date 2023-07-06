@@ -50,6 +50,7 @@ export namespace GameMap {
     };
     doors: Door[];
     prompts?: Prompt[];
+    npcs?: NPC[];
     animations?: AutoPlayAnimation[];
     zoomScale: number;
     collisions: number[];
@@ -83,11 +84,14 @@ export namespace GameMap {
       height: number;
     };
   };
+
   export type Content = string | React.FunctionComponent;
+
   export type Dialogue = {
     title: string;
     content: Content[];
   };
+
   export type Prompt = {
     title: string;
     content: Content[];
@@ -102,5 +106,26 @@ export namespace GameMap {
       width: number;
       height: number;
     };
+  };
+
+  export type NPC = {
+    /**
+     * Matrix Coordinates in collisionMap
+     */
+    position: {
+      x: number;
+      y: number;
+    };
+    imageSrc: string;
+    frames: { total: number; rate: number };
+    sprites: {
+      up: string;
+      down: string;
+      left: string;
+      right: string;
+    };
+    movable: boolean;
+    promptAnimation?: string;
+    dialogue: Dialogue;
   };
 }

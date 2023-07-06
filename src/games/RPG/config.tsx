@@ -8,6 +8,7 @@ import animatedRiverSrc from "../../images/RPG/animated_river_waterfall.png";
 import { WORK_HISTORY } from "./workHistory";
 import { WelcomeSign } from "../../components/Prompts/Museum";
 import { Keys, GameMap } from "./types";
+import { NPCS } from "./npcs";
 
 export const MAPS_CONFIG: GameMap.Maps = {
   [GameMap.MapNames.ISLAND]: {
@@ -15,9 +16,8 @@ export const MAPS_CONFIG: GameMap.Maps = {
     imageForegroundSrc: islandForegroundImgSrc,
     offset: {
       // x: -1555,
-      // y: -700,
-      x: -600,
-      y: -300,
+      x: -2055,
+      y: -700,
     },
     dimensions: {
       width: 70,
@@ -29,17 +29,9 @@ export const MAPS_CONFIG: GameMap.Maps = {
         entryDirection: Keys.W,
         position: {
           x: 43,
-          // x: 20,
           y: 9,
         },
       },
-      //   {
-      //     map: Maps.HOME,
-      //     position: {
-      //       x: 749,
-      //       y: 324,
-      //     },
-      //   },
     ],
     animations: [
       {
@@ -52,12 +44,9 @@ export const MAPS_CONFIG: GameMap.Maps = {
           x: 12,
           y: 9,
         },
-        // position: {
-        //   x: 70,
-        //   y: -130,
-        // },
       },
     ],
+    npcs: [NPCS.arcadeOwner, NPCS.neighbor],
     zoomScale: 4,
     collisions: COLLISIONS[GameMap.MapNames.ISLAND],
   },
@@ -154,26 +143,4 @@ export const MAPS_CONFIG: GameMap.Maps = {
       },
     ],
   },
-  //   [Maps.HOME]: {
-  //     imageBackgroundSrc: museumBackgroundImgSrc,
-  //     imageForegroundSrc: museumForegroundImgSrc,
-  //     offset: {
-  //       x: -1555,
-  //       y: -700,
-  //     },
-  //     dimensions: {
-  //       width: 70,
-  //       height: 40,
-  //     },
-  //     doors: [
-  //       {
-  //         map: Maps.MUSEUM,
-  //         position: {
-  //           x: 1197,
-  //           y: -124,
-  //         },
-  //       },
-  //     ],
-  //     zoomScale: 3.5,
-  //   },
 };

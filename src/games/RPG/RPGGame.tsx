@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import Boundary from "./Boundary";
-import Sprite from "./Sprite";
+import Sprite, { CollisionBox } from "./Sprite";
 import Door from "./Door";
 import Prompt from "./Prompt";
 import { Keys, KeysPressed, TILE_WIDTH } from "./types";
@@ -10,7 +10,6 @@ import { COLLISION_IDS, OBJECT_IDs } from "./collisions";
 import { GameMap } from "./types";
 import {
   padRectangle,
-  Rectangle,
   rectangularCollision,
   rectangularDoorCollision,
 } from "../../utilities";
@@ -44,6 +43,7 @@ class RPGGame implements CanvasGame {
   foreground?: Sprite;
   prompts?: Prompt[]; // An array of dialogue Prompts
   animations?: Sprite[]; // An array of Sprites that autoPlay and loop
+  npcs?: Sprite[];
   collisionDirection?: Keys; // The direction the player was moving when colliding
   eventListeners: EventHandler[];
   updateGameState: UpdateGameState;
@@ -56,6 +56,7 @@ class RPGGame implements CanvasGame {
       boundaries: Boundary[];
       animations?: Sprite[];
       prompts?: Prompt[];
+      npcs?: Sprite[];
     }
   >;
 
@@ -69,7 +70,7 @@ class RPGGame implements CanvasGame {
     this.player = player;
     this.cache = new Map();
 
-    // Sets background, foreground, doors, boundaries
+    // Sets background, foreground, doors, boundaries, prompts, npcs
     this.loadMap(this.map);
 
     // Keep track of currently pressed keys
@@ -119,18 +120,15 @@ class RPGGame implements CanvasGame {
     // Draw elements
     this.background.draw();
     this.animations?.forEach((a) => a.draw());
+    this.npcs?.forEach((n) => n.draw());
     this.player.draw();
     this.foreground?.draw();
     this.boundaries.forEach((b) => b.draw());
     this.doors.forEach((d) => d.draw());
     this.prompts?.forEach((p) => p.draw());
 
-    // Handle collision detection
-    // Initialize to undefined because it should only be defined when a collision is detected
-    this.collisionDirection = undefined;
-    this.handleCollisions(this.keyEvents);
-    this.handleDoorEntry(this.keyEvents);
-    this.handlePrompt(this.keyEvents);
+    // Call each of the collisionDetection methods
+    this.handleInteractions();
 
     // Handle keyboard input for Player
     this.player.handleKeyboardInput(this.keyEvents);
@@ -138,6 +136,9 @@ class RPGGame implements CanvasGame {
     // Handle keyboard input for movables
     this.animations?.forEach((a) =>
       a.handleKeyboardInput(this.keyEvents, this.collisionDirection)
+    );
+    this.npcs?.forEach((n) =>
+      n.handleKeyboardInput(this.keyEvents, this.collisionDirection)
     );
     this.background.handleKeyboardInput(
       this.keyEvents,
@@ -158,27 +159,31 @@ class RPGGame implements CanvasGame {
     );
   }
 
-  private handleCollisions(keyEvents: KeysPressed) {
-    const isKeyPressed = Object.values(keyEvents).some(
+  /**
+   * Calls the collision detection methods only if a key is currently being pressed
+   */
+  private handleInteractions() {
+    const isKeyPressed = Object.values(this.keyEvents).some(
       (x) => x.pressed === true
     );
     if (!isKeyPressed) return;
     if (!this.player.collisionBox) return;
 
+    // Initialize to undefined because it should only be defined when a collision is detected
+    this.collisionDirection = undefined;
+    this.handleCollisions(this.player.collisionBox);
+    this.handleDoorEntry(this.player.collisionBox);
+    this.handlePrompt(this.player.collisionBox);
+    this.handleNPCCollision(this.player.collisionBox);
+  }
+
+  private handleCollisions(playerCollisionBox: CollisionBox) {
     for (let i = 0; i <= this.boundaries.length - 1; i++) {
-      const boundary = padRectangle(this.boundaries[i], keyEvents);
+      const boundary = padRectangle(this.boundaries[i], this.keyEvents);
 
       // If there is a collision, set the collision direction
-      if (rectangularCollision(this.player.collisionBox, boundary)) {
-        if (keyEvents[Keys.W].pressed) {
-          this.collisionDirection = Keys.W;
-        } else if (keyEvents[Keys.S].pressed) {
-          this.collisionDirection = Keys.S;
-        } else if (keyEvents[Keys.A].pressed) {
-          this.collisionDirection = Keys.A;
-        } else if (keyEvents[Keys.D].pressed) {
-          this.collisionDirection = Keys.D;
-        }
+      if (rectangularCollision(playerCollisionBox, boundary)) {
+        this.setCollisionDirection(this.keyEvents);
       }
     }
   }
@@ -186,21 +191,15 @@ class RPGGame implements CanvasGame {
   /**
    * Similar to handleCollision. Detects collisions with doors and loads a new map upon door entry.
    */
-  private handleDoorEntry(keyEvents: KeysPressed) {
-    const isKeyPressed = Object.values(keyEvents).some(
-      (x) => x.pressed === true
-    );
-    if (!isKeyPressed) return;
-    if (!this.player.collisionBox) return;
-
+  private handleDoorEntry(playerCollisionBox: CollisionBox) {
     for (let i = 0; i <= this.doors.length - 1; i++) {
       const door = this.doors[i];
-      const paddedDoor = padRectangle(this.doors[i], keyEvents);
+      const paddedDoor = padRectangle(this.doors[i], this.keyEvents);
 
       // If there is a door collision, load the new map
       if (
         rectangularDoorCollision(
-          this.player.collisionBox,
+          playerCollisionBox,
           paddedDoor,
           door.entryDirection
         )
@@ -213,22 +212,79 @@ class RPGGame implements CanvasGame {
       }
     }
   }
-  private handlePrompt(keyEvents: KeysPressed) {
+
+  private handleNPCCollision(playerCollisionBox: CollisionBox) {
+    if (!this.npcs) return;
+
+    for (let i = 0; i <= this.npcs.length - 1; i++) {
+      const npc = this.npcs[i];
+      if (!npc.collisionBox) return;
+
+      const paddedNPC = padRectangle(npc.collisionBox, this.keyEvents, 25);
+
+      if (rectangularCollision(playerCollisionBox, paddedNPC)) {
+        this.setCollisionDirection(this.keyEvents);
+
+        switch (this.collisionDirection) {
+          case Keys.D:
+            npc.image.src = npc.sprites!.left;
+            break;
+          case Keys.A:
+            npc.image.src = npc.sprites!.right;
+            break;
+          case Keys.W:
+            npc.image.src = npc.sprites!.down;
+            break;
+          case Keys.S:
+            npc.image.src = npc.sprites!.up;
+            break;
+          default:
+            break;
+        }
+
+        this.updateGameState((prev) => {
+          if (prev.dialogue?.title !== npc.dialogue?.title) {
+            return {
+              ...prev,
+              dialogue: npc.dialogue,
+            };
+          } else {
+            return prev;
+          }
+        });
+      } else {
+        /**
+         * This is tricky.
+         * Since this inner logic runs for every prompt, we only want to clear the content
+         * once because every time we update state, we'll trigger a re-render.
+         * We clear the content and automatically set showContent to false
+         */
+        this.updateGameState((prev) => {
+          if (prev.dialogue === npc.dialogue) {
+            return {
+              ...prev,
+              dialogue: undefined,
+              showDialogue: false,
+            };
+          }
+          // We can cancel the state update by simply returning prev
+          return prev;
+        });
+      }
+    }
+  }
+
+  private handlePrompt(playerCollisionBox: CollisionBox) {
     if (!this.prompts) return;
-    const isKeyPressed = Object.values(keyEvents).some(
-      (x) => x.pressed === true
-    );
-    if (!isKeyPressed) return;
-    if (!this.player.collisionBox) return;
 
     for (let i = 0; i <= this.prompts.length - 1; i++) {
       const prompt = this.prompts[i];
 
-      const paddedPrompt = padRectangle(prompt, keyEvents);
+      const paddedPrompt = padRectangle(prompt, this.keyEvents);
 
       // If the player is in the boundaries of a prompt, we want to update React state
       // to display the prompt
-      if (rectangularCollision(this.player as Rectangle, paddedPrompt)) {
+      if (rectangularCollision(playerCollisionBox, paddedPrompt)) {
         this.updateGameState((prev) => {
           if (prev.dialogue?.title !== prompt.dialogue.title)
             return {
@@ -260,6 +316,22 @@ class RPGGame implements CanvasGame {
   }
 
   /**
+   * Used by handleNPCCollision and handleCollisions to set collision direction when player
+   * collides with a boundary or an NPC
+   */
+  private setCollisionDirection(keyEvents: KeysPressed) {
+    if (keyEvents[Keys.W].pressed) {
+      this.collisionDirection = Keys.W;
+    } else if (keyEvents[Keys.S].pressed) {
+      this.collisionDirection = Keys.S;
+    } else if (keyEvents[Keys.A].pressed) {
+      this.collisionDirection = Keys.A;
+    } else if (keyEvents[Keys.D].pressed) {
+      this.collisionDirection = Keys.D;
+    }
+  }
+
+  /**
    * Sets the new mapConfig and updates background, foreground, boundaries, doors, animations, etc
    */
   private loadMap(map: GameMap.MapNames) {
@@ -269,13 +341,21 @@ class RPGGame implements CanvasGame {
     // Load from cache if possible
     if (this.cache.has(map)) {
       const mapConfigFromCache = this.cache.get(map)!;
-      const { background, foreground, doors, boundaries, prompts, animations } =
-        mapConfigFromCache;
+      const {
+        background,
+        foreground,
+        doors,
+        boundaries,
+        prompts,
+        animations,
+        npcs,
+      } = mapConfigFromCache;
 
       // Optional properties
       this.foreground = foreground || undefined;
       this.prompts = prompts || undefined;
       this.animations = animations || undefined;
+      this.npcs = npcs || undefined;
 
       // Required properties
       this.background = background;
@@ -307,15 +387,17 @@ class RPGGame implements CanvasGame {
         ? this.createPrompts(currentMapConfig.prompts)
         : undefined;
 
+      this.npcs = currentMapConfig.npcs
+        ? this.createNPCs(currentMapConfig.npcs)
+        : undefined;
+
       // Required properties
       this.background = new Sprite({
         ctx: this.ctx,
         position: { x: offset.x, y: offset.y },
         imageSrc: currentMapConfig.imageBackgroundSrc,
       });
-      this.boundaries = this.createBoundariesFromCollisions(
-        currentMapConfig.collisions
-      );
+      this.boundaries = this.createBoundaries(currentMapConfig.collisions);
       this.doors = this.createDoors(currentMapConfig.doors);
 
       // Set cache values
@@ -325,6 +407,7 @@ class RPGGame implements CanvasGame {
         doors: this.doors,
         foreground: this.foreground,
         animations: this.animations,
+        npcs: this.npcs,
       });
     }
   }
@@ -377,7 +460,7 @@ class RPGGame implements CanvasGame {
     }
   }
 
-  private createBoundariesFromCollisions(collisions: Collisions) {
+  private createBoundaries(collisions: Collisions) {
     const currentMapConfig = this.mapsConfig[this.map];
     const { dimensions, zoomScale, offset } = currentMapConfig;
 
@@ -387,11 +470,11 @@ class RPGGame implements CanvasGame {
       collisionsMap.push(collisions.slice(i, i + dimensions.width));
     }
 
-    const collisionIds = Object.values(COLLISION_IDS)
+    const collisionIds = Object.values(COLLISION_IDS);
     return collisionsMap
       .flatMap((row, y) => {
         return row.map((cell, x) => {
-          if ( collisionIds.includes(cell)) {
+          if (collisionIds.includes(cell)) {
             return new Boundary({
               ctx: this.ctx,
               zoomScale: zoomScale,
@@ -423,7 +506,7 @@ class RPGGame implements CanvasGame {
         zoomScale: zoomScale,
         position: {
           x: door.position.x * TILE_WIDTH * zoomScale + offset.x,
-          y: door.position.y * TILE_WIDTH * zoomScale + +offset.y,
+          y: door.position.y * TILE_WIDTH * zoomScale + offset.y,
         },
         entryDirection: door.entryDirection,
         span: door.span,
@@ -447,6 +530,27 @@ class RPGGame implements CanvasGame {
         title: prompt.title,
         content: prompt.content,
         span: prompt.span,
+      });
+    });
+  }
+
+  private createNPCs(npcs: GameMap.NPC[]) {
+    const currentMapConfig = this.mapsConfig[this.map];
+    const { offset, zoomScale } = currentMapConfig;
+
+    return npcs.map((npc) => {
+      return new Sprite({
+        ctx: this.ctx,
+        position: {
+          x: npc.position.x * TILE_WIDTH * zoomScale + offset.x,
+          y: npc.position.y * TILE_WIDTH * zoomScale + offset.y,
+        },
+        imageSrc: npc.imageSrc,
+        frames: npc.frames,
+        sprites: npc.sprites,
+        movable: npc.movable,
+        promptAnimation: npc.promptAnimation,
+        dialogue: npc.dialogue,
       });
     });
   }

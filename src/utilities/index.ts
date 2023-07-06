@@ -67,7 +67,11 @@ const COLLISION_PADDING = 3 as const;
  * In other words, we're detecting the collision slightly BEFORE it actually happens
  *
  */
-export function padRectangle(rectangle: Rectangle, keyEvents: KeysPressed) {
+export function padRectangle(
+  rectangle: Rectangle,
+  keyEvents: KeysPressed,
+  padding: number = COLLISION_PADDING
+) {
   const paddedRectangle = {
     ...rectangle,
   };
@@ -77,7 +81,7 @@ export function padRectangle(rectangle: Rectangle, keyEvents: KeysPressed) {
       ...rectangle,
       position: {
         x: rectangle.position.x,
-        y: rectangle.position.y + COLLISION_PADDING,
+        y: rectangle.position.y + padding,
       },
     };
   }
@@ -87,7 +91,7 @@ export function padRectangle(rectangle: Rectangle, keyEvents: KeysPressed) {
       ...rectangle,
       position: {
         x: rectangle.position.x,
-        y: rectangle.position.y - COLLISION_PADDING,
+        y: rectangle.position.y - padding,
       },
     };
   }
@@ -96,7 +100,7 @@ export function padRectangle(rectangle: Rectangle, keyEvents: KeysPressed) {
     return {
       ...rectangle,
       position: {
-        x: rectangle.position.x + COLLISION_PADDING,
+        x: rectangle.position.x + padding,
         y: rectangle.position.y,
       },
     };
@@ -106,7 +110,7 @@ export function padRectangle(rectangle: Rectangle, keyEvents: KeysPressed) {
     return {
       ...rectangle,
       position: {
-        x: rectangle.position.x - COLLISION_PADDING,
+        x: rectangle.position.x - padding,
         y: rectangle.position.y,
       },
     };
