@@ -1,20 +1,22 @@
 {
   "files": {
     "main.css": "/static/css/main.df8b671f.css",
-    "main.js": "/static/js/main.84dea311.js",
+    "main.js": "/static/js/main.d9700ab8.js",
     "static/js/787.1ed0c42c.chunk.js": "/static/js/787.1ed0c42c.chunk.js",
-    "static/media/island_v1.png": "/static/media/island_v1.d5fb1d0e07dda88281a2.png",
+    "static/media/island_v2.png": "/static/media/island_v2.6ccc2b8da6ecd5d2555d.png",
     "static/media/museum_v3.png": "/static/media/museum_v3.649129af54244fccd1b6.png",
     "static/media/museum_foreground_v2.png": "/static/media/museum_foreground_v2.69273ab7a42973760051.png",
+    "static/media/island_foreground_v2.png": "/static/media/island_foreground_v2.944ec1c773f500b6a3c8.png",
+    "static/media/animated_river_waterfall.png": "/static/media/animated_river_waterfall.61ca4d6dbb555604b901.png",
     "static/media/FinkHeavy Regular.ttf": "/static/media/FinkHeavy Regular.09f21b835b6deb7c49da.ttf",
     "static/media/meteor.png": "/static/media/meteor.2375c9b00b7a2d59cfea.png",
     "index.html": "/index.html",
     "main.df8b671f.css.map": "/static/css/main.df8b671f.css.map",
-    "main.84dea311.js.map": "/static/js/main.84dea311.js.map",
+    "main.d9700ab8.js.map": "/static/js/main.d9700ab8.js.map",
     "787.1ed0c42c.chunk.js.map": "/static/js/787.1ed0c42c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.df8b671f.css",
-    "static/js/main.84dea311.js"
+    "static/js/main.d9700ab8.js"
   ]
 }
